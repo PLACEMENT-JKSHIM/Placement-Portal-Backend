@@ -99,3 +99,5 @@ secrets.json
 .vscode
 *invoice*
 .DS_Store
+
+node_modules

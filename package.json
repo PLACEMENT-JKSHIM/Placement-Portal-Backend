@@ -1,0 +1,26 @@
+{
+  "name": "placement-portal-backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "npx tailwindcss -i ./static/src/input.css -o ./static/src/output.css --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PLACEMENT-JKSHIM/Placement-Portal-Backend.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/PLACEMENT-JKSHIM/Placement-Portal-Backend/issues"
+  },
+  "homepage": "https://github.com/PLACEMENT-JKSHIM/Placement-Portal-Backend#readme",
+  "devDependencies": {
+    "tailwindcss": "^3.2.7"
+  },
+  "dependencies": {
+    "flowbite": "^1.6.3"
+  }
+}
