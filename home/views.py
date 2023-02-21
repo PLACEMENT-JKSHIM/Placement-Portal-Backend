@@ -13,4 +13,6 @@ def login(request):
 def student_home(request):
     return render(request,"student_home.html")
 
+def gallery(request):
+    return render(request,"gallery.html")
 
