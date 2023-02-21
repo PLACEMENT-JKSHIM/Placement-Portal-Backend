@@ -1,0 +1,15 @@
+{% extends "./_base_home.html" %}
+
+{% block content %}
+    <div class="flex flex-col gap-16"> 
+        <div>
+            {% include "./slideshow.html" %}
+        </div>
+        <div >
+            {% include "./statistics.html" %}
+        </div>
+        <div>
+            {% include "./teams.html" %}
+        </div>
+    <div>
+{% endblock content %}
