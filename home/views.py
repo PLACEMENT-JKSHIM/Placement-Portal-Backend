@@ -8,7 +8,6 @@ def index(request):
 
 
 def login(request):
-
     return render(request,"login.html")
 
 def student_home(request):
