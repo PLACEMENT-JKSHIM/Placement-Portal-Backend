@@ -1,0 +1,62 @@
+<div class="text-center text-3xl uppercase font-extrabold text-primary my-6 hover:text-gray-900">
+    <h1>Placement Statistics</h1>
+</div>
+<div class="m-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 hover:shadow-md">
+    <div id="fullWidthTabContent" class="border-t border-gray-200 dark:border-gray-600">
+        <div class="p-4 bg-white rounded-lg md:p-8 dark:bg-gray-800" id="stats" role="tabpanel" aria-labelledby="stats-tab">
+            <dl class="grid max-w-screen-xl grid-cols-2 gap-8 p-4 mx-auto text-primary sm:grid-cols-3 xl:grid-cols-6 dark:text-white sm:p-8">
+                <div class="flex flex-col items-center justify-center">
+                    <dt class="mb-2 w-40 text-center text-3xl font-extrabold hover:scale-125 transition-transform" data-placed="213" id="placed">200+</dt>
+                    <dd class="font-light text-primary dark:text-gray-400">Students Placed</dd>
+                </div>
+                <div class="flex flex-col items-center justify-center">
+                    <dt class="mb-2 w-40 text-center text-3xl font-extrabold hover:scale-125 transition-transform" data-offers="321" id="offers">300+</dt>
+                    <dd class="font-light text-primary dark:text-gray-400">Offers Received</dd>
+                </div>
+                <div class="flex flex-col items-center justify-center">
+                    <dt class="mb-2 text-3xl font-extrabold hover:scale-125 transition-transform">10LPA</dt>
+                    <dd class="font-light text-primary dark:text-gray-400">Highest Package</dd>
+                </div>
+                <div class="flex flex-col items-center justify-center">
+                    <dt class="mb-2 text-3xl font-extrabold hover:scale-125 transition-transform">4.87LPA</dt>
+                    <dd class="font-light text-primary dark:text-gray-400">Average Package</dd>
+                </div>
+                <div class="flex flex-col items-center justify-center">
+                    <dt class="mb-2 text-3xl font-extrabold hover:scale-125 transition-transform">4.8LPA</dt>
+                    <dd class="font-light text-primary dark:text-gray-400">Median Package</dd>
+                </div>
+                <div class="flex flex-col items-center justify-center">
+                    <dt class="mb-2 w-40 text-center text-3xl font-extrabold hover:scale-125 transition-transform" data-companies="42" id="companies">40+</dt>
+                    <dd class="font-light text-primary dark:text-gray-400">Companies Participated</dd>
+                </div>
+            </dl>
+        </div>
+        
+    </div>
+</div>
+<script>
+    var placed = document.getElementById("placed");
+    var offers = document.getElementById("offers");
+    var companies = document.getElementById("companies");
+    var placedValue = placed.getAttribute("data-placed");
+    var offersValue = offers.getAttribute("data-offers");
+    var companiesValue = companies.getAttribute("data-companies");
+    placed.onmouseover = function() {
+        placed.innerHTML = placedValue;
+    }
+    placed.onmouseout = function() {
+        placed.innerHTML = "200+";
+    }
+    offers.onmouseover = function() {
+        offers.innerHTML = offersValue;
+    }
+    offers.onmouseout = function() {
+        offers.innerHTML = "300+";
+    }
+    companies.onmouseover = function() {
+        companies.innerHTML = companiesValue;
+    }
+    companies.onmouseout = function() {
+        companies.innerHTML = "40+";
+    }
+</script>
