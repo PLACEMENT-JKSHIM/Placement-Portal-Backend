@@ -8,3 +8,6 @@ def index(request):
 
 def login(request):
     return render(request,"login.html")
+
+def gallery(request):
+    return render(request,"gallery.html")
