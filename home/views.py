@@ -16,3 +16,5 @@ def student_home(request):
 def gallery(request):
     return render(request,"home/gallery.html")
 
+def changePassword(request):
+    return render(request,"student/changePassword.html")
