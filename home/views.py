@@ -18,3 +18,5 @@ def gallery(request):
 
 def profile(request):
     return render(request,"student/profile.html")
+def changePassword(request):
+    return render(request,"student/changePassword.html")
