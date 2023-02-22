@@ -9,3 +9,10 @@ def index(request):
 
 def login(request):
     return render(request,"home/login.html")
+
+def student_home(request):
+    return render(request,"student_home.html")
+
+def gallery(request):
+    return render(request,"gallery.html")
+

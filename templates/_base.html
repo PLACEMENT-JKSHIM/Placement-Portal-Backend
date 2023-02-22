@@ -11,11 +11,14 @@
 
     <link rel="stylesheet" href="{% static 'src/output.css' %}">
     <script defer src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.3/flowbite.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/viewerjs@1.11.2/dist/viewer.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/viewerjs@1.11.2/dist/viewer.min.css" rel="stylesheet">
 </head>
 
 <body class="h-screen p-0 m-0 relative">
         {% block blocks %}
         {% endblock blocks %}
+        <script src="{% static 'js/student_home.js' %}"></script>
 </body>
 
 </html>
