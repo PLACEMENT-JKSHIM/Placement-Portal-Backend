@@ -10,7 +10,7 @@ def index(request):
 def login(request):
     return render(request,"home/login.html")
 
-def student_home(request):
+def home(request):
     return render(request,"student/student_home.html")
 
 def gallery(request):
@@ -20,3 +20,7 @@ def rules(request):
     return render(request,"student/rules.html")
 
 
+def profile(request):
+    return render(request,"student/profile.html")
+def changePassword(request):
+    return render(request,"student/changePassword.html")
