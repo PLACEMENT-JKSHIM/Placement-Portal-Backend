@@ -16,3 +16,7 @@ def student_home(request):
 def gallery(request):
     return render(request,"home/gallery.html")
 
+def rules(request):
+    return render(request,"student/rules.html")
+
+
