@@ -101,3 +101,4 @@ secrets.json
 .DS_Store
 
 node_modules
+static/src/output.css
