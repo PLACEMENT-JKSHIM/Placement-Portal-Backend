@@ -30,12 +30,17 @@ python manage.py makemigrations
 python manage.py migrate
 ```
 
-### 6. Run Server
+### 6.Create a super user. This is to access Admin panel and admin specific pages.
+```base
+python manage.py createsuperuser
+```
+
+### 7. Run Server
 ```base
 python manage.py runserver
 ```
 
-### 7. Tailwind Setup
+### 8. Tailwind Setup
 ```base
 npm i
 ```
