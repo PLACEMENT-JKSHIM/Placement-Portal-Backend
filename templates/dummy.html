@@ -1,0 +1,26 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Django + Tailwind CSS + Flowbite</title>
+
+    <link rel="stylesheet" href="{% static 'src/output.css' %}">
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.3/flowbite.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/viewerjs@1.11.2/dist/viewer.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/viewerjs@1.11.2/dist/viewer.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+</head>
+
+<body class="min-h-screen p-0  m-0 relative">
+    <p>{{c.c_name}}</p>
+    <img src="{{ c.image.url }}" alt="My Image">
+
+        <script src="{% static 'src/js/student_home.js' %}"></script>
+</body>
+
+</html>
