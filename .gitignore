@@ -100,5 +100,7 @@ secrets.json
 *invoice*
 .DS_Store
 
+#Additionals
 node_modules
+media/images
 static/src/output.css
