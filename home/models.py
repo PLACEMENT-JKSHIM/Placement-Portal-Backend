@@ -14,9 +14,15 @@ class Team(models.Model):
     mem_designation=models.CharField( max_length=60,null=False)
     mem_image = models.ImageField(upload_to='teams')
     mem_address=models.CharField( max_length=60,null=True)
+    mem_email=models.CharField(null=True)
     mem_number=models.IntegerField(null=True)
     def __str__(self):
         return f"{self.mem_name}-{self.mem_designation}-{self.mem_image}"
+
+class Slider(models.Model):
+    slider_image=models.ImageField(upload_to='sliders')
+    def __str__(self):
+        return f"{self.slider_image}"
 
 
 class Job(models.Model):
