@@ -1,6 +1,6 @@
 from django.shortcuts import HttpResponse
 from django.contrib.auth.models import User
-from .models import Company, Jobs
+from .models import Company, Job
 from django.shortcuts import render
 # Create your views here.
 
@@ -35,10 +35,10 @@ def changePassword(request):
 
 def company(req):
     #testing 
-    j = Jobs.objects.get(id=1)
+    j = Job.objects.get(id=1)
     c = Company.objects.get(id=j.company.id)
     comp1 = Company.objects.get(id=j.company.id)
     # checking feilds
-    job1= Jobs.objects.get(company=comp1.id)#comp1 holds object of company
+    job1= Job.objects.get(company=comp1.id)#comp1 holds object of company
     print(job1)
     return render(req, "dummy.html", {'c': c})
