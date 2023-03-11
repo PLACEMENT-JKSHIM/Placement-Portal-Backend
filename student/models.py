@@ -71,8 +71,8 @@ class Student(models.Model):
     name=models.CharField(blank=True,max_length=50)
     nameAadhar=models.CharField(blank=True,max_length=50)
     gender=models.CharField(blank=True,max_length=1,choices=Gender.choices,default=Gender.MALE)
-    image=models.ImageField(blank=True,)
-    resume=models.FileField(blank=True,)
+    image=models.ImageField(blank=True,null=True)
+    resume=models.FileField(blank=True,null=True)
 
     phoneNo=models.CharField(blank=True,max_length=11)
     alternatePhoneNo=models.CharField(blank=True,max_length=11)

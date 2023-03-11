@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     'livereload',
     'django.contrib.staticfiles',
     'home',
-    'student'
+    'student',
+    'administrator'
 ]
 
 MIDDLEWARE = [
