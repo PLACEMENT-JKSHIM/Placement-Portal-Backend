@@ -1,0 +1,84 @@
+{% extends "../_base_admin.html" %}
+{% block meta %}
+<!-- use version 0.19.2 -->
+<script lang="javascript" src="https://cdn.sheetjs.com/xlsx-0.19.2/package/dist/xlsx.full.min.js"></script>
+{% endblock meta %}
+{% block content %}
+
+<div class="p-4 overflow-auto text-center ">
+    <div class="p-3 text-2xl pb-7">Add Students To The Portal</div>
+    <div class="grid grid-cols-2 gap-4">
+        <div class="rounded-lg border-slate-300 text-left overflow-auto border-2">
+            <div class="bg-sky-600 h-10 text-white px-4 font-semibold">Add Single Student</div>
+            <form action="" method="post">
+                {% csrf_token %}
+                <div class="px-4 pt-3">
+                    <label class="my-3 font-semibold" for="{{student.username.id_for_label}}">Student USN
+                        Number</label><br>
+                    <input class="my-3 w-full rounded-lg border-gray-300" type="{{student.username.type}}"
+                        name="{{student.username.name}}" placeholder="Enter USN"><br>
+                    <label class="my-3 font-semibold" for="{{student.password.id_for_label}}">Password (minimum 8
+                        Char)</label><br>
+                    <input class="my-3 w-full rounded-lg border-gray-300" type={"student.password.type"}
+                        name="{{student.password.name}}" placeholder="Password"><br>
+                </div>
+                <div class="text-center mt-5 pt-1 bg-gray-100 font-semibold">
+                    <input class="my-3 py-1 px-2 bg-sky-600 text-white rounded-md" type="submit" value="Add Student">
+                </div>
+            </form>
+        </div>
+        <div class="rounded-lg border-slate-300 text-left overflow-auto border-2">
+            <div class="bg-green-600 h-10 text-white px-4 font-semibold">Add Multiple Student</div>
+
+            <div class="text-center p-5"><b>Upload xlsx file</b><br><b>XLSX File Must Contain username,password</b>
+            </div>
+            <div class="px-4 pt-5">
+                <form method="POST">
+                    {% csrf_token %}
+                    <label class="my-3 font-semibold" for="S_password">File Input</label><br>
+                    <input class="hidden" name="students" id="multiple">
+                    <input class="my-3 w-full rounded-lg border-gray-300" id="uploadFile" type="file"
+                        placeholder="Choose File" accept=".xlsx,xls,csv"><br>
+                    <div class="text-center mt-5 pt-1 bg-gray-100 font-semibold">
+                        <input class="my-3 py-1 px-2 bg-sky-600 text-white rounded-md" type="submit" value="Upload CSV file">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    const uploadFile = document.getElementById("uploadFile")
+
+    uploadFile.addEventListener("change", (e) => {
+        if (!e.target.files)
+            return;
+
+        let f = e.target.files[0]
+
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            let data = e.target.result;
+            let workbook = XLSX.read(data);
+            const sheet1 = workbook.Sheets[workbook.SheetNames[0]]
+            const obj = XLSX.utils.sheet_to_row_object_array(sheet1)
+            const input = document.getElementById("multiple")
+            input.value = JSON.stringify(obj)
+            // fetch("/au/student/addMany",{
+            //     method:"POST",
+            //     redirect:"follow",
+            //     body:JSON.stringify(obj),
+            //     headers:{
+            //         'Accept':'application/json',
+            //         'Content-type':'application/json',
+            //         "X-CSRFToken":'{{csrf_token}}'
+            //     }
+
+            // }).then((data)=>{
+            //     window.location.href=data.url
+            // })
+        };
+        reader.readAsArrayBuffer(f)
+    })
+</script>
+{% endblock content %}

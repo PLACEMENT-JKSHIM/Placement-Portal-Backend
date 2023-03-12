@@ -14,9 +14,13 @@
     <script src="https://cdn.jsdelivr.net/npm/viewerjs@1.11.2/dist/viewer.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/viewerjs@1.11.2/dist/viewer.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+    {% block meta %}
+    
+    {% endblock meta %}
 </head>
 
 <body class="min-h-screen p-0  m-0 relative">
+        {% include "messages.html" %}
         {% block blocks %}
         {% endblock blocks %}
         <script src="{% static 'src/js/student_home.js' %}"></script>
