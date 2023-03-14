@@ -1,8 +1,8 @@
-<button type="submit" class="relative inline-flex items-center border-2 border-{% if secondary %}secondary{% else %}primary{% endif %} justify-center {% if main %} px-4 py-2 
+<button type="submit" class="relative inline-flex items-center border-2 {% if secondary %}border-secondary{% else %}border-primary{% endif %} justify-center {% if main %} px-4 py-2 w-full
 {% else %} p-1 px-2 {% endif %} m-1
-overflow-hidden transition-all bg-white text-{% if secondary %}secondary{% else %}primary{% endif %} rounded-full group top-0.5 left-0.5 hover:shadow-lg hover:text-white">
-    <span class="w-[120%] h-[110%]  bg-{% if secondary %}secondary{% else %}primary{% endif %} absolute -translate-y-full ease-out duration-500 transition-all group-hover:translate-y-0"></span>
-    <span class="relative w-full text-left duration-300 ease-in-out {% if main %}
+overflow-hidden transition-all bg-white {% if secondary %}text-secondary{% else %}text-primary{% endif %} rounded-full group top-0.5 left-0.5 hover:shadow-lg hover:text-white">
+    <span class="w-[120%] h-[110%]  {% if secondary %}bg-secondary{% else %}bg-primary{% endif %} absolute -translate-y-full ease-out duration-500 transition-all group-hover:translate-y-0"></span>
+    <span class="relative w-full text-center duration-300 ease-in-out {% if main %}
       uppercase
     {% endif %}">{{btn}}</span>
 </button>

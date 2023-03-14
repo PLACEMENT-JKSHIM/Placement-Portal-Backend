@@ -1,7 +1,11 @@
 from django.shortcuts import HttpResponse
 from django.contrib.auth.models import User
 from .models import Company, Job
-from django.shortcuts import render
+from django.shortcuts import render,redirect
+from django.contrib.auth import authenticate
+from django.contrib import auth
+from django.contrib import messages
+from student.models import Student
 # Create your views here.
 
 
@@ -10,6 +14,23 @@ def index(request):
 
 
 def login(request):
+    if request.method=='POST':
+        usn=request.POST['username']
+        password=request.POST['password']
+        user=authenticate(username=usn,password=password)
+        if user is not None:
+            auth.login(request, user)
+            if request.user.is_superuser:
+                messages.success(request, message='Successfully logged in')
+                return redirect("/au")
+            s=Student.objects.filter(user=user).first()
+            if s.status == 'LB':
+                messages.error(request, message="Login blocked")
+            else:
+                return redirect("/home")
+        else:
+            messages.error(request, message="Invaild username or password")
+            
     return render(request, "home/login.html")
 
 

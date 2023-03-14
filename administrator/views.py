@@ -5,8 +5,10 @@ from django.http import HttpResponse
 import json
 from student.models import Student
 from django.contrib.auth.models import User
+from django.contrib.auth.forms import UserCreationForm
 from django.db import IntegrityError
 from django.contrib import messages
+
 
 def index(request):
     return render(request, "admininstrator/index.html")
@@ -14,57 +16,56 @@ def index(request):
 def addStudent(request):
     if request.method=='POST' and request.POST.get('students'):
         data=json.loads(request.POST.get('students'))
-        try:
-            for d in data:
-                u,success=User.objects.get_or_create(username=d['username'],password=d['password'])
-                if not success:
-                    continue
-                u.save()
-                s=Student.objects.create(user=u)
-                s.save()
-        except:
-            messages.error(request, message={'title':"username",'message':"no column username"})
-            messages.error(request, message={'title':"password",'message':"no column password"})
+        error=False
+        for d in data:
+            print(d)
+            form=UserForm(d)
+            if form.is_valid():
+                user=form.save(commit=False)
+                user.set_password(str(d['password']))
+                user.save()
+                Student(user=user).save()
+            else:
+                error=True
+                for field,errors in form.errors.items():
+                    for error in errors:
+                        messages.error(request, message=f"{field} {d['username']} : {error}")
+        
+        if not error:
+            messages.success(request, message="added successfully")
         else:
-            messages.success(request, message={'message':"added successfully"})
-
-        # data=[User(username=d['username'],password=d['password']) for d in data]
-        # users=User.objects.bulk_create(data,ignore_conflicts=True)
-        # students=[Student(user=user) for user in users]
-        # print(students)
-        # Student.objects.bulk_create(students,ignore_conflicts=True)
+            messages.success(request, message="added others successfully")
 
 
     elif request.method=='POST':
         form=UserForm(request.POST)
-
         if form.is_valid():
-            user=form.save()
+            user=form.save(commit=False)
+            user.set_password(request.POST['password'])
+            user.save()
             Student(user=user).save()
-            messages.success(request, message={'message': "Saved successfully"})
+            messages.success(request, message="Saved successfully")
         else:
             for field,errors in form.errors.items():
                 for error in errors:
-                    messages.error(request, message={'message':error,'title':field})
+                    messages.error(request, message=f"{field} : {error}")
     form=UserForm()
 
     return render(request, "admininstrator/student/add.html",context={'student':form})
 
 def adminEditor(request):
-    if request.method=='POST' and request.POST.get('slider_image'):
-        form = SliderForm(request.POST)
-
+    if request.method=='POST' and  request.FILES.get('slider_image') :
+        form = SliderForm(request.POST,request.FILES)
         if form.is_valid():
-            slider=form.save()
-            Slider(slider=slider).save()
-            messages.success(request, message={'message': "Image added successfully"})
+            form.save()
+            # Slider(slider=slider).save()
+            messages.success(request, message="Image added successfully")
         else:
             for field,errors in form.errors.items():
                 for error in errors:
-                    messages.error(request, message={'message':error,'title':field})
-        
-        form = SliderForm()
+                    messages.error(request, message=f"{field} : {error}")
 
+    sliderForm=SliderForm()
     members = Team.objects.all()
     sliders = Slider.objects.all()
-    return render(request, "admininstrator/adminEditor.html",{'members':members,'sliders':sliders},context={'members':form})
+    return render(request, "admininstrator/adminEditor.html",context={'members':members,'sliders':sliders,'sliderForm':sliderForm})
