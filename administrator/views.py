@@ -1,4 +1,6 @@
 from django.shortcuts import render,redirect
+
+from home.models import Team
 from .forms import UserForm
 from django.http import HttpResponse
 import json
@@ -50,4 +52,5 @@ def addStudent(request):
     return render(request, "admininstrator/student/add.html",context={'student':form})
 
 def adminEditor(request):
-    return render(request, "admininstrator/adminEditor.html")
+    members = Team.objects.all()
+    return render(request, "admininstrator/adminEditor.html",{'members':members})
