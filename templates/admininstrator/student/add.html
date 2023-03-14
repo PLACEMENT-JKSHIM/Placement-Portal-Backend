@@ -9,38 +9,40 @@
     <div class="p-2 text-2xl pb-7">Add Students To The Portal</div>
     <div class="grid md:grid-cols-2 gap-4">
         <div class="rounded-lg border-slate-300 text-left overflow-auto border-2">
-            <div class="bg-sky-600 h-10 text-white px-4 pt-2 font-semibold">Add Single Student</div>
+            <div class="bg-primary h-10 text-white px-4 pt-2 font-semibold">Add Single Student</div>
             <form action="" method="post">
                 {% csrf_token %}
                 <div class="px-4 pt-3">
                     <label class="my-3 font-semibold" for="{{student.username.id_for_label}}">Student USN
                         Number</label><br>
-                    <input class="my-3 w-full rounded-lg border-gray-300" type="{{student.username.type}}"
+                    <input class="my-3 w-full rounded-lg border-gray-300" type="{{student.username.field.widget.input_type}}"
                         name="{{student.username.name}}" placeholder="Enter USN"><br>
                     <label class="my-3 font-semibold" for="{{student.password.id_for_label}}">Password (minimum 8
                         Char)</label><br>
-                    <input class="my-3 w-full rounded-lg border-gray-300" type={"student.password.type"}
+                    <input class="my-3 w-full rounded-lg border-gray-300" type="password"
                         name="{{student.password.name}}" placeholder="Password"><br>
                 </div>
-                <div class="text-center mt-5 pt-1 bg-gray-100 font-semibold">
-                    <input class="my-3 py-1 px-2 bg-sky-600 text-white rounded-md" type="submit" value="Add Student">
+                <div class="text-center mt-5 p-1 pb-2 bg-gray-100 font-semibold">
+                    {% include "../../buttons.html" with btn="Add Student" %}
                 </div>
             </form>
         </div>
-        <div class="rounded-lg border-slate-300 text-left overflow-auto border-2">
-            <div class="bg-green-600 h-10 text-white px-4 pt-2 font-semibold">Add Multiple Student</div>
+        <div class="rounded-lg min-h-[300px] border-slate-300 text-left flex flex-col justify-between border-2">
+            <div class="bg-secondary/75 h-10 text-white px-4 pt-2 font-semibold">Add Multiple Student</div>
 
-            <div class="text-center p-5"><b>Upload xlsx file</b><br><b>XLSX File Must Contain username,password</b>
+            <div class="text-center"><b>Upload xlsx file</b><br><b>XLSX File Must Contain username,password</b>
             </div>
-            <div class="px-4 pt-3\1">
+            <div>
                 <form method="POST">
                     {% csrf_token %}
+                    <div class="p-3">
                     <label class="my-3 font-semibold" for="S_password">File Input</label><br>
                     <input class="hidden" name="students" id="multiple">
-                    <input class="my-3 w-full rounded-lg border-gray-300" id="uploadFile" type="file"
-                        placeholder="Choose File" accept=".xlsx,.xls,.csv"><br>
-                    <div class="text-center pt-1 bg-gray-100 font-semibold">
-                        <input class="my-3 py-1 px-2 bg-sky-600 text-white rounded-md" type="submit" value="Upload CSV file">
+                    <input class="my-3 w-full border-secondary/40 border-2  rounded-lg" id="uploadFile" type="file"
+                        placeholder="Choose File" accept=".xlsx,.xls,.csv">
+                    </div>
+                    <div class="text-center pb-2 p-1 bg-gray-100 font-semibold">
+                        {% include "../../buttons.html" with btn="Add Students" secondary=True %}
                     </div>
                 </form>
             </div>
@@ -64,19 +66,6 @@
             const obj = XLSX.utils.sheet_to_row_object_array(sheet1)
             const input = document.getElementById("multiple")
             input.value = JSON.stringify(obj)
-            // fetch("/au/student/addMany",{
-            //     method:"POST",
-            //     redirect:"follow",
-            //     body:JSON.stringify(obj),
-            //     headers:{
-            //         'Accept':'application/json',
-            //         'Content-type':'application/json',
-            //         "X-CSRFToken":'{{csrf_token}}'
-            //     }
-
-            // }).then((data)=>{
-            //     window.location.href=data.url
-            // })
         };
         reader.readAsArrayBuffer(f)
     })
