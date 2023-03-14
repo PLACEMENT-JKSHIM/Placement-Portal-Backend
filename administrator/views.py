@@ -1,6 +1,6 @@
 from django.shortcuts import render,redirect
 
-from home.models import Team
+from home.models import Slider, Team
 from .forms import UserForm
 from django.http import HttpResponse
 import json
@@ -35,4 +35,5 @@ def addStudent(request):
 
 def adminEditor(request):
     members = Team.objects.all()
-    return render(request, "admininstrator/adminEditor.html",{'members':members})
+    sliders = Slider.objects.all()
+    return render(request, "admininstrator/adminEditor.html",{'members':members,'sliders':sliders})
