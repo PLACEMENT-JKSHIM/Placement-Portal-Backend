@@ -1,5 +1,4 @@
 from django.shortcuts import render,redirect
-
 from home.models import Slider, Team
 from .forms import UserForm
 from django.http import HttpResponse
