@@ -102,5 +102,5 @@ secrets.json
 
 #Additionals
 node_modules
-media/images
+media/
 static/src/output.css
