@@ -30,3 +30,6 @@ def addStudent(request):
     form=UserForm()
 
     return render(request, "admininstrator/student/add.html",context={'student':form})
+
+def adminEditor(request):
+    return render(request, "admininstrator/adminEditor.html")
