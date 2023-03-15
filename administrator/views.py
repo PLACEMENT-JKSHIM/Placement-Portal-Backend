@@ -1,6 +1,6 @@
 from django.shortcuts import render,redirect
 from home.models import Slider, Team
-from .forms import UserForm,SliderForm
+from .forms import TeamForm, UserForm,SliderForm
 from django.http import HttpResponse
 import json
 from student.models import Student
@@ -64,8 +64,19 @@ def adminEditor(request):
             for field,errors in form.errors.items():
                 for error in errors:
                     messages.error(request, message=f"{field} : {error}")
+    
+    if request.method=='POST':
+        form = TeamForm(request.POST,request.FILES)
+        if form.is_valid():
+            form.save()
+            messages.success(request, message="Member added successfully")
+        else:
+            for field,errors in form.errors.items():
+                for error in errors:
+                    messages.error(request, message=f"{field} : {error}")
 
     sliderForm=SliderForm()
+    teamForm=TeamForm()
     members = Team.objects.all()
     sliders = Slider.objects.all()
-    return render(request, "admininstrator/adminEditor.html",context={'members':members,'sliders':sliders,'sliderForm':sliderForm})
+    return render(request, "admininstrator/adminEditor.html",context={'members':members,'sliders':sliders,'sliderForm':sliderForm,'teamForm':teamForm})

@@ -13,7 +13,7 @@ class Team(models.Model):
     mem_name=models.CharField( max_length=60,null=False)
     mem_designation=models.CharField( max_length=60,null=False)
     mem_image = models.ImageField(upload_to='teams')
-    mem_description=models.TextField(null=True)
+    mem_description=models.TextField(null=True,blank=True, default='')
     def __str__(self):
         return f"{self.mem_name}-{self.mem_designation}-{self.mem_image}-{self.mem_description}"
     
