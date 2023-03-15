@@ -1,3 +1,4 @@
+import http
 from django.shortcuts import render,redirect
 from home.models import Slider, Team
 from .forms import TeamForm, UserForm,SliderForm
@@ -65,7 +66,7 @@ def adminEditor(request):
                 for error in errors:
                     messages.error(request, message=f"{field} : {error}")
     
-    if request.method=='POST':
+    elif request.method=='POST':
         form = TeamForm(request.POST,request.FILES)
         if form.is_valid():
             form.save()
