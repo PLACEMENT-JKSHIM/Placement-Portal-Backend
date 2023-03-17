@@ -6,27 +6,27 @@
         <div class="p-4 bg-white rounded-lg md:p-8 dark:bg-gray-800" id="stats" role="tabpanel" aria-labelledby="stats-tab">
             <dl class="grid max-w-screen-xl grid-cols-2 gap-8 p-2 mx-auto text-primary sm:grid-cols-3 xl:grid-cols-6 dark:text-white sm:p-8">
                 <div class="flex flex-col items-center justify-center">
-                    <dt class="mb-2 w-24 text-center text-3xl font-extrabold hover:scale-125 transition-transform  duration-500" data-placed="213" id="placed">200+</dt>
+                    <dt class="mb-2 w-24 text-center text-3xl font-extrabold hover:scale-125 transition-all  duration-1000" id="animation1">0</dt>
                     <dd class="font-light text-primary dark:text-gray-400">Students Placed</dd>
                 </div>
                 <div class="flex flex-col items-center justify-center">
-                    <dt class="mb-2 w-24 text-center text-3xl font-extrabold hover:scale-125 transition-transform  duration-500 " data-offers="321" id="offers">300+</dt>
+                    <dt class="mb-2 w-24 text-center text-3xl font-extrabold hover:scale-125 transition-all  duration-1000" id="animation2">0</dt>
                     <dd class="font-light text-primary dark:text-gray-400">Offers Received</dd>
                 </div>
                 <div class="flex flex-col items-center justify-center">
-                    <dt class="mb-2 text-3xl font-extrabold hover:scale-125 transition-transform  duration-500">10LPA</dt>
-                    <dd class="font-light text-primary dark:text-gray-400">Highest Package</dd>
+                    <dt class="mb-2 text-3xl font-extrabold hover:scale-125 transition-all  duration-1000" id="animation3">0</dt>
+                    <dd class="font-light text-primary dark:text-gray-400">Highest Package (LPA)</dd>
                 </div>
                 <div class="flex flex-col items-center justify-center">
-                    <dt class="mb-2 text-3xl font-extrabold hover:scale-125 transition-transform  duration-500">4.87LPA</dt>
-                    <dd class="font-light text-primary text-center dark:text-gray-400">Average Package</dd>
+                    <dt class="mb-2 text-3xl font-extrabold hover:scale-125 transition-all  duration-1000" id="animation4">0</dt>
+                    <dd class="font-light text-primary text-center dark:text-gray-400">Average Package (LPA)</dd>
                 </div>
                 <div class="flex flex-col items-center justify-center">
-                    <dt class="mb-2 text-3xl font-extrabold hover:scale-125 transition-transform  duration-500">4.8LPA</dt>
-                    <dd class="font-light text-primary dark:text-gray-400">Median Package</dd>
+                    <dt class="mb-2 text-3xl font-extrabold hover:scale-125 transition-all  duration-1000" id="animation5">0</dt>
+                    <dd class="font-light text-primary dark:text-gray-400">Median Package (LPA)</dd>
                 </div>
                 <div class="flex flex-col items-center justify-center">
-                    <dt class="mb-2 w-24 text-center text-3xl font-extrabold hover:scale-125 transition-transform  duration-500" data-companies="42" id="companies">40+</dt>
+                    <dt class="mb-2 w-24 text-center text-3xl font-extrabold hover:scale-125 transition-all  duration-1000" id="animation6">0</dt>
                     <dd class="font-light text-center text-primary dark:text-gray-400">Companies Participated</dd>
                 </div>
             </dl>
@@ -35,28 +35,54 @@
     </div>
 </div>
 <script>
-    var placed = document.getElementById("placed");
-    var offers = document.getElementById("offers");
-    var companies = document.getElementById("companies");
-    var placedValue = placed.getAttribute("data-placed");
-    var offersValue = offers.getAttribute("data-offers");
-    var companiesValue = companies.getAttribute("data-companies");
-    placed.onmouseover = function() {
-        placed.innerHTML = placedValue;
+
+    const countAnimations = [
+      { id: "animation1", startValue: 0, endValue: 100 },
+      { id: "animation2", startValue: 0, endValue: 200 },
+      { id: "animation3", startValue: 0, endValue: 25 },
+      { id: "animation4", startValue: 0, endValue: 20 },
+      { id: "animation5", startValue: 0, endValue: 10 },
+      { id: "animation6", startValue: 0, endValue: 30 },
+    ];
+    
+    const animationDuration = 2000; // 2 seconds
+    const statisticsContainer = document.getElementById('stats');
+    countAnimations.forEach(animation => {
+      const numberSpan = document.getElementById(animation.id);
+      let currentValue = animation.startValue;
+      const valueDifference = animation.endValue - animation.startValue;
+      const valueIncrement = valueDifference / (animationDuration / 10);
+      const observer = new IntersectionObserver(function(entries, observer) {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+            animateCounters();
+            observer.unobserve(entry.target);
+            }
+        });
+        }, { threshold: 0.5 });
+
+        observer.observe(statisticsContainer);
+
+        function animateCounters() {
+  countAnimations.forEach(animation => {
+    const numberSpan = document.getElementById(animation.id);
+    let currentValue = animation.startValue;
+    const valueDifference = animation.endValue - animation.startValue;
+    const valueIncrement = valueDifference / (animationDuration / 10);
+
+    function animateNumber() {
+      const intervalId = setInterval(function() {
+        currentValue += valueIncrement;
+        numberSpan.textContent = Math.round(currentValue);
+        if (currentValue >= animation.endValue) {
+          clearInterval(intervalId);
+        }
+      }, 10);
     }
-    placed.onmouseout = function() {
-        placed.innerHTML = "200+";
-    }
-    offers.onmouseover = function() {
-        offers.innerHTML = offersValue;
-    }
-    offers.onmouseout = function() {
-        offers.innerHTML = "300+";
-    }
-    companies.onmouseover = function() {
-        companies.innerHTML = companiesValue;
-    }
-    companies.onmouseout = function() {
-        companies.innerHTML = "40+";
-    }
-</script>
+
+    animateNumber();
+  });
+}
+    });
+    
+    </script>
