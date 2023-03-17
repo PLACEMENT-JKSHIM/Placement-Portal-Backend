@@ -86,7 +86,8 @@ def adminEditor(request):
     return render(request, "admininstrator/adminEditor.html",context={'members':members,'sliders':sliders,'sliderForm':sliderForm,'teamForm':teamForm})
 
 def blockStudent(request):
-    return render(request,"admininstrator/blockStudent.html")
+    students = Student.objects.all().order_by('-updated_at')[:5]
+    return render(request,"admininstrator/blockStudent.html",{'students':students})
 
 def editBlock(request):
     query = request.GET.get('q', '')#get the query
