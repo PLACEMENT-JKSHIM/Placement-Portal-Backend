@@ -1,0 +1,253 @@
+{% extends "./_base_student.html" %}
+{% block content %}
+
+    <div class="p-3">
+        <h1 class="text-3xl font-bold text-primary"><span class="underline underline-offset-8 decoration-7 decoration-secondary">Pers</span>onal Details</h1>
+        <ul class="ml-10 pt-4 mt-4 space-y-2 font-semibold " style="list-style-type: square;">
+            <li>Please Do Fill applicable filed carefully, and at the same entered details will be forwareded to companies.</li>
+            <li>Try to fill below information using desktop/laptop, because there are nearly 40+ fields to enter.</li>
+            <li>Register and update will be enable for few days, so fill all the fields the earliest.</li>
+            <li class="text-blue-800">Students are required to fill their 10th, 12th, Diploma and BE(semester wise,cgpa) marks without fail</li>
+            <li class="text-red-600">Do not round off the marks (for eg: 59.6% = 59.6% only and not 60%).</li>
+            <li class="text-green-400">Only the Resume upload is open, During student details update is blocked.</li>
+        </ul>
+        <div class="mt-8 p-4 sm:ml-0 bg-sidebarfont shadow-lg">
+            <form method="post">
+                {% csrf_token %}
+                <div class="grid md:grid-cols-3 gap-2 ">
+                    <div class="relative z-0 w-full mb-6 group">
+                        {% include "./_input.html" with field=form.name %}
+                    </div>
+                    <div class="relative z-0 w-full mb-6 group">
+                        {% include "./_input.html" with field=form.nameAadhar %}
+                    </div>
+                    <div class="relative z-0 w-full mb-6 group">
+                        {% include "./_input.html" with field=form.dateOfBirth %}
+                    </div>
+                </div>
+                <div class="grid lg:grid-cols-3 md:gap-2 ">
+                    <div class="relative z-0 w-full mb-6 group">
+                        {% include "./_input.html" with field=form.gender %}
+                    </div>
+                    <div class="relative z-0 w-full mb-6 group">
+                        {% include "./_input.html" with field=form.phoneNo %}
+                    </div>
+                    <div class="relative z-0 w-full mb-6 group">
+                        {% include "./_input.html" with field=form.alternatePhoneNo %}
+                    </div>
+                </div>
+                <div class="grid lg:grid-cols-3 md:gap-2 ">
+                    <div class="relative z-0 w-full mb-6 group">
+                        {% include "./_input.html" with field=form.email %}
+                    </div>
+                    <div class="relative z-0 w-full mb-6 group">
+                       {% include "./_input.html" with field=form.aadhar %}
+                    </div>
+                    <div class="relative z-0 w-full mb-6 group">
+                       {% include "./_input.html" with field=form.pancard %}
+                    </div>
+                </div>
+                <div class="grid lg:grid-cols-2 md:gap-2 ">
+                    <div class="relative z-0 w-full mb-6 group">
+                         {% include "./_input.html" with field=form.homeState %}
+                    </div>
+                    <div class="relative z-0 w-full mb-6 group">
+                         {% include "./_input.html" with field=form.homeTown %}
+                    </div>
+                    <div class="relative z-0 w-full mb-6 group">
+                        {% include "./_textarea.html" with field=form.address %}
+                    </div>
+                </div>
+                <div class="mt-3 pt-2 border-t border-secondary grid lg:grid-cols-1 text-center ">
+                    <h3 class="text-primary font-bold">SSLC details</h3>
+                </div>
+                <div class="mt-3 pt-6 border-t border-secondary grid lg:grid-cols-3 md:gap-2 ">
+                    <div class="relative z-0 w-full mb-6 group">
+                        {% include "./_input.html" with field=form.tenPercentage %}
+                    </div>
+                    <div class="relative z-0 w-full mb-6 group">
+                        {% include "./_input.html" with field=form.tenBoard %}
+                    </div>
+                    <div class="relative z-0 w-full mb-6 group">
+                        {% include "./_input.html" with field=form.tenSchool %}
+                    </div>
+                </div>
+                <div class="grid lg:grid-cols-3 md:gap-2 ">
+                    <div class="relative z-0 w-full mb-6 group">
+                        {% include "./_input.html" with field=form.tenPassYear %}
+                    </div>
+                    <div class="relative z-0 w-full mb-6 group">
+                        {% include "./_input.html" with field=form.tenState %}
+                    </div>
+                    <div class="relative z-0 w-full mb-6 group">
+                        {% include "./_input.html" with field=form.tenCountry %}
+                    </div>
+                </div>
+                <div class="mt-3 pt-2 border-t border-secondary grid lg:grid-cols-1 text-center ">
+                    <h3 class="text-primary font-bold">PUC details</h3>
+                    <span>(Please fill if it's applicable)</span>
+                </div>
+                <div class="mt-3 pt-6 border-t border-secondary grid lg:grid-cols-3 md:gap-2 ">
+                    {% comment %} pu diploma choices {% endcomment %}
+
+
+                    <div class="relative z-0 w-full mb-6 group">
+                        {% include "./_input.html" with field=form.twelvePercentage %}
+                    </div>
+                    <div class="relative z-0 w-full mb-6 group">
+                        {% include "./_input.html" with field=form.twelveBoard %}
+                    </div>
+                    <div class="relative z-0 w-full mb-6 group">
+                        {% include "./_input.html" with field=form.twelveSchool %}
+                    </div>
+                </div>
+                <div class="grid lg:grid-cols-3 md:gap-2 ">
+                    <div class="relative z-0 w-full mb-6 group">
+                        {% include "./_input.html" with field=form.twelvePassYear %}
+                    </div>
+                    <div class="relative z-0 w-full mb-6 group">
+                        {% include "./_input.html" with field=form.twelveState %}
+                    </div>
+                    <div class="relative z-0 w-full mb-6 group">
+                        {% include "./_input.html" with field=form.twelveCountry %}
+                    </div>
+                </div>
+                <div class="mt-3 pt-2 border-t border-secondary grid lg:grid-cols-1 text-center">
+                    <h3 class="text-primary font-bold">UG / Degree details</h3>
+                    <span class="text-red-600">(Only for PG Students)</span>
+                </div>
+                <div class="mt-3 pt-6 border-t border-secondary grid grid-cols-2 md:gap-2 ">
+                    <div class="relative z-0 w-full mb-6 group">
+                        {% include "./_input.html" with field=form.degreePercentage %}
+                    </div>
+                    <div class="relative z-0 w-full mb-6 group">
+                        {% include "./_input.html" with field=form.degreeStream %}
+                    </div>
+                </div>
+                <div class="grid lg:grid-cols-3 md:gap-2 ">
+                    <div class="relative z-0 w-full mb-6 group">
+                        {% include "./_input.html" with field=form.degreeCourse %}
+                    </div>
+                    <div class="relative z-0 w-full mb-6 group">
+                        {% include "./_input.html" with field=form.degreeCollege %}
+                    </div>
+                    <div class="relative z-0 w-full mb-6 group">
+                        {% include "./_input.html" with field=form.degreeUniversity %}
+                    </div>
+                </div>
+                <div class="grid lg:grid-cols-3 md:gap-2 ">
+                    <div class="relative z-0 w-full mb-6 group">
+                        {% include "./_input.html" with field=form.degreePassYear %}
+                    </div>
+                    <div class="relative z-0 w-full mb-6 group">
+                        {% include "./_input.html" with field=form.degreeState %}
+                    </div>
+                    <div class="relative z-0 w-full mb-6 group">
+                        {% include "./_input.html" with field=form.degreeCountry %}
+                    </div>
+                </div>
+                <div class="mt-3 pt-2 border-t border-secondary grid lg:grid-cols-1 text-center ">
+                    <h3 class="text-primary font-bold">Present Course details</h3>
+                    <span>(for both PG and BE students)</span>
+                </div>
+                <div class="mt-3 pt-6 border-t border-secondary grid lg:grid-cols-4 md:gap-2 ">
+                    <div class="relative z-0 w-full mb-6 group">
+                        {% include "./_input.html" with field=form.sgpa1 %}
+                    </div>
+                    <div class="relative z-0 w-full mb-6 group">
+                        {% include "./_input.html" with field=form.sgpa2 %}
+                    </div>
+                    <div class="relative z-0 w-full mb-6 group">
+                        {% include "./_input.html" with field=form.sgpa3 %}
+                    </div>
+                    <div class="relative z-0 w-full mb-6 group">
+                        {% include "./_input.html" with field=form.sgpa4 %}
+                    </div>
+                </div>
+                <div class="grid lg:grid-cols-4 md:gap-2 ">
+                    <div class="relative z-0 w-full mb-6 group">
+                        {% include "./_input.html" with field=form.cgpa %}
+                    </div>
+                    <div class="relative z-0 w-full mb-6 group">
+                        {% include "./_input.html" with field=form.activeBacklog %}
+                    </div>
+                    <div class="relative z-0 w-full mb-6 group">
+                        {% include "./_input.html" with field=form.totalBacklog %}
+                    </div>
+                    {% comment %} <div class="relative z-0 w-full mb-6 group">
+                        {% include "./_toggle.html" with field=form.pastExperience %}
+                    </div> {% endcomment %}
+                </div>
+                <div class="grid lg:grid-cols-2 md:gap-2 ">
+                    <div class="relative z-0 w-full mb-6 group">
+                        {% include "./_textarea.html" with field=form.projects %}
+                    </div>
+                    <div class="relative z-0 w-full mb-6 group">
+                        {% include "./_input.html" with field=form.preferredJobLocation %}
+                    </div>
+                </div>
+                <div class="mt-3 pt-2 border-t border-secondary grid lg:grid-cols-1 text-center">
+                    <h3 class="text-primary font-bold">Past Experience</h3>
+                    <span class="text-red-600">(If any)</span>
+                </div>
+                <div class="grid md:gap-2 ">
+                    <button data-modal-target="pj" data-modal-toggle="pj" class="block m-auto w-20  text-white text-center bg-secondary rounded-full text-2xl" type="button">
+                        +
+                    </button>
+                    {% for pj in previousJobs %}
+                        <div class="flex">
+                            <div>{{pj.jobRole}}</div>
+                            <div>{{pj.yearsofExperience}} years {{pj.monthsofExperience}} months </div>
+                            <div>{{pj.company}}</div>
+                            <button data-element={{pj.pk}}>Edit</button>
+                            <a href="/previousjob/delete/{{pj.pk}}" data-element={{pj.pk}}>Delete</a>
+                        </div>
+                    {% endfor %}
+                </div>
+                <div class="mt-3 pt-6 border-t border-secondary grid ">
+                    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="resume">Upload the resume if required(less than 300Kb)</label>
+                    <input id="resume" class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" aria-describedby="user_avatar_help" type="file">
+                </div>
+                <div class="mt-3 mb-3 pt-6 pb-4 border-t border-b border-secondary grid">
+                    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="profile_pic">Upload Profile Pic(less than 300Kb)</label>
+                    <input id="profile_pic" class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" aria-describedby="user_avatar_help" type="file">
+                </div>
+                <div class="relative w-36 m-auto flex">
+                    {% include "../buttons.html" with btn="Submit" main=True %}
+                </div>
+            </form>
+        </div>
+    </div>
+    <div id="pj" tabindex="-1" aria-hidden="true" class="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] md:h-full">
+        <div class="relative w-full h-full max-w-2xl md:h-auto">
+            <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                <!-- Modal header -->
+                <div class="flex items-start justify-between p-4 border-b rounded-t dark:border-gray-600">
+                    <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
+                        Add a Previous job
+                    </h3>
+                    <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="pj">
+                        <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+                        <span class="sr-only">Close modal</span>
+                    </button>
+                </div>
+                <!-- Modal body -->
+                <div class="p-6 space-y-6">
+                    <form action="/previousjob/add" method="POST">
+                        {% csrf_token %}
+                        <div class="grid gap-2">
+                                {% include "./_input.html" with field=pjForm.role %}
+                                {% include "./_input.html" with field=pjForm.yearsofExperience %}
+                                {% include "./_input.html" with field=pjForm.monthsofExperience %}
+                                {% include "./_input.html" with field=pjForm.company %}
+                        </div>
+                        <div class="relative w-40 m-auto mt-4">
+                            {% include "../buttons.html" with main=True btn="Submit" secondary=True %}
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+{% endblock content %}

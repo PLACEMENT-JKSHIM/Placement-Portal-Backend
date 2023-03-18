@@ -1,0 +1,15 @@
+
+{% load widget_tweaks %}
+ 
+<div>
+    <label class="block mb-2 text-sm font-medium text-gray-900">
+        {{field.label}}
+    </label>
+    <div>
+        <label class="relative inline-flex items-center mt-2">
+            {% render_field field class="peer sr-only" %}
+            <div class="w-14 h-8 bg-secondary/50 peer-focus:outline-none rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[3px] after:left-[4px] after:bg-white after:border after:rounded-full after:h-6 after:w-6 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600
+            peer-checked:before:translate-x-0 before:translate-x-full peer before:content-['No'] peer-checked:before:content-['Yes'] before:absolute before:top-[3px] before:left-[5px] before:text-white before:font-semibold after:border-gray-300 before:transition-all"></div>
+        </label>
+    </div>
+</div>

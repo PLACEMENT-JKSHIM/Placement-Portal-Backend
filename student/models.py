@@ -43,6 +43,16 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 #total backlog
 #status:login blocked,application blocked
 
+class PreviousJob(models.Model):
+    user=models.OneToOneField(User,on_delete=models.CASCADE)
+    role=models.CharField(max_length=50)
+    yearsofExperience=models.IntegerField()
+    monthsofExperience=models.IntegerField()
+    company=models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.role
+
 
 class Student(models.Model):
 
@@ -70,9 +80,9 @@ class Student(models.Model):
 
     name=models.CharField(blank=True,max_length=50)
     nameAadhar=models.CharField(blank=True,max_length=50)
-    gender=models.CharField(blank=True,max_length=1,choices=Gender.choices,default=Gender.MALE)
-    image=models.ImageField(blank=True,null=True)
-    resume=models.FileField(blank=True,null=True)
+    gender=models.CharField(max_length=1,choices=Gender.choices,default=Gender.MALE)
+    image=models.ImageField(blank=True,null=True,upload_to='student')
+    resume=models.FileField(blank=True,null=True,upload_to='resume')
 
     phoneNo=models.CharField(blank=True,max_length=11)
     alternatePhoneNo=models.CharField(blank=True,max_length=11)
@@ -83,7 +93,7 @@ class Student(models.Model):
     dateOfBirth=models.DateField(blank=True,null=True)
     homeTown=models.CharField(blank=True,max_length=50)
     homeState=models.CharField(blank=True,max_length=50)
-    permanentAddress=models.CharField(blank=True,max_length=150)
+    address=models.TextField(blank=True)
     
     tenPercentage=models.FloatField(blank=True,null=True)
     tenBoard=models.CharField(blank=True,max_length=10)
@@ -102,7 +112,7 @@ class Student(models.Model):
 
     degreePercentage=models.FloatField(blank=True,null=True)
     degreeStream=models.CharField(blank=True,max_length=30)
-    degreCourse=models.CharField(blank=True,max_length=30)
+    degreeCourse=models.CharField(blank=True,max_length=30)
     degreeCollege=models.CharField(blank=True,max_length=50)
     degreeUniversity=models.CharField(blank=True,max_length=50)
     degreePassYear=models.PositiveSmallIntegerField(blank=True,null=True,validators=[MinValueValidator(1950),MaxValueValidator(2040)])
@@ -119,14 +129,13 @@ class Student(models.Model):
     activeBacklog=models.IntegerField(blank=True,default=0)
     totalBacklog=models.IntegerField(blank=True,default=0)
 
-    pastExperience=models.BooleanField(default=False)
 
     projects=models.TextField(blank=True)
 
     preferredJobLocation=models.CharField(blank=True,max_length=30)
 
-    created_at=models.DateTimeField(editable=False,default=datetime.now())
-    updated_at=models.DateTimeField(default=datetime.now())
+    created_at=models.DateTimeField(auto_now_add=True)
+    updated_at=models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.user.username
