@@ -131,8 +131,8 @@ class Student(models.Model):
 
     preferredJobLocation=models.CharField(blank=True,max_length=30)
 
-    created_at=models.DateTimeField(editable=False,default=datetime.now())
-    updated_at=models.DateTimeField(default=datetime.now())
+    created_at=models.DateTimeField(editable=False,auto_now=True)
+    updated_at=models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.user.username
