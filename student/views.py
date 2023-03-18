@@ -5,6 +5,7 @@ from .models import Student,PreviousJob
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.shortcuts import get_object_or_404
+from home.models import Job
 
 @login_required(login_url='/login')
 def updateProfile(request):
@@ -56,3 +57,7 @@ def deletePreviousJob(request,id):
     pj.delete()
     messages.success(request, message="Deleted successfully")
     return redirect('/profile/update')
+
+def registerCompany(request):
+    jobs = Job.objects.all()
+    return render(request, "student/registerCompany.html",{'jobs': jobs})

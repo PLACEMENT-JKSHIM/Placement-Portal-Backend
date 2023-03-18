@@ -6,7 +6,7 @@ from django.contrib.auth import authenticate
 from django.contrib import auth
 from django.contrib import messages
 from student.models import Student
-from home.models import Job
+
 # Create your views here.
 
 
@@ -64,7 +64,3 @@ def company(req):
     job1= Job.objects.get(company=comp1.id)#comp1 holds object of company
     print(job1)
     return render(req, "dummy.html", {'c': c})
-
-def registerCompany(request):
-    jobs = Job.objects.all()
-    return render(request, "student/registerCompany.html",{'jobs': jobs})
