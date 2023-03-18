@@ -3,7 +3,7 @@ from django.forms.models import model_to_dict
 from django.core import serializers
 from django.shortcuts import render,redirect
 from home.models import Slider, Team
-from .forms import TeamForm, UserForm,SliderForm
+from .forms import TeamForm, UserForm,SliderForm,JobForm
 from django.http import HttpResponse,JsonResponse
 import json
 from student.models import Student
@@ -125,5 +125,18 @@ def profileEditBlockAll(req):
 def profileEditUnblockAll(req):
     Student.objects.all().update(editable=True)
     return redirect("blockStudent")
+
+#company
+def addcompany(request):
+    if request.method == 'POST':
+        form = JobForm(request.POST)
+        if form.is_valid():
+            job = form.save()
+            # Redirect to a success page or do something else
+            return redirect('job_detail', pk=job.pk)
+    else:
+        form = JobForm()
+    context = {'form': form}
+    return render(request, "admininstrator/company/addCompany.html", context)
 
     
