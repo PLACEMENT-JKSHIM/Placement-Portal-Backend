@@ -1,0 +1,45 @@
+{% extends "./_base_student_sidebar.html" %}
+{% load static %}
+{% block content %}
+
+<div class="flex justify-center"> 
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-6 justify-items-end gap-2 md:gap-4">
+{% for jobs in jobs %}    
+<a
+  class="relative flex max-w-sm items-start justify-between rounded-xl border  border-gray-100 p-4 shadow-md sm:p-6 lg:p-8"
+  href="#"
+>
+<div class="pt-4 text-gray-500 relative">
+<div class="flex items-center">
+    <!-- <img class="w-8 h-8 inline-block" src="{{ jobs.image.url }}" alt=""> -->
+    <img class="w-8 h-8 inline-block" src="{% static '/assets/company.png' %}" alt="">
+
+    <div class="mt-4 block text-lg font-bold text-gray-900 pl-3 sm:text-xl">
+      {{ jobs.company }}
+    </div>
+</div>
+<div class="mt-4 block text-md font-bold text-gray-900 pl-3 sm:text-xl">
+    {{ jobs.title }}
+</div>
+    <p class="mt-4 pl-3 text-sm sm:block">
+      <p class="font-bold">Dream</p>
+      <p><span class="font-bold">CTC PA : </span>{{ jobs.ctc_pa }}</p>
+      <p><span class="font-bold">Talk Date : </span>{{ jobs.talk_date }}</p>
+      <p><span class="font-bold">Test Date : </span>{{ jobs.test_date }}</p>
+      <p><span class="font-bold">Interview Date : </span>{{ jobs.interview_date }}</p>
+
+    </p>
+    <p class="pt-3 text-blue-300">Register before: {{ jobs.registration_date }}</p>
+
+  </div>
+  {% if jobs.status == 'Closed' %}
+  <span class="bg-red-600 text-white text-sm absolute right-0 font-medium mr-2 px-2.5 py-0.5 rounded-full">Closed</span>
+  {% else %}
+  <span class="bg-blue-700 text-white text-sm absolute right-0 font-medium mr-2 px-2.5 py-0.5 rounded-full">Open</span>
+  {% endif %}
+</a>
+{% endfor %}
+</div>
+</div>
+
+{% endblock content %}
