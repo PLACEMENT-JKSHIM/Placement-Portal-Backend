@@ -5,6 +5,7 @@ from .models import Student,PreviousJob
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.shortcuts import get_object_or_404
+from home.models import Job
 
 @login_required(login_url='/login')
 def updateProfile(request):
@@ -77,3 +78,6 @@ def editPreviousJob(request,id):
 
     form=PreviousJobForm(instance=pj)
     return render(request, "student/editpreviousjob.html",context={'form':form})
+def registerCompany(request):
+    jobs = Job.objects.all()
+    return render(request, "student/registerCompany.html",{'jobs': jobs})
