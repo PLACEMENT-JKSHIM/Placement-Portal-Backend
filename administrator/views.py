@@ -12,7 +12,10 @@ from django.contrib.auth.forms import UserCreationForm
 from django.db import IntegrityError
 from django.contrib import messages
 from django.core.cache import cache
+from django.contrib import messages
+from django.contrib.auth import authenticate, get_user_model, login
 
+User = get_user_model()
 
 def index(request):
     return render(request, "admininstrator/index.html")
@@ -126,4 +129,26 @@ def profileEditUnblockAll(req):
     Student.objects.all().update(editable=True)
     return redirect("blockStudent")
 
+def changePasswordAdmin(request):
+    if request.method == 'POST':
+        usn=request.POST['username']
+        password = request.POST['password']
+        new_password = request.POST['newpassword']
+        confirm_password = request.POST['confirmpassword']
+        print(usn,password,new_password,confirm_password)
+        user=authenticate(request,username=usn,password=password)
+        
+        if user is not None:
+            if new_password == confirm_password:
+                user.set_password(new_password)
+                user.save()
+                login(request, user)
+                messages.success(request, 'Password changed successfully.')
+                return redirect('admin')
+            else:
+                messages.error(request, 'New password and confirmation do not match.')
+        else:
+            messages.error(request, 'Invalid email or password.')
     
+    return render(request, 'admininstrator/student/changePasswordAdmin.html')
+
