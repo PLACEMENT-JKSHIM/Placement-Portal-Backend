@@ -14,7 +14,8 @@ def updateProfile(request):
     s=Student.objects.filter(user=request.user).first()
     pjs=PreviousJob.objects.filter(user=request.user)
     if request.method=="POST":
-        form=StudentForm(request.POST,instance=s)
+        print(request.FILES)
+        form=StudentForm(request.POST,request.FILES,instance=s)
         if form.is_valid():
             st=form.save()
             messages.success(request, message="Saved successfully")
@@ -56,3 +57,23 @@ def deletePreviousJob(request,id):
     pj.delete()
     messages.success(request, message="Deleted successfully")
     return redirect('/profile/update')
+
+@login_required(login_url='/login')
+def editPreviousJob(request,id):
+    if request.user.is_superuser:
+        return redirect('/au/')
+
+    pj=get_object_or_404(PreviousJob,id=id)
+    if request.method=="POST":
+        form=PreviousJobForm(request.POST,instance=pj)
+        if form.is_valid():
+            form.save()
+            messages.success(request, message="Edited successfully")
+            return redirect(to='/profile/update')
+        else:
+            for field,errors in form.errors.items():
+                for error in errors:
+                    messages.error(request, message=f"{field} : {error}")
+
+    form=PreviousJobForm(instance=pj)
+    return render(request, "student/editpreviousjob.html",context={'form':form})

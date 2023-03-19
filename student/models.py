@@ -50,10 +50,10 @@ class Rule(models.Model):
 #status:login blocked,application blocked
 
 class PreviousJob(models.Model):
-    user=models.OneToOneField(User,on_delete=models.CASCADE)
+    user=models.ForeignKey(User, on_delete=models.CASCADE)
     role=models.CharField(max_length=50)
-    yearsofExperience=models.IntegerField()
-    monthsofExperience=models.IntegerField()
+    yearsofExperience=models.IntegerField(default=0)
+    monthsofExperience=models.IntegerField(default=0)
     company=models.CharField(max_length=50)
 
     def __str__(self):
@@ -90,8 +90,8 @@ class Student(models.Model):
     image=models.ImageField(blank=True,null=True,upload_to='student')
     resume=models.FileField(blank=True,null=True,upload_to='resume')
 
-    phoneNo=models.CharField(blank=True,max_length=11)
-    alternatePhoneNo=models.CharField(blank=True,max_length=11)
+    phoneNo=models.IntegerField(blank=True,null=True,validators=[MinValueValidator(1000000000),MaxValueValidator(99999999999)])
+    alternatePhoneNo=models.IntegerField(blank=True,null=True,validators=[MinValueValidator(1000000000),MaxValueValidator(99999999999)])
     email=models.EmailField(blank=True,max_length=50)
     aadhar=models.CharField(blank=True,max_length=12)
     pancard= models.CharField(blank=True,max_length=12)
@@ -101,22 +101,28 @@ class Student(models.Model):
     homeState=models.CharField(blank=True,max_length=50)
     address=models.TextField(blank=True)
     
-    tenPercentage=models.FloatField(blank=True,null=True)
+    tenPercentage=models.FloatField(blank=True,null=True,validators=[MinValueValidator(0),MaxValueValidator(100)])
     tenBoard=models.CharField(blank=True,max_length=10)
     tenSchool=models.CharField(blank=True,max_length=50)
     tenPassYear=models.PositiveSmallIntegerField(blank=True,null=True,validators=[MinValueValidator(1950),MaxValueValidator(2040)])
     tenState=models.CharField(blank=True,max_length=50)
     tenCountry=models.CharField(blank=True,max_length=50)
 
-    puOrDiploma=models.CharField(max_length=1,choices=PreGraduate.choices,default=PreGraduate.PU)
-    twelvePercentage=models.FloatField(blank=True,null=True)
+    twelvePercentage=models.FloatField(blank=True,null=True,validators=[MinValueValidator(0),MaxValueValidator(100)])
     twelveBoard=models.CharField(blank=True,max_length=10)
     twelveSchool=models.CharField(blank=True,max_length=50)
     twelvePassYear=models.PositiveSmallIntegerField(blank=True,null=True,validators=[MinValueValidator(1950),MaxValueValidator(2040)])
     twelveState=models.CharField(blank=True,max_length=50)
     twelveCountry=models.CharField(blank=True,max_length=50)
 
-    degreePercentage=models.FloatField(blank=True,null=True)
+    diplomaPercentage=models.FloatField(blank=True,null=True,validators=[MinValueValidator(0),MaxValueValidator(100)])
+    diplomaBoard=models.CharField(blank=True,max_length=10)
+    diplomaSchool=models.CharField(blank=True,max_length=50)
+    diplomaPassYear=models.PositiveSmallIntegerField(blank=True,null=True,validators=[MinValueValidator(1950),MaxValueValidator(2040)])
+    diplomaState=models.CharField(blank=True,max_length=50)
+    diplomaCountry=models.CharField(blank=True,max_length=50)
+
+    degreePercentage=models.FloatField(blank=True,null=True,validators=[MinValueValidator(0),MaxValueValidator(100)])
     degreeStream=models.CharField(blank=True,max_length=30)
     degreeCourse=models.CharField(blank=True,max_length=30)
     degreeCollege=models.CharField(blank=True,max_length=50)
@@ -126,14 +132,14 @@ class Student(models.Model):
     degreeCountry=models.CharField(blank=True,max_length=50)
 
     mbaSpecialisation=models.CharField(blank=True,max_length=2,choices=Specialisation.choices)
-    sgpa1=models.FloatField(blank=True,null=True)
-    sgpa2=models.FloatField(blank=True,null=True)
-    sgpa3=models.FloatField(blank=True,null=True)
-    sgpa4=models.FloatField(blank=True,null=True)
-    cgpa=models.FloatField(blank=True,null=True)
+    sgpa1=models.FloatField(blank=True,null=True,validators=[MinValueValidator(0),MaxValueValidator(10)])
+    sgpa2=models.FloatField(blank=True,null=True,validators=[MinValueValidator(0),MaxValueValidator(10)])
+    sgpa3=models.FloatField(blank=True,null=True,validators=[MinValueValidator(0),MaxValueValidator(10)])
+    sgpa4=models.FloatField(blank=True,null=True,validators=[MinValueValidator(0),MaxValueValidator(10)])
+    cgpa=models.FloatField(blank=True,null=True,validators=[MinValueValidator(0),MaxValueValidator(10)])
 
-    activeBacklog=models.IntegerField(blank=True,default=0)
-    totalBacklog=models.IntegerField(blank=True,default=0)
+    activeBacklog=models.IntegerField(blank=True,default=0,validators=[MinValueValidator(0)])
+    totalBacklog=models.IntegerField(blank=True,default=0,validators=[MinValueValidator(0)])
 
 
     projects=models.TextField(blank=True)

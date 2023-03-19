@@ -1,4 +1,5 @@
 {% extends "./_base_student.html" %}
+{% load static %}
 {% block content %}
 
     <div class="p-3">
@@ -12,7 +13,7 @@
             <li class="text-green-400">Only the Resume upload is open, During student details update is blocked.</li>
         </ul>
         <div class="mt-8 p-4 sm:ml-0 bg-sidebarfont shadow-lg">
-            <form method="post">
+            <form method="post" enctype="multipart/form-data">
                 {% csrf_token %}
                 <div class="grid md:grid-cols-3 gap-2 ">
                     <div class="relative z-0 w-full mb-6 group">
@@ -88,9 +89,6 @@
                     <span>(Please fill if it's applicable)</span>
                 </div>
                 <div class="mt-3 pt-6 border-t border-secondary grid lg:grid-cols-3 md:gap-2 ">
-                    {% comment %} pu diploma choices {% endcomment %}
-
-
                     <div class="relative z-0 w-full mb-6 group">
                         {% include "./_input.html" with field=form.twelvePercentage %}
                     </div>
@@ -110,6 +108,32 @@
                     </div>
                     <div class="relative z-0 w-full mb-6 group">
                         {% include "./_input.html" with field=form.twelveCountry %}
+                    </div>
+                </div>
+                <div class="mt-3 pt-2 border-t border-secondary grid lg:grid-cols-1 text-center ">
+                    <h3 class="text-primary font-bold">Diploma details</h3>
+                    <span>(Please fill if it's applicable)</span>
+                </div>
+                <div class="mt-3 pt-6 border-t border-secondary grid lg:grid-cols-3 md:gap-2 ">
+                    <div class="relative z-0 w-full mb-6 group">
+                        {% include "./_input.html" with field=form.diplomaPercentage %}
+                    </div>
+                    <div class="relative z-0 w-full mb-6 group">
+                        {% include "./_input.html" with field=form.diplomaBoard %}
+                    </div>
+                    <div class="relative z-0 w-full mb-6 group">
+                        {% include "./_input.html" with field=form.diplomaSchool %}
+                    </div>
+                </div>
+                <div class="grid lg:grid-cols-3 md:gap-2 ">
+                    <div class="relative z-0 w-full mb-6 group">
+                        {% include "./_input.html" with field=form.diplomaPassYear %}
+                    </div>
+                    <div class="relative z-0 w-full mb-6 group">
+                        {% include "./_input.html" with field=form.diplomaState %}
+                    </div>
+                    <div class="relative z-0 w-full mb-6 group">
+                        {% include "./_input.html" with field=form.diplomaCountry %}
                     </div>
                 </div>
                 <div class="mt-3 pt-2 border-t border-secondary grid lg:grid-cols-1 text-center">
@@ -174,9 +198,6 @@
                     <div class="relative z-0 w-full mb-6 group">
                         {% include "./_input.html" with field=form.totalBacklog %}
                     </div>
-                    {% comment %} <div class="relative z-0 w-full mb-6 group">
-                        {% include "./_toggle.html" with field=form.pastExperience %}
-                    </div> {% endcomment %}
                 </div>
                 <div class="grid lg:grid-cols-2 md:gap-2 ">
                     <div class="relative z-0 w-full mb-6 group">
@@ -190,30 +211,33 @@
                     <h3 class="text-primary font-bold">Past Experience</h3>
                     <span class="text-red-600">(If any)</span>
                 </div>
-                <div class="grid md:gap-2 ">
+                <div class="grid gap-4">
                     <button data-modal-target="pj" data-modal-toggle="pj" class="block m-auto w-20  text-white text-center bg-secondary rounded-full text-2xl" type="button">
                         +
                     </button>
                     {% for pj in previousJobs %}
-                        <div class="flex">
-                            <div>{{pj.jobRole}}</div>
-                            <div>{{pj.yearsofExperience}} years {{pj.monthsofExperience}} months </div>
+                        <div class="flex flex-wrap justify-center m-auto p-3 py-2 w-fit bg-white rounded-full gap-3 md:gap-5 text-primary">
+                            <div class="uppercase">{{pj.role}}</div>
+                            <div class="text-secondary">{{pj.yearsofExperience}} years {{pj.monthsofExperience}} months </div>
                             <div>{{pj.company}}</div>
-                            <button data-element={{pj.pk}}>Edit</button>
-                            <a href="/previousjob/delete/{{pj.pk}}" data-element={{pj.pk}}>Delete</a>
+                            <a href="/previousjob/edit/{{pj.pk}}">
+                                <img alt="edit" class="w-7 h-7" src="{% static 'assets/edit.svg' %}" type="image/svg+xml">
+                            </a>
+                            <button id="delete-btn" data-modal-target="delete" data-modal-toggle="delete" data-element={{pj.pk}}>
+                                <img alt="delte" class="w-7 h-7" src="{% static 'assets/delete.svg' %}" type="image/svg+xml">
+                            </button>
                         </div>
                     {% endfor %}
                 </div>
-                <div class="mt-3 pt-6 border-t border-secondary grid ">
-                    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="resume">Upload the resume if required(less than 300Kb)</label>
-                    <input id="resume" class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" aria-describedby="user_avatar_help" type="file">
+                <div class="mt-3 pt-6 border-t border-secondary">
+
+                    {% include "./_file.html" with field=form.image obj=form.instance.image %}
                 </div>
-                <div class="mt-3 mb-3 pt-6 pb-4 border-t border-b border-secondary grid">
-                    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="profile_pic">Upload Profile Pic(less than 300Kb)</label>
-                    <input id="profile_pic" class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" aria-describedby="user_avatar_help" type="file">
+                <div class="mt-3 mb-3 pt-6 pb-4 border-t border-b border-secondary">
+                    {% include "./_file.html" with field=form.resume obj=form.instance.resume %}
                 </div>
                 <div class="relative w-36 m-auto flex">
-                    {% include "../buttons.html" with btn="Submit" main=True %}
+                    {% include "../buttons/buttons.html" with btn="Submit" main=True %}
                 </div>
             </form>
         </div>
@@ -242,12 +266,40 @@
                                 {% include "./_input.html" with field=pjForm.company %}
                         </div>
                         <div class="relative w-40 m-auto mt-4">
-                            {% include "../buttons.html" with main=True btn="Submit" secondary=True %}
+                            {% include "../buttons/buttons.html" with main=True btn="Submit" secondary=True %}
                         </div>
                     </form>
                 </div>
             </div>
         </div>
     </div>
+
+    <div id="delete" tabindex="-1" class="fixed top-0 left-0 right-0 z-50 hidden p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] md:h-full">
+      <div class="relative w-full h-full max-w-md md:h-auto">
+            <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+               <button type="button" class="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-800 dark:hover:text-white" data-modal-hide="delete">
+                  <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+                  <span class="sr-only">Close modal</span>
+               </button>
+               <div class="p-6 text-center">
+                  <svg aria-hidden="true" class="mx-auto mb-4 text-gray-400 w-14 h-14 dark:text-gray-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                  <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">Are you sure you want to delete the this item?</h3>
+                    <a id="delete-link" href="#" class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10">
+                        Yes
+                    </a>
+                  <button data-modal-hide="delete" type="button" class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10">No</button>
+               </div>
+            </div>
+      </div>
+   </div>
+
+   <script>
+        const link=document.querySelector('#delete-link')
+        document.querySelectorAll('#delete-btn').forEach((d)=>{
+            d.addEventListener('click', (e)=>{
+                link.href ="/previousjob/delete/"+ d.getAttribute('data-element')
+            })
+        })
+   </script>
     
 {% endblock content %}
