@@ -7,6 +7,7 @@ from .forms import TeamForm, UserForm,SliderForm
 from django.http import HttpResponse,JsonResponse
 import json
 from student.models import Student
+from administrator.models import Notice
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from django.db import IntegrityError
@@ -152,3 +153,10 @@ def changePasswordAdmin(request):
     
     return render(request, 'admininstrator/student/changePasswordAdmin.html')
 
+def addNewsUpdates(request):
+    if request.method=='POST':
+        title=request.POST.get("news_title")
+        content=request.POST.get("news_content")
+        addNewsUpdates=Notice(title=title,content=content);
+        addNewsUpdates.save();
+    return render(request,"admininstrator/admin_newsUpdates.html");

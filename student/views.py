@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from .forms import StudentForm,PreviousJobForm
 from .models import Student,PreviousJob
 from django.contrib.auth.decorators import login_required
+from administrator.models import Notice       
 from django.contrib import messages
 from django.shortcuts import get_object_or_404
 from home.models import Job
@@ -81,3 +82,9 @@ def editPreviousJob(request,id):
 def registerCompany(request):
     jobs = Job.objects.all()
     return render(request, "student/registerCompany.html",{'jobs': jobs})
+
+@login_required(login_url='/login')
+def student_home(request):
+    l1=Notice.objects.all();
+    l2=sorted(l1,key=lambda x:x.updated_on, reverse=True);
+    return render(request,"student/student_newsUpdates.html",{'news':l2})

@@ -9,5 +9,6 @@ path('au/student/editBlock',views.editBlock,name='editBlock'),
 path('au/student/profileEditBlock/<int:id>/',views.profileEditBlock,name='profileEditBlock'),
 path('au/student/profileEditUnblockAll',views.profileEditUnblockAll,name='profileEditUnblockAll'),
 path('au/student/profileEditBlockAll',views.profileEditBlockAll,name='profileEditBlockAll'),
+path('au/addNewsUpdates',views.addNewsUpdates,name='addNewsUpdates'), 
 path('au/adminEditor',views.adminEditor,name='adminEditor'), 
 ]
