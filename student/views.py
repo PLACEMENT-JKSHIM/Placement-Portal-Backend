@@ -1,11 +1,13 @@
 from django.shortcuts import render,redirect
 from django.contrib.auth.models import User
-from .forms import StudentForm,PreviousJobForm
+from .forms import StudentForm,PreviousJobForm,ChangePasswordForm
 from .models import Student,PreviousJob
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.shortcuts import get_object_or_404
 from home.models import Job
+from django.contrib.auth import authenticate, get_user_model, login
+from django.contrib.auth.forms import PasswordChangeForm
 
 @login_required(login_url='/login')
 def updateProfile(request):
@@ -78,6 +80,29 @@ def editPreviousJob(request,id):
 
     form=PreviousJobForm(instance=pj)
     return render(request, "student/editpreviousjob.html",context={'form':form})
+
 def registerCompany(request):
     jobs = Job.objects.all()
     return render(request, "student/registerCompany.html",{'jobs': jobs})
+
+def changePassword(request):
+    if request.method == 'POST':
+        form = ChangePasswordForm(request.POST)
+        if form.is_valid():
+            password = request.POST['password']
+            new_password = request.POST['newpassword']
+            confirm_password = request.POST['confirmpassword']
+            user = authenticate(username=request.user.username, password=password)
+            if user is not None:
+                if new_password == confirm_password:
+                    user.set_password(new_password)
+                    user.save()
+                    messages.success(request, 'Your password was successfully updated!')
+                    return redirect('changePassword')
+                else:
+                    messages.error(request, 'New password and confirm password does not match!')
+            else:
+                messages.error(request, 'Invalid email or password!')
+    else:
+        form = ChangePasswordForm()
+    return render(request, 'student/changePassword.html')

@@ -131,24 +131,23 @@ def profileEditUnblockAll(req):
 
 def changePasswordAdmin(request):
     if request.method == 'POST':
-        usn=request.POST['username']
-        password = request.POST['password']
-        new_password = request.POST['newpassword']
-        confirm_password = request.POST['confirmpassword']
-        print(usn,password,new_password,confirm_password)
-        user=authenticate(request,username=usn,password=password)
-        
-        if user is not None:
+        form = UserForm(request.POST)
+        print(form)
+        if form.is_valid():
+            usn=request.POST['username']
+            new_password = request.POST['newpassword']
+            confirm_password = request.POST['confirmpassword']
+            user = get_user_model().objects.get(username=usn)
             if new_password == confirm_password:
                 user.set_password(new_password)
                 user.save()
-                login(request, user)
                 messages.success(request, 'Password changed successfully.')
-                return redirect('admin')
+                return redirect('changePasswordAdmin')
             else:
                 messages.error(request, 'New password and confirmation do not match.')
         else:
-            messages.error(request, 'Invalid email or password.')
-    
+            messages.error(request, 'Invalid username or password.')
+    else:
+        form = UserForm()
     return render(request, 'admininstrator/student/changePasswordAdmin.html')
 

@@ -51,10 +51,6 @@ def profile(request):
     return render(request, "student/profile.html")
 
 
-def changePassword(request):
-    return render(request, "student/changePassword.html")
-
-
 def company(req):
     #testing 
     j = Job.objects.get(id=1)

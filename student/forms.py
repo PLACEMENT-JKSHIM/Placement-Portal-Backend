@@ -1,6 +1,7 @@
 from django.forms import ModelForm
 from django import forms
 from .models import Student,PreviousJob
+from django.contrib.auth.models import User
 
 always_enabled_list=['image','resume','pastExperience','projects','preferredJobLocation']
 required_list=['name','nameAadhar','image','phoneNo','email','aadhar','pancard','dateOfBirth',
@@ -41,3 +42,8 @@ class PreviousJobForm(ModelForm):
     class Meta:
         model=PreviousJob
         fields=['role','yearsofExperience','monthsofExperience','company']
+
+class ChangePasswordForm(ModelForm):
+    class Meta:
+        model=User
+        fields=['username','password']
