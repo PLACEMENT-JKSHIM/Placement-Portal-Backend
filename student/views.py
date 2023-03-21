@@ -7,6 +7,14 @@ from administrator.models import Notice
 from django.contrib import messages
 from django.shortcuts import get_object_or_404
 from home.models import Job
+from django.contrib.auth import logout
+
+
+
+@login_required(login_url='/login')
+def logoutStudent(request):
+    logout(request)
+    return render(request,"home/index.html")
 
 @login_required(login_url='/login')
 def updateProfile(request):

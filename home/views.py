@@ -13,7 +13,6 @@ from django.contrib import messages
 def index(request):
     return render(request, "home/index.html")
 
-
 def login(request):
     if request.method=='POST':
         usn=request.POST['username']
@@ -34,7 +33,6 @@ def login(request):
             messages.error(request, message="Invaild username or password")
             
     return render(request, "home/login.html")
-
 
 def home(request):
     return render(request, "student/student_home.html")
