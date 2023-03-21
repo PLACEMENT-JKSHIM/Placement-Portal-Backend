@@ -12,4 +12,5 @@ path('au/student/profileEditBlockAll',views.profileEditBlockAll,name='profileEdi
 path('au/addNewsUpdates',views.addNewsUpdates,name='addNewsUpdates'), 
 path('au/adminEditor',views.adminEditor,name='adminEditor'), 
 path('au/adminEditor/deleteMember/<int:id>',views.deleteTeamMember, name='deleteTeamMember'),
+path('au/adminEditor/deleteSlider/<int:id>',views.deleteSlider, name='deleteSlider'),
 ]

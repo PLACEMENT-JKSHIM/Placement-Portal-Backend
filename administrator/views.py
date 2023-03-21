@@ -163,7 +163,14 @@ def addNewsUpdates(request):
     return render(request,"admininstrator/admin_newsUpdates.html")
 
 def deleteTeamMember(request,id):
-    pj=get_object_or_404(Team,id=id)
-    pj.delete()
-    messages.success(request, message="Deleted successfully")
+    teamobj=get_object_or_404(Team,id=id)
+    teamobj.delete()
+    messages.success(request, message="Member deleted successfully")
+    return redirect('/au/adminEditor')
+
+def deleteSlider(request,id):
+    print(id)
+    slidobj = get_object_or_404(Slider,id=id)
+    slidobj.delete()
+    messages.success(request, message="Slider image deleted successfully")
     return redirect('/au/adminEditor')
