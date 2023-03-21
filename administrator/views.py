@@ -163,9 +163,6 @@ def addNewsUpdates(request):
     return render(request,"admininstrator/admin_newsUpdates.html")
 
 def deleteTeamMember(request,id):
-    if request.user.is_superuser:
-        return redirect('/au/adminEditor')
-
     pj=get_object_or_404(Team,id=id)
     pj.delete()
     messages.success(request, message="Deleted successfully")
