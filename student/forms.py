@@ -42,8 +42,3 @@ class PreviousJobForm(ModelForm):
     class Meta:
         model=PreviousJob
         fields=['role','yearsofExperience','monthsofExperience','company']
-
-class ChangePasswordForm(ModelForm):
-    class Meta:
-        model=User
-        fields=['username','password']

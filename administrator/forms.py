@@ -1,6 +1,6 @@
 from django.forms import ModelForm 
 from django.contrib.auth.models import User
-
+from django import forms
 from home.models import Slider, Team
 
 class UserForm(ModelForm):
@@ -17,3 +17,4 @@ class TeamForm(ModelForm):
     class Meta:
         model = Team
         fields = ['mem_name','mem_designation','mem_image','mem_description']
+

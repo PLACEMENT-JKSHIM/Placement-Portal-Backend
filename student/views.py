@@ -1,6 +1,6 @@
 from django.shortcuts import render,redirect
 from django.contrib.auth.models import User
-from .forms import StudentForm,PreviousJobForm,ChangePasswordForm
+from .forms import StudentForm,PreviousJobForm
 from .models import Student,PreviousJob
 from django.contrib.auth.decorators import login_required
 from administrator.models import Notice       
@@ -92,26 +92,26 @@ def registerCompany(request):
     jobs = Job.objects.all()
     return render(request, "student/registerCompany.html",{'jobs': jobs})
 
+@login_required
 def changePassword(request):
     if request.method == 'POST':
-        form = ChangePasswordForm(request.POST)
-        if form.is_valid():
-            password = request.POST['password']
-            new_password = request.POST['newpassword']
-            confirm_password = request.POST['confirmpassword']
-            user = authenticate(username=request.user.username, password=password)
-            if user is not None:
-                if new_password == confirm_password:
-                    user.set_password(new_password)
-                    user.save()
-                    messages.success(request, 'Your password was successfully updated!')
-                    return redirect('changePassword')
-                else:
-                    messages.error(request, 'New password and confirm password does not match!')
-            else:
-                messages.error(request, 'Invalid email or password!')
-    else:
-        form = ChangePasswordForm()
+        current_password = request.POST.get('password')
+        new_password = request.POST.get('newpassword')
+        confirm_password = request.POST.get('confirmpassword')
+        
+        if not request.user.check_password(current_password):
+            messages.error(request, 'Current password is incorrect.')
+            return redirect('changePassword')
+        
+        if new_password != confirm_password:
+            messages.error(request, 'Passwords do not match.')
+            return redirect('changePassword')
+        
+        request.user.set_password(new_password)
+        request.user.save()
+        messages.success(request, 'Password changed successfully.')
+        return redirect('changePassword')
+        
     return render(request, 'student/changePassword.html')
 
 @login_required(login_url='/login')
