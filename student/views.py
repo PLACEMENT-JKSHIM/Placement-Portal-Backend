@@ -3,11 +3,19 @@ from django.contrib.auth.models import User
 from .forms import StudentForm,PreviousJobForm,ChangePasswordForm
 from .models import Student,PreviousJob
 from django.contrib.auth.decorators import login_required
+from administrator.models import Notice       
 from django.contrib import messages
 from django.shortcuts import get_object_or_404
 from home.models import Job
-from django.contrib.auth import authenticate, get_user_model, login
-from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth import authenticate
+from django.contrib.auth import logout
+
+
+
+@login_required(login_url='/login')
+def logoutStudent(request):
+    logout(request)
+    return render(request,"home/index.html")
 
 @login_required(login_url='/login')
 def updateProfile(request):
@@ -48,7 +56,6 @@ def addPreviousJob(request):
             for field,errors in form.errors.items():
                 for error in errors:
                     messages.error(request, message=f"{field} : {error}")
-
     return redirect('/profile/update')
 
 @login_required(login_url='/login')
@@ -106,3 +113,9 @@ def changePassword(request):
     else:
         form = ChangePasswordForm()
     return render(request, 'student/changePassword.html')
+
+@login_required(login_url='/login')
+def student_home(request):
+    l1=Notice.objects.all();
+    l2=sorted(l1,key=lambda x:x.updated_on, reverse=True);
+    return render(request,"student/student_newsUpdates.html",{'news':l2})

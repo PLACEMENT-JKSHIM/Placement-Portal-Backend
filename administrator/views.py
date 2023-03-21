@@ -7,6 +7,7 @@ from .forms import TeamForm, UserForm,SliderForm
 from django.http import HttpResponse,JsonResponse
 import json
 from student.models import Student
+from administrator.models import Notice
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from django.db import IntegrityError
@@ -14,6 +15,7 @@ from django.contrib import messages
 from django.core.cache import cache
 from django.contrib import messages
 from django.contrib.auth import authenticate, get_user_model, login
+from django.shortcuts import get_object_or_404
 
 User = get_user_model()
 
@@ -151,3 +153,23 @@ def changePasswordAdmin(request):
         form = UserForm()
     return render(request, 'admininstrator/student/changePasswordAdmin.html')
 
+def addNewsUpdates(request):
+    if request.method=='POST':
+        title=request.POST.get("news_title")
+        content=request.POST.get("news_content")
+        addNewsUpdates=Notice(title=title,content=content)
+        addNewsUpdates.save();
+    return render(request,"admininstrator/admin_newsUpdates.html")
+
+def deleteTeamMember(request,id):
+    teamobj=get_object_or_404(Team,id=id)
+    teamobj.delete()
+    messages.success(request, message="Member deleted successfully")
+    return redirect('/au/adminEditor')
+
+def deleteSlider(request,id):
+    print(id)
+    slidobj = get_object_or_404(Slider,id=id)
+    slidobj.delete()
+    messages.success(request, message="Slider image deleted successfully")
+    return redirect('/au/adminEditor')
