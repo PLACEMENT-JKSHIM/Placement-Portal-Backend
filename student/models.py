@@ -3,12 +3,6 @@ from datetime import datetime
 from django.contrib.auth.models import User
 from django.core.validators import MaxValueValidator, MinValueValidator 
 
-
-class Rule(models.Model):
-     rule=models.TextField(null=False)
-     def __str__(self):
-         return f"{self.rule}" 
-
 # Create your models here.
 
 #usn

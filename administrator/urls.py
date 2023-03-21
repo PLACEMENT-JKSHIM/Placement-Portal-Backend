@@ -11,4 +11,5 @@ path('au/student/profileEditUnblockAll',views.profileEditUnblockAll,name='profil
 path('au/student/profileEditBlockAll',views.profileEditBlockAll,name='profileEditBlockAll'),
 path('au/addNewsUpdates',views.addNewsUpdates,name='addNewsUpdates'), 
 path('au/adminEditor',views.adminEditor,name='adminEditor'), 
+path('au/adminEditor/deleteMember/<int:id>',views.deleteTeamMember, name='deleteTeamMember'),
 ]

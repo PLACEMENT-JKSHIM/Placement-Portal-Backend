@@ -4,8 +4,8 @@ from .models import Company, Job
 from django.shortcuts import render,redirect
 from django.contrib.auth import authenticate
 from django.contrib import auth
-from django.contrib import messages
 from student.models import Student
+from django.contrib import messages
 
 # Create your views here.
 
@@ -19,6 +19,7 @@ def login(request):
         usn=request.POST['username']
         password=request.POST['password']
         user=authenticate(username=usn,password=password)
+        print(usn,password)
         if user is not None:
             auth.login(request, user)
             if request.user.is_superuser:

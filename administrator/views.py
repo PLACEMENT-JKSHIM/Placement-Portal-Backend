@@ -15,6 +15,7 @@ from django.contrib import messages
 from django.core.cache import cache
 from django.contrib import messages
 from django.contrib.auth import authenticate, get_user_model, login
+from django.shortcuts import get_object_or_404
 
 User = get_user_model()
 
@@ -157,6 +158,15 @@ def addNewsUpdates(request):
     if request.method=='POST':
         title=request.POST.get("news_title")
         content=request.POST.get("news_content")
-        addNewsUpdates=Notice(title=title,content=content);
+        addNewsUpdates=Notice(title=title,content=content)
         addNewsUpdates.save();
-    return render(request,"admininstrator/admin_newsUpdates.html");
+    return render(request,"admininstrator/admin_newsUpdates.html")
+
+def deleteTeamMember(request,id):
+    if request.user.is_superuser:
+        return redirect('/au/adminEditor')
+
+    pj=get_object_or_404(Team,id=id)
+    pj.delete()
+    messages.success(request, message="Deleted successfully")
+    return redirect('/au/adminEditor')
