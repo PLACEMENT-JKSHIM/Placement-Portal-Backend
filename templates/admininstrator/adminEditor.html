@@ -61,8 +61,8 @@
          {% endfor %}
       </div>
    </div>
-   <div id="delete-modal" tabindex="-1" class="fixed top-0 left-0 right-0 z-50 hidden p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] md:h-full"
-   data-pk="1">
+   <div id="delete-modal" tabindex="-1" class="fixed top-0 left-0 right-0 z-50 hidden p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] md:h-full">
+   <!-- data-pk="1"> -->
       <div class="relative w-full h-full max-w-md md:h-auto">
             <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
                <button type="button" class="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-800 dark:hover:text-white" data-modal-hide="delete-modal">
@@ -84,7 +84,7 @@
       </div>
    </div>
    <script>
-      const btn=document.querySelector("#deleteTeam");
+      const deleteTConfirm=document.querySelector("#deleteTConfirm");
       const deleteModal=document.getElementById("delete-modal");
       const team=document.querySelectorAll("#team > div");
       team.forEach((ele,key)=>{
@@ -95,12 +95,12 @@
                deleteModal.setAttribute("data-pk",ele.getAttribute("data-pk"))
          })
       })
-      btn.addEventListener("click",()=>{
+      deleteTConfirm.addEventListener("click",()=>{
          //send a hidden form to backend
          //https://www.geeksforgeeks.org/how-to-create-a-form-dynamically-with-the-javascript/ and submit() method to submit
          const k=parseInt(deleteModal.getAttribute("data-pk"))
          // team.item(k).remove()
-         deleteTConfirm.href = "/adminEditor/deleteMember/"+ k
+         deleteTConfirm.href = "/au/adminEditor/deleteMember/"+ k
       })
    </script>
    <div id="edit-modal" tabindex="-1" aria-hidden="true" class="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-modal md:h-full">
