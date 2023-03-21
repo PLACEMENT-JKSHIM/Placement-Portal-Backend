@@ -6,6 +6,7 @@ from django.contrib.auth import authenticate
 from django.contrib import auth
 from student.models import Student
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 
@@ -34,6 +35,7 @@ def login(request):
             
     return render(request, "home/login.html")
 
+@login_required(login_url='/login')
 def home(request):
     return render(request, "student/student_home.html")
 
@@ -46,6 +48,7 @@ def rules(request):
     return render(request, "student/rules.html")
 
 
+@login_required(login_url='/login')
 def profile(request):
     return render(request, "student/profile.html")
 
