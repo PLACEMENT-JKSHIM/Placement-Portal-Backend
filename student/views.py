@@ -88,6 +88,7 @@ def editPreviousJob(request,id):
     form=PreviousJobForm(instance=pj)
     return render(request, "student/editpreviousjob.html",context={'form':form})
 
+@login_required
 def registerCompany(request):
     jobs = Job.objects.all()
     return render(request, "student/registerCompany.html",{'jobs': jobs})
@@ -119,3 +120,13 @@ def student_home(request):
     l1=Notice.objects.all();
     l2=sorted(l1,key=lambda x:x.updated_on, reverse=True);
     return render(request,"student/student_newsUpdates.html",{'news':l2})
+
+@login_required(login_url='/login')
+def companyPage(request,id):
+    jobs = Job.objects.all()
+    job = None
+    for i in jobs:
+        if i.id == id:
+            job = i
+            break
+    return render(request,"student/companyPage.html",{'job':job})

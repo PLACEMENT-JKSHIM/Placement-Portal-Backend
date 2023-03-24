@@ -9,4 +9,5 @@ path('previousjob/edit/<int:id>',views.editPreviousJob, name='editPreviousJob') 
 path('student/registerCompany',views.registerCompany,name="registerCompany"),
 path('student/changePassword',views.changePassword,name="changePassword"),
 path('student_home',views.student_home,name='student_home'),  
+path('student/companyPage/<int:id>',views.companyPage,name='companyPage'),
 ]

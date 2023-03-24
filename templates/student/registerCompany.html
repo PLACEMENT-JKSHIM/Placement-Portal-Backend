@@ -7,7 +7,7 @@
 {% for jobs in jobs %}    
 <a
   class="relative flex max-w-sm items-start justify-between rounded-xl border  border-gray-100 p-4 shadow-md sm:p-6 lg:p-8"
-  href="#"
+  href="/student/companyPage/{{ jobs.id }}"
 >
 <div class="pt-4 text-gray-500 relative">
 <div class="flex items-center">
@@ -32,7 +32,7 @@
     <p class="pt-3 text-blue-300">Register before: {{ jobs.registration_date }}</p>
 
   </div>
-  {% if jobs.status == 'Closed' %}
+  {% if jobs.status == 'C' %}
   <span class="bg-red-600 text-white text-sm absolute right-0 font-medium mr-2 px-2.5 py-0.5 rounded-full">Closed</span>
   {% else %}
   <span class="bg-blue-700 text-white text-sm absolute right-0 font-medium mr-2 px-2.5 py-0.5 rounded-full">Open</span>
