@@ -120,7 +120,8 @@ def changePassword(request):
 def student_home(request):
     l1=Notice.objects.all();
     l2=sorted(l1,key=lambda x:x.updated_on, reverse=True);
-    return render(request,"student/student_newsUpdates.html",{'news':l2})
+    print(l2)
+    return render(request,"student/student_home.html",{'news':l2})
 
 @login_required(login_url='/login')
 def companyPage(request,id):

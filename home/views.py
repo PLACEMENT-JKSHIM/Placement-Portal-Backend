@@ -29,15 +29,15 @@ def login(request):
             if s.status == 'LB':
                 messages.error(request, message="Login blocked")
             else:
-                return redirect("/home")
+                return redirect("/student_home")
         else:
             messages.error(request, message="Invaild username or password")
             
     return render(request, "home/login.html")
 
-@login_required(login_url='/login')
-def home(request):
-    return render(request, "student/student_home.html")
+# @login_required(login_url='/login')
+# def home(request):
+#     return render(request, "student/student_home.html")
 
 
 def gallery(request):

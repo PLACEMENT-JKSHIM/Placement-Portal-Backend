@@ -25,13 +25,13 @@ class JobForm(ModelForm):
         fields = '__all__'
         widgets = {
 
-            'min_dob': forms.DateTimeInput(attrs={'type': 'date'}),
+            'min_dob': forms.DateInput(attrs={'type': 'date'}),
 
-            'max_dob': forms.DateTimeInput(attrs={'type': 'date'}),
+            'max_dob': forms.DateInput(attrs={'type': 'date'}),
 
             'talk_date': forms.DateInput(attrs={'type': 'date'}),
 
-            'registration_date': forms.DateTimeInput(attrs={'type': 'date'}),
+            'registration_date': forms.DateInput(attrs={'type': 'date'}),
 
             'interview_date': forms.DateInput(attrs={'type': 'date'}),
 
