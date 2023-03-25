@@ -7,6 +7,8 @@ from django.contrib import auth
 from django.contrib import messages
 from student.models import Student
 from home.models import Job
+from django.shortcuts import get_object_or_404
+from django.contrib.auth.decorators import login_required
 # Create your views here.
 
 
@@ -54,16 +56,6 @@ def profile(request):
 def changePassword(request):
     return render(request, "student/changePassword.html")
 
-
-def company(req):
-    #testing 
-    j = Job.objects.get(id=1)
-    c = Company.objects.get(id=j.company.id)
-    comp1 = Company.objects.get(id=j.company.id)
-    # checking feilds
-    job1= Job.objects.get(company=comp1.id)#comp1 holds object of company
-    print(job1)
-    return render(req, "dummy.html", {'c': c})
 
 def registerCompany(request):
     jobs = Job.objects.all()

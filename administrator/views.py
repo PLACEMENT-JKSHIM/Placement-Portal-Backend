@@ -2,8 +2,8 @@ import http
 from django.forms.models import model_to_dict
 from django.core import serializers
 from django.shortcuts import render,redirect
-from home.models import Slider, Team
-from .forms import TeamForm, UserForm,SliderForm
+from home.models import Slider,Team,Company,Job
+from .forms import TeamForm, UserForm,SliderForm,JobForm,CompanyForm
 from django.http import HttpResponse,JsonResponse
 import json
 from student.models import Student
@@ -12,6 +12,8 @@ from django.contrib.auth.forms import UserCreationForm
 from django.db import IntegrityError
 from django.contrib import messages
 from django.core.cache import cache
+from django.shortcuts import get_object_or_404
+from django.contrib.auth.decorators import login_required
 
 
 def index(request):
@@ -125,5 +127,82 @@ def profileEditBlockAll(req):
 def profileEditUnblockAll(req):
     Student.objects.all().update(editable=True)
     return redirect("blockStudent")
+
+
+def addJob(request):
+    if request.method == 'POST':
+        form = JobForm(request.POST)
+        if form.is_valid():
+            job = form.save()
+            messages.success(request, message=" {0} added Successfully!".format(job.title))
+        else:
+            for field,errors in form.errors.items():
+                for error in errors:
+                    messages.error(request, message=f"{field} : {error}")
+        return redirect('jobs')
+    else:
+        form = JobForm()
+    context = {'form': form}
+    return render(request, "admininstrator/company/addjob.html", context)
+
+@login_required(login_url='/login')
+def companies(request):
+    companies=Company.objects.all()
+    if request.method == 'POST':
+        form = CompanyForm(request.POST,request.FILES)
+        print(form)
+        if form.is_valid():
+            companynew = form.save()
+            messages.success(request,message=" {0} deleted Successfully!".format(companynew))
+        else:
+            for field,errors in form.errors.items():
+                for error in errors:
+                    messages.error(request, message=f"{field} : {error}")
+            return redirect('admin')
+    else:
+        form = CompanyForm()
+    return render(request, "admininstrator/company/companies.html",{'companies':companies})
+
+def jobs(request):
+    jobs=Job.objects.all()
+    context={
+        'jobs':jobs
+    }
+    return render(request, "admininstrator/company/jobs.html",context)
+
+
+@login_required(login_url='/login')
+def deletecompany(request,id):
+    print(request.user.is_superuser)
+    c=get_object_or_404(Company,id=id)
+    cname=c.c_name
+    c.delete()
+    messages.success(request, message=" {0} deleted Successfully!".format(cname))
+    return redirect('companies')
+
+@login_required(login_url='/login')
+def editCompany(request,id):
+    company=get_object_or_404(Company,id=id)
+    cname=company.c_name
+    if request.method == 'GET':
+        form=CompanyForm(instance=company)
+        context={
+            'form':form,
+            'company':company
+        }
+        return render(request,"admininstrator/company/editCompany.html",context)
+    if request.method=="POST":
+        form = CompanyForm(request.POST,request.FILES, instance=company)
+        if form.is_valid():
+            form.save()
+            messages.success(request, message=" {0} updated Successfully!".format(cname))
+        else:
+            for field,errors in form.errors.items():
+                for error in errors:
+                    messages.error(request, message=f"{field} : {error}")
+        return redirect('companies')
+    return redirect('companies')
+
+
 
     

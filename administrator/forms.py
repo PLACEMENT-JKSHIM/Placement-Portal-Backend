@@ -1,7 +1,7 @@
 from django.forms import ModelForm 
 from django.contrib.auth.models import User
-
-from home.models import Slider, Team
+from django import forms
+from home.models import Slider, Team,Job,Company
 
 class UserForm(ModelForm):
     class Meta:
@@ -17,3 +17,29 @@ class TeamForm(ModelForm):
     class Meta:
         model = Team
         fields = ['mem_name','mem_designation','mem_image','mem_description']
+
+class JobForm(ModelForm):
+    class Meta:
+
+        model = Job
+        fields = '__all__'
+        widgets = {
+
+            'min_dob': forms.DateTimeInput(attrs={'type': 'date'}),
+
+            'max_dob': forms.DateTimeInput(attrs={'type': 'date'}),
+
+            'talk_date': forms.DateInput(attrs={'type': 'date'}),
+
+            'registration_date': forms.DateTimeInput(attrs={'type': 'date'}),
+
+            'interview_date': forms.DateInput(attrs={'type': 'date'}),
+
+            'test_date': forms.DateInput(attrs={'type': 'date'}),
+
+        }
+
+class CompanyForm(ModelForm):
+    class Meta:
+        model = Company
+        fields = ['c_name','about','image']

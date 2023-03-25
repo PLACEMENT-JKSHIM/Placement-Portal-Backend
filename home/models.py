@@ -30,16 +30,16 @@ class Slider(models.Model):
 
 class Job(models.Model):
     class Status(models.TextChoices):
-        REG_OPEN = 'O'
-        REG_CLOSE = 'C'
+        OPEN = 'O'
+        CLOSE = 'C'
     title=models.CharField(max_length=50,null=True)
-    description=models.CharField( max_length=100,null=True)
+    description=models.TextField(blank=True)
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
     academic_year=models.IntegerField()
     sslc=models.DecimalField(max_digits=4, decimal_places=2)
     puc=models.DecimalField(max_digits=4, decimal_places=2)
     degree=models.DecimalField(max_digits=4, decimal_places=2)
-    curr_cgpa=models.DecimalField(max_digits=2, decimal_places=2)
+    curr_cgpa=models.DecimalField(max_digits=3, decimal_places=2)
     gap_edu=models.IntegerField()
     min_dob=models.DateTimeField()
     max_dob=models.DateTimeField()
@@ -51,8 +51,8 @@ class Job(models.Model):
     talk_date=models.DateField()
     interview_date=models.DateField()
     test_date=models.DateField()
-    notes=models.CharField( max_length=1000,null=True)
-    status= status=models.CharField(max_length=2,choices=Status.choices,default=Status.REG_OPEN)
+    notes=models.TextField( blank=True)
+    status=models.CharField(max_length=2,choices=Status.choices,default=Status.OPEN)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     def __str__(self):
