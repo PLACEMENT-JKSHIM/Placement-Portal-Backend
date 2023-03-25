@@ -1,0 +1,23 @@
+{% extends "./_base_student.html" %}
+{% block content %}
+
+<div class="px-6 py-2 md:p-2 space-y-6">
+    <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
+        Edit Previous job <span class="text-primary uppercase">{{form.role.value}}</span>
+    </h3>
+    <div class="p-1">
+    <form action="/previousjob/edit/{{form.instance.id}}" method="POST">
+        {% csrf_token %}
+        <div class="grid gap-2">
+                {% include "./_input.html" with field=form.role %}
+                {% include "./_input.html" with field=form.yearsofExperience %}
+                {% include "./_input.html" with field=form.monthsofExperience %}
+                {% include "./_input.html" with field=form.company %}
+        </div>
+        <div class="relative w-40 m-auto mt-4">
+            {% include "../buttons/buttons.html" with main=True btn="Submit" secondary=True %}
+        </div>
+    </form>
+    </div>
+</div>
+{% endblock content %}

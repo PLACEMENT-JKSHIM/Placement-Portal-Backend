@@ -1,0 +1,11 @@
+{% load widget_tweaks %}
+<div id="file-input" class="text-primary flex flex-col gap-1">
+    <label for="{{field.id_for_label}}" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{{field.label}}
+    </label>
+    {% if obj %}
+        <a target='_blank' href="{{obj.url}}" class="text-primary bg-white w-fit p-2 rounded-full">View current file</a>
+    {% endif %}
+    {% render_field field class="flex w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50"  %}
+</div>
+<script>
+</script>

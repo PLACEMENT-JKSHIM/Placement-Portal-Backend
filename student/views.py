@@ -3,8 +3,19 @@ from django.contrib.auth.models import User
 from .forms import StudentForm,PreviousJobForm
 from .models import Student,PreviousJob
 from django.contrib.auth.decorators import login_required
+from administrator.models import Notice       
 from django.contrib import messages
 from django.shortcuts import get_object_or_404
+from home.models import Job
+from django.contrib.auth import authenticate
+from django.contrib.auth import logout
+
+
+
+@login_required(login_url='/login')
+def logoutStudent(request):
+    logout(request)
+    return render(request,"home/index.html")
 
 @login_required(login_url='/login')
 def updateProfile(request):
@@ -14,7 +25,8 @@ def updateProfile(request):
     s=Student.objects.filter(user=request.user).first()
     pjs=PreviousJob.objects.filter(user=request.user)
     if request.method=="POST":
-        form=StudentForm(request.POST,instance=s)
+        print(request.FILES)
+        form=StudentForm(request.POST,request.FILES,instance=s)
         if form.is_valid():
             st=form.save()
             messages.success(request, message="Saved successfully")
@@ -44,7 +56,6 @@ def addPreviousJob(request):
             for field,errors in form.errors.items():
                 for error in errors:
                     messages.error(request, message=f"{field} : {error}")
-
     return redirect('/profile/update')
 
 @login_required(login_url='/login')
@@ -56,3 +67,66 @@ def deletePreviousJob(request,id):
     pj.delete()
     messages.success(request, message="Deleted successfully")
     return redirect('/profile/update')
+
+@login_required(login_url='/login')
+def editPreviousJob(request,id):
+    if request.user.is_superuser:
+        return redirect('/au/')
+
+    pj=get_object_or_404(PreviousJob,id=id)
+    if request.method=="POST":
+        form=PreviousJobForm(request.POST,instance=pj)
+        if form.is_valid():
+            form.save()
+            messages.success(request, message="Edited successfully")
+            return redirect(to='/profile/update')
+        else:
+            for field,errors in form.errors.items():
+                for error in errors:
+                    messages.error(request, message=f"{field} : {error}")
+
+    form=PreviousJobForm(instance=pj)
+    return render(request, "student/editpreviousjob.html",context={'form':form})
+
+@login_required
+def registerCompany(request):
+    jobs = Job.objects.all()
+    return render(request, "student/registerCompany.html",{'jobs': jobs})
+
+@login_required
+def changePassword(request):
+    if request.method == 'POST':
+        current_password = request.POST.get('password')
+        new_password = request.POST.get('newpassword')
+        confirm_password = request.POST.get('confirmpassword')
+        
+        if not request.user.check_password(current_password):
+            messages.error(request, 'Current password is incorrect.')
+            return redirect('changePassword')
+        
+        if new_password != confirm_password:
+            messages.error(request, 'Passwords do not match.')
+            return redirect('changePassword')
+        
+        request.user.set_password(new_password)
+        request.user.save()
+        messages.success(request, 'Password changed successfully.')
+        return redirect('changePassword')
+        
+    return render(request, 'student/changePassword.html')
+
+@login_required(login_url='/login')
+def student_home(request):
+    l1=Notice.objects.all();
+    l2=sorted(l1,key=lambda x:x.updated_on, reverse=True);
+    return render(request,"student/student_newsUpdates.html",{'news':l2})
+
+@login_required(login_url='/login')
+def companyPage(request,id):
+    jobs = Job.objects.all()
+    job = None
+    for i in jobs:
+        if i.id == id:
+            job = i
+            break
+    return render(request,"student/companyPage.html",{'job':job})

@@ -7,14 +7,17 @@ from .forms import TeamForm, UserForm,SliderForm,JobForm,CompanyForm
 from django.http import HttpResponse,JsonResponse
 import json
 from student.models import Student
+from administrator.models import Notice
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from django.db import IntegrityError
 from django.contrib import messages
 from django.core.cache import cache
+from django.contrib.auth import authenticate, login,get_user_model
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.decorators import login_required
 
+User = get_user_model()
 
 def index(request):
     return render(request, "admininstrator/index.html")
@@ -206,3 +209,46 @@ def editCompany(request,id):
 
 
     
+@login_required
+def changePasswordAdmin(request):
+    if request.method == 'POST':
+        # get the input values from the POST request
+        username = request.POST.get('username')
+        new_password = request.POST.get('newpassword')
+        confirm_password = request.POST.get('confirmpassword')
+
+        # perform basic form validation
+        if not all([username, new_password, confirm_password]):
+            messages.error(request, 'All fields are required')
+        elif new_password != confirm_password:
+            messages.error(request, 'Passwords do not match')
+        else:
+            # find the user and update the password
+            user = User.objects.get(username=username)
+            user.set_password(new_password)
+            user.save()
+            messages.success(request, f'Password updated successfully for user {username}')
+            return redirect('changePasswordAdmin')
+
+    return render(request, 'admininstrator/student/changePasswordAdmin.html')
+
+def addNewsUpdates(request):
+    if request.method=='POST':
+        title=request.POST.get("news_title")
+        content=request.POST.get("news_content")
+        addNewsUpdates=Notice(title=title,content=content)
+        addNewsUpdates.save();
+    return render(request,"admininstrator/admin_newsUpdates.html")
+
+def deleteTeamMember(request,id):
+    teamobj=get_object_or_404(Team,id=id)
+    teamobj.delete()
+    messages.success(request, message="Member deleted successfully")
+    return redirect('/au/adminEditor')
+
+def deleteSlider(request,id):
+    print(id)
+    slidobj = get_object_or_404(Slider,id=id)
+    slidobj.delete()
+    messages.success(request, message="Slider image deleted successfully")
+    return redirect('/au/adminEditor')
