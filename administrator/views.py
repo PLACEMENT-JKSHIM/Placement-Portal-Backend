@@ -255,3 +255,40 @@ def deleteSlider(request,id):
     slidobj.delete()
     messages.success(request, message="Slider image deleted successfully")
     return redirect('/au/adminEditor')
+
+def viewJob(request,id):
+    job=get_object_or_404(Job,id=id)
+    context={
+        'job':job
+    }
+    return render(request,"admininstrator/company/viewJob.html",context)
+
+def deleteJob(request, id):
+    job_code = get_object_or_404(Job, id=id)
+    if request.method == 'POST':
+            job_code.delete()
+            messages.success(request, ' deleted successfully.')
+    else:
+            messages.warning(request, 'Cannot delete')
+    return redirect('jobs')
+
+def editJob(request,id):
+    job=get_object_or_404(Job,id=id)
+    jobname=job.title
+    if request.method=='POST':
+        form = JobForm(request.POST,instance=job)
+        if form.is_valid():
+            form.save()
+            messages.success(request, message=" {0} updated Successfully!".format(jobname))
+        else:
+            for field,errors in form.errors.items():
+                for error in errors:
+                    messages.error(request, message=f"{field} : {error}")
+    else:
+        form=JobForm(instance=job)
+        context={
+            'form':form
+        }
+        return render(request,"admininstrator/company/editJob.html",context)
+    return redirect('viewJob', id=job.id)
+

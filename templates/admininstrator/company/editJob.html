@@ -5,11 +5,11 @@
 {% endblock meta %}
 {% block content %}
 
-<div class="p-4 sm:ml-4 overflow-auto">
+<div class="p-2 sm:ml-2 overflow-auto">
 
-    <div class="p-4 sm:ml-4 overflow-auto">
-        <h1 class="text-3xl font-bold text-primary"><span class="underline underline-offset-8 decoration-7 decoration-secondary">Add New Job</span> Details </h1>
-        <div class=" bg-white p-4">
+    <div class="p-2 sm:ml-2 overflow-auto">
+        <h1 class="text-3xl mt-5 font-bold text-primary"><span class="underline underline-offset-8 decoration-7 decoration-secondary">Update Job</span> Details </h1>
+        <div class=" bg-white p-2">
 
             <form method="POST">
                 {% csrf_token %}
@@ -32,7 +32,9 @@
                     <div class="col-span-6">
                         {% include "../../custom_feilds/_input.html" with field=form.puc %}
                     </div>
-
+                    <div class="col-span-6">
+                        {% include "../../custom_feilds/_input.html" with field=form.diploma %}
+                    </div>
                     <div class="col-span-6">
                         {% include "../../custom_feilds/_input.html" with field=form.degree %}
                     </div>
@@ -87,8 +89,10 @@
     </label>
 {% endfor %}
                       </div>
-                      <div class="relative w-40 m-auto mt-4">
-                        {% include "../../buttons/buttons.html" with main=True btn="Add Job" secondary=True %}
+                     
+                    <div class="col-span-10">
+                      <div class="relative block w-40 m-auto mt-4">
+                        {% include "../../buttons/buttons.html" with main=True btn="Update Job" secondary=True %}
                     </div>
             </form>
         </div>
