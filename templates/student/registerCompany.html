@@ -27,18 +27,29 @@
       <p><span class="font-bold">Talk Date : </span>{{ jobs.talk_date }}</p>
       <p><span class="font-bold">Test Date : </span>{{ jobs.test_date }}</p>
       <p><span class="font-bold">Interview Date : </span>{{ jobs.interview_date }}</p>
-
     </p>
     <p class="pt-3 text-blue-300">Register before: {{ jobs.registration_date }}</p>
-
   </div>
+  {% for jobs_student in jobs_students %}
+    {% if jobs.id == jobs_student.job.id %}
+    {% if jobs_student.status == 'A' %}
+    <span class="bg-green-500 text-white text-sm absolute right-0 font-medium mr-2 mt-2 top-0 px-2.5 py-0.5 rounded-full">APPLIED</span>
+    {{ continue }}
+    {% elif jobs_student.status == 'R' %}
+    <span class="bg-red-500 text-white text-sm absolute right-0 font-medium mr-2 mt-2 top-0 px-2.5 py-0.5 rounded-full">NOT APPLIED</span>
+    {{ continue }}
+    {% else %}
+    {% endif %}
+    {% endif %}  
+  {% endfor %}
   {% if jobs.status == 'C' %}
-  <span class="bg-red-600 text-white text-sm absolute right-0 font-medium mr-2 px-2.5 py-0.5 rounded-full">Closed</span>
+  <span class="bg-red-600 text-white text-sm absolute right-0 font-medium mr-2 mt-2 px-2.5 py-0.5 rounded-full">CLOSED</span>
   {% else %}
-  <span class="bg-blue-700 text-white text-sm absolute right-0 font-medium mr-2 px-2.5 py-0.5 rounded-full">Open</span>
+  <span class="bg-blue-700 text-white text-sm absolute right-0 font-medium mr-2 mt-2 px-2.5 py-0.5 rounded-full">OPEN</span>
   {% endif %}
 </a>
 {% endfor %}
+
 </div>
 </div>
 
