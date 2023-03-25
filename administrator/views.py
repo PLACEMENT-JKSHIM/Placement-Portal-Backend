@@ -109,10 +109,13 @@ def editBlock(request):
                 'editable': student.editable,
                 'user': user_dict,
                 'name': student.name,
+                'image':{
+                'url':student.image.url
+                }
                 # add any other fields you want to include here
             }
+            print(student_dict)
             students.append(student_dict)
-    print(students)
     context = {'students': students}
     return JsonResponse(context, safe=False)
 
