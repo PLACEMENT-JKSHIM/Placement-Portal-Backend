@@ -266,10 +266,11 @@ def deleteTeamMember(request,id):
 def editTeamMember(request,id):
     teamobj=get_object_or_404(Team,id=id)
     if request.method=="POST":
-        form=TeamForm(request.POST,instance=teamobj)
+        form=TeamForm(request.POST,request.FILES,instance=teamobj)
         if form.is_valid():
             form.save()
-            messages.success(request, message="Edited successfully")
+            memname=teamobj.mem_name
+            messages.success(request, message="{0} Edited successfully".format(memname))
             return redirect(to='/au/adminEditor')
         else:
             for field,errors in form.errors.items():
