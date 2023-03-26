@@ -49,7 +49,7 @@
             </svg>
          </div> -->
          {% for slider in sliders %}
-            <div class="flex flex-col items-center group gap-1 bg-white pt-2 pr-2 pl-2 pb-2 shadow-sm shadow-white">
+            <div data-ik={{slider.id}} class="flex flex-col items-center group gap-1 bg-white pt-2 pr-2 pl-2 pb-2 shadow-sm shadow-white">
                <img class="min-h-[150px]" src="{{slider.slider_image.url}}"/>
                <div class="flex flex-row gap-4">
                   <button id="deleteImage" data-modal-target="image-delete" data-modal-toggle="image-delete" type="button" class="text-white  bg-red-600 hover:bg-red-500  focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-full text-sm p-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
