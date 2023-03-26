@@ -29,15 +29,15 @@ def login(request):
             if s.status == 'LB':
                 messages.error(request, message="Login blocked")
             else:
-                return redirect("/home")
+                return redirect("/student_home")
         else:
             messages.error(request, message="Invaild username or password")
             
     return render(request, "home/login.html")
 
-@login_required(login_url='/login')
-def home(request):
-    return render(request, "student/student_home.html")
+# @login_required(login_url='/login')
+# def home(request):
+#     return render(request, "student/student_home.html")
 
 
 def gallery(request):
@@ -52,13 +52,3 @@ def rules(request):
 def profile(request):
     return render(request, "student/profile.html")
 
-
-def company(req):
-    #testing 
-    j = Job.objects.get(id=1)
-    c = Company.objects.get(id=j.company.id)
-    comp1 = Company.objects.get(id=j.company.id)
-    # checking feilds
-    job1= Job.objects.get(company=comp1.id)#comp1 holds object of company
-    print(job1)
-    return render(req, "dummy.html", {'c': c})

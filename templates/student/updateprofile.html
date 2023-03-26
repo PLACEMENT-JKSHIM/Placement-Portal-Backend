@@ -17,46 +17,46 @@
                 {% csrf_token %}
                 <div class="grid md:grid-cols-3 gap-2 ">
                     <div class="relative z-0 w-full mb-6 group">
-                        {% include "./_input.html" with field=form.name %}
+                        {% include "../custom_feilds/_input.html" with field=form.name %}
                     </div>
                     <div class="relative z-0 w-full mb-6 group">
-                        {% include "./_input.html" with field=form.nameAadhar %}
+                        {% include "../custom_feilds/_input.html" with field=form.nameAadhar %}
                     </div>
                     <div class="relative z-0 w-full mb-6 group">
-                        {% include "./_input.html" with field=form.dateOfBirth %}
-                    </div>
-                </div>
-                <div class="grid lg:grid-cols-3 md:gap-2 ">
-                    <div class="relative z-0 w-full mb-6 group">
-                        {% include "./_input.html" with field=form.gender %}
-                    </div>
-                    <div class="relative z-0 w-full mb-6 group">
-                        {% include "./_input.html" with field=form.phoneNo %}
-                    </div>
-                    <div class="relative z-0 w-full mb-6 group">
-                        {% include "./_input.html" with field=form.alternatePhoneNo %}
+                        {% include "../custom_feilds/_input.html" with field=form.dateOfBirth %}
                     </div>
                 </div>
                 <div class="grid lg:grid-cols-3 md:gap-2 ">
                     <div class="relative z-0 w-full mb-6 group">
-                        {% include "./_input.html" with field=form.email %}
+                        {% include "../custom_feilds/_input.html" with field=form.gender %}
                     </div>
                     <div class="relative z-0 w-full mb-6 group">
-                       {% include "./_input.html" with field=form.aadhar %}
+                        {% include "../custom_feilds/_input.html" with field=form.phoneNo %}
                     </div>
                     <div class="relative z-0 w-full mb-6 group">
-                       {% include "./_input.html" with field=form.pancard %}
+                        {% include "../custom_feilds/_input.html" with field=form.alternatePhoneNo %}
+                    </div>
+                </div>
+                <div class="grid lg:grid-cols-3 md:gap-2 ">
+                    <div class="relative z-0 w-full mb-6 group">
+                        {% include "../custom_feilds/_input.html" with field=form.email %}
+                    </div>
+                    <div class="relative z-0 w-full mb-6 group">
+                       {% include "../custom_feilds/_input.html" with field=form.aadhar %}
+                    </div>
+                    <div class="relative z-0 w-full mb-6 group">
+                       {% include "../custom_feilds/_input.html" with field=form.pancard %}
                     </div>
                 </div>
                 <div class="grid lg:grid-cols-2 md:gap-2 ">
                     <div class="relative z-0 w-full mb-6 group">
-                         {% include "./_input.html" with field=form.homeState %}
+                         {% include "../custom_feilds/_input.html" with field=form.homeState %}
                     </div>
                     <div class="relative z-0 w-full mb-6 group">
-                         {% include "./_input.html" with field=form.homeTown %}
+                         {% include "../custom_feilds/_input.html" with field=form.homeTown %}
                     </div>
                     <div class="relative z-0 w-full mb-6 group">
-                        {% include "./_textarea.html" with field=form.address %}
+                        {% include "../custom_feilds/_textarea.html" with field=form.address %}
                     </div>
                 </div>
                 <div class="mt-3 pt-2 border-t border-secondary grid lg:grid-cols-1 text-center ">
@@ -64,24 +64,24 @@
                 </div>
                 <div class="mt-3 pt-6 border-t border-secondary grid lg:grid-cols-3 md:gap-2 ">
                     <div class="relative z-0 w-full mb-6 group">
-                        {% include "./_input.html" with field=form.tenPercentage %}
+                        {% include "../custom_feilds/_input.html" with field=form.tenPercentage %}
                     </div>
                     <div class="relative z-0 w-full mb-6 group">
-                        {% include "./_input.html" with field=form.tenBoard %}
+                        {% include "../custom_feilds/_input.html" with field=form.tenBoard %}
                     </div>
                     <div class="relative z-0 w-full mb-6 group">
-                        {% include "./_input.html" with field=form.tenSchool %}
+                        {% include "../custom_feilds/_input.html" with field=form.tenSchool %}
                     </div>
                 </div>
                 <div class="grid lg:grid-cols-3 md:gap-2 ">
                     <div class="relative z-0 w-full mb-6 group">
-                        {% include "./_input.html" with field=form.tenPassYear %}
+                        {% include "../custom_feilds/_input.html" with field=form.tenPassYear %}
                     </div>
                     <div class="relative z-0 w-full mb-6 group">
-                        {% include "./_input.html" with field=form.tenState %}
+                        {% include "../custom_feilds/_input.html" with field=form.tenState %}
                     </div>
                     <div class="relative z-0 w-full mb-6 group">
-                        {% include "./_input.html" with field=form.tenCountry %}
+                        {% include "../custom_feilds/_input.html" with field=form.tenCountry %}
                     </div>
                 </div>
                 <div class="mt-3 pt-2 border-t border-secondary grid lg:grid-cols-1 text-center ">
@@ -90,24 +90,24 @@
                 </div>
                 <div class="mt-3 pt-6 border-t border-secondary grid lg:grid-cols-3 md:gap-2 ">
                     <div class="relative z-0 w-full mb-6 group">
-                        {% include "./_input.html" with field=form.twelvePercentage %}
+                        {% include "../custom_feilds/_input.html" with field=form.twelvePercentage %}
                     </div>
                     <div class="relative z-0 w-full mb-6 group">
-                        {% include "./_input.html" with field=form.twelveBoard %}
+                        {% include "../custom_feilds/_input.html" with field=form.twelveBoard %}
                     </div>
                     <div class="relative z-0 w-full mb-6 group">
-                        {% include "./_input.html" with field=form.twelveSchool %}
+                        {% include "../custom_feilds/_input.html" with field=form.twelveSchool %}
                     </div>
                 </div>
                 <div class="grid lg:grid-cols-3 md:gap-2 ">
                     <div class="relative z-0 w-full mb-6 group">
-                        {% include "./_input.html" with field=form.twelvePassYear %}
+                        {% include "../custom_feilds/_input.html" with field=form.twelvePassYear %}
                     </div>
                     <div class="relative z-0 w-full mb-6 group">
-                        {% include "./_input.html" with field=form.twelveState %}
+                        {% include "../custom_feilds/_input.html" with field=form.twelveState %}
                     </div>
                     <div class="relative z-0 w-full mb-6 group">
-                        {% include "./_input.html" with field=form.twelveCountry %}
+                        {% include "../custom_feilds/_input.html" with field=form.twelveCountry %}
                     </div>
                 </div>
                 <div class="mt-3 pt-2 border-t border-secondary grid lg:grid-cols-1 text-center ">
@@ -116,24 +116,24 @@
                 </div>
                 <div class="mt-3 pt-6 border-t border-secondary grid lg:grid-cols-3 md:gap-2 ">
                     <div class="relative z-0 w-full mb-6 group">
-                        {% include "./_input.html" with field=form.diplomaPercentage %}
+                        {% include "../custom_feilds/_input.html" with field=form.diplomaPercentage %}
                     </div>
                     <div class="relative z-0 w-full mb-6 group">
-                        {% include "./_input.html" with field=form.diplomaBoard %}
+                        {% include "../custom_feilds/_input.html" with field=form.diplomaBoard %}
                     </div>
                     <div class="relative z-0 w-full mb-6 group">
-                        {% include "./_input.html" with field=form.diplomaSchool %}
+                        {% include "../custom_feilds/_input.html" with field=form.diplomaSchool %}
                     </div>
                 </div>
                 <div class="grid lg:grid-cols-3 md:gap-2 ">
                     <div class="relative z-0 w-full mb-6 group">
-                        {% include "./_input.html" with field=form.diplomaPassYear %}
+                        {% include "../custom_feilds/_input.html" with field=form.diplomaPassYear %}
                     </div>
                     <div class="relative z-0 w-full mb-6 group">
-                        {% include "./_input.html" with field=form.diplomaState %}
+                        {% include "../custom_feilds/_input.html" with field=form.diplomaState %}
                     </div>
                     <div class="relative z-0 w-full mb-6 group">
-                        {% include "./_input.html" with field=form.diplomaCountry %}
+                        {% include "../custom_feilds/_input.html" with field=form.diplomaCountry %}
                     </div>
                 </div>
                 <div class="mt-3 pt-2 border-t border-secondary grid lg:grid-cols-1 text-center">
@@ -142,32 +142,32 @@
                 </div>
                 <div class="mt-3 pt-6 border-t border-secondary grid grid-cols-2 md:gap-2 ">
                     <div class="relative z-0 w-full mb-6 group">
-                        {% include "./_input.html" with field=form.degreePercentage %}
+                        {% include "../custom_feilds/_input.html" with field=form.degreePercentage %}
                     </div>
                     <div class="relative z-0 w-full mb-6 group">
-                        {% include "./_input.html" with field=form.degreeStream %}
-                    </div>
-                </div>
-                <div class="grid lg:grid-cols-3 md:gap-2 ">
-                    <div class="relative z-0 w-full mb-6 group">
-                        {% include "./_input.html" with field=form.degreeCourse %}
-                    </div>
-                    <div class="relative z-0 w-full mb-6 group">
-                        {% include "./_input.html" with field=form.degreeCollege %}
-                    </div>
-                    <div class="relative z-0 w-full mb-6 group">
-                        {% include "./_input.html" with field=form.degreeUniversity %}
+                        {% include "../custom_feilds/_input.html" with field=form.degreeStream %}
                     </div>
                 </div>
                 <div class="grid lg:grid-cols-3 md:gap-2 ">
                     <div class="relative z-0 w-full mb-6 group">
-                        {% include "./_input.html" with field=form.degreePassYear %}
+                        {% include "../custom_feilds/_input.html" with field=form.degreeCourse %}
                     </div>
                     <div class="relative z-0 w-full mb-6 group">
-                        {% include "./_input.html" with field=form.degreeState %}
+                        {% include "../custom_feilds/_input.html" with field=form.degreeCollege %}
                     </div>
                     <div class="relative z-0 w-full mb-6 group">
-                        {% include "./_input.html" with field=form.degreeCountry %}
+                        {% include "../custom_feilds/_input.html" with field=form.degreeUniversity %}
+                    </div>
+                </div>
+                <div class="grid lg:grid-cols-3 md:gap-2 ">
+                    <div class="relative z-0 w-full mb-6 group">
+                        {% include "../custom_feilds/_input.html" with field=form.degreePassYear %}
+                    </div>
+                    <div class="relative z-0 w-full mb-6 group">
+                        {% include "../custom_feilds/_input.html" with field=form.degreeState %}
+                    </div>
+                    <div class="relative z-0 w-full mb-6 group">
+                        {% include "../custom_feilds/_input.html" with field=form.degreeCountry %}
                     </div>
                 </div>
                 <div class="mt-3 pt-2 border-t border-secondary grid lg:grid-cols-1 text-center ">
@@ -176,35 +176,35 @@
                 </div>
                 <div class="mt-3 pt-6 border-t border-secondary grid lg:grid-cols-4 md:gap-2 ">
                     <div class="relative z-0 w-full mb-6 group">
-                        {% include "./_input.html" with field=form.sgpa1 %}
+                        {% include "../custom_feilds/_input.html" with field=form.sgpa1 %}
                     </div>
                     <div class="relative z-0 w-full mb-6 group">
-                        {% include "./_input.html" with field=form.sgpa2 %}
+                        {% include "../custom_feilds/_input.html" with field=form.sgpa2 %}
                     </div>
                     <div class="relative z-0 w-full mb-6 group">
-                        {% include "./_input.html" with field=form.sgpa3 %}
+                        {% include "../custom_feilds/_input.html" with field=form.sgpa3 %}
                     </div>
                     <div class="relative z-0 w-full mb-6 group">
-                        {% include "./_input.html" with field=form.sgpa4 %}
+                        {% include "../custom_feilds/_input.html" with field=form.sgpa4 %}
                     </div>
                 </div>
                 <div class="grid lg:grid-cols-4 md:gap-2 ">
                     <div class="relative z-0 w-full mb-6 group">
-                        {% include "./_input.html" with field=form.cgpa %}
+                        {% include "../custom_feilds/_input.html" with field=form.cgpa %}
                     </div>
                     <div class="relative z-0 w-full mb-6 group">
-                        {% include "./_input.html" with field=form.activeBacklog %}
+                        {% include "../custom_feilds/_input.html" with field=form.activeBacklog %}
                     </div>
                     <div class="relative z-0 w-full mb-6 group">
-                        {% include "./_input.html" with field=form.totalBacklog %}
+                        {% include "../custom_feilds/_input.html" with field=form.totalBacklog %}
                     </div>
                 </div>
                 <div class="grid lg:grid-cols-2 md:gap-2 ">
                     <div class="relative z-0 w-full mb-6 group">
-                        {% include "./_textarea.html" with field=form.projects %}
+                        {% include "../custom_feilds/_textarea.html" with field=form.projects %}
                     </div>
                     <div class="relative z-0 w-full mb-6 group">
-                        {% include "./_input.html" with field=form.preferredJobLocation %}
+                        {% include "../custom_feilds/_input.html" with field=form.preferredJobLocation %}
                     </div>
                 </div>
                 <div class="mt-3 pt-2 border-t border-secondary grid lg:grid-cols-1 text-center">
@@ -260,10 +260,10 @@
                     <form action="/previousjob/add" method="POST">
                         {% csrf_token %}
                         <div class="grid gap-2">
-                                {% include "./_input.html" with field=pjForm.role %}
-                                {% include "./_input.html" with field=pjForm.yearsofExperience %}
-                                {% include "./_input.html" with field=pjForm.monthsofExperience %}
-                                {% include "./_input.html" with field=pjForm.company %}
+                                {% include "../custom_feilds/_input.html" with field=pjForm.role %}
+                                {% include "../custom_feilds/_input.html" with field=pjForm.yearsofExperience %}
+                                {% include "../custom_feilds/_input.html" with field=pjForm.monthsofExperience %}
+                                {% include "../custom_feilds/_input.html" with field=pjForm.company %}
                         </div>
                         <div class="relative w-40 m-auto mt-4">
                             {% include "../buttons/buttons.html" with main=True btn="Submit" secondary=True %}

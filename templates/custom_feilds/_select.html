@@ -1,0 +1,11 @@
+{% load widget_tweaks %}
+
+<div>
+    <label class="font-bold"  for="company_name">Company Name</label><br>
+    <select name="{{ field.name }}" id="{{ field.id }}"
+class="w-full border border-gray-300 text-gray-900 text-sm">
+{% for company in field.field.choices %}
+<option value="{{ company.0 }}" {% if field.value == company.0 %}selected{% endif %}>{{ company.1 }}</option>
+{% endfor %}
+</select>
+</div>

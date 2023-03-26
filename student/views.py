@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from .forms import StudentForm,PreviousJobForm
 from .models import Student,PreviousJob
 from django.contrib.auth.decorators import login_required
-from administrator.models import Notice       
+from administrator.models import Notice,Job_student
 from django.contrib import messages
 from django.shortcuts import get_object_or_404
 from home.models import Job
@@ -88,9 +88,11 @@ def editPreviousJob(request,id):
     form=PreviousJobForm(instance=pj)
     return render(request, "student/editpreviousjob.html",context={'form':form})
 
+@login_required
 def registerCompany(request):
     jobs = Job.objects.all()
-    return render(request, "student/registerCompany.html",{'jobs': jobs})
+    jobs_students = Job_student.objects.filter(student=request.user.student)
+    return render(request, "student/registerCompany.html",{'jobs': jobs, 'jobs_students': jobs_students})
 
 @login_required
 def changePassword(request):
@@ -118,4 +120,21 @@ def changePassword(request):
 def student_home(request):
     l1=Notice.objects.all();
     l2=sorted(l1,key=lambda x:x.updated_on, reverse=True);
-    return render(request,"student/student_newsUpdates.html",{'news':l2})
+    print(l2)
+    return render(request,"student/student_home.html",{'news':l2})
+
+@login_required(login_url='/login')
+def companyPage(request,id):
+    job = get_object_or_404(Job,id=id)
+    if request.method == 'POST':
+        if job_student.is_eligible():
+            job_student = Job_student.create(job=job,student=request.user.student)
+            job_student.status = 'A'
+            job_student.save()
+            messages.success(request, 'Applied successfully.')
+            return redirect('companyPage',id=id)
+        else:
+            messages.error(request, 'You are not eligible for this job.')
+            return redirect('companyPage',id=id)
+    job_students = Job_student.objects.filter(job=job,student=request.user.student)
+    return render(request,"student/companyPage.html",{'job':job,'job_students':job_students})

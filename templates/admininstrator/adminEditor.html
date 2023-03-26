@@ -10,6 +10,7 @@
             <p class="text-primary font-bold"> Add Team member </p>
          </div>
          <!-- data pk is the value of priamry key -->
+        
          {% for member in members %}
             <div data-pk="{{member.id}}" class="flex flex-col items-center group gap-1 bg-white pt-2 pr-2 pl-2 pb-4 shadow-sm shadow-white">
                <img class="max-h-[196px] rounded border-2 border-transparent group-hover:border-2 group-hover:border-gray-300" src="{{member.mem_image.url}}" />
@@ -48,8 +49,8 @@
             </svg>
          </div> -->
          {% for slider in sliders %}
-            <div data-ik="{{slider.id}}" class="flex flex-col items-center group gap-1 bg-white pt-2 pr-2 pl-2 pb-2 shadow-sm shadow-white">
-               <img class="min-h-[150px]" src="{{slider.slider_image.url}}"" />
+            <div class="flex flex-col items-center group gap-1 bg-white pt-2 pr-2 pl-2 pb-2 shadow-sm shadow-white">
+               <img class="min-h-[150px]" src="{{slider.slider_image.url}}"/>
                <div class="flex flex-row gap-4">
                   <button id="deleteImage" data-modal-target="image-delete" data-modal-toggle="image-delete" type="button" class="text-white  bg-red-600 hover:bg-red-500  focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-full text-sm p-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
                      <svg aria-hidden="true" class="flex-shrink-0 w-6 h-6 text-white transition duration-75 dark:group-hover:text-white" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
@@ -175,6 +176,8 @@
                </div>
             </div>
       </div>
+
+      
    </div>
    <script>
       const deleteIConfirm = document.querySelector('#deleteIConfirm');

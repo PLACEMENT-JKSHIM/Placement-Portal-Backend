@@ -1,0 +1,195 @@
+{% extends "../_base_admin.html" %}
+{% block meta %}
+<!-- use version 0.19.2 -->
+<script lang="javascript" src="https://cdn.sheetjs.com/xlsx-0.19.2/package/dist/xlsx.full.min.js"></script>
+{% endblock meta %}
+{% block content %}
+
+
+
+<div>
+  <!-- Main modal -->
+  <h1 class="text-3xl font-bold text-primary mb-10 text-center"><span class="underline underline-offset-8 decoration-7 decoration-secondary">Companies </span> List </h1>
+  <div id="authentication-modal" tabindex="-1" aria-hidden="true" class="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] md:h-full">
+      <div class="relative w-full h-full max-w-md md:h-auto">
+          <!-- Modal content -->
+          <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+              <button type="button" class="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-800 dark:hover:text-white" data-modal-hide="authentication-modal">
+                  <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+                  <span class="sr-only">Close modal</span>
+              </button>
+              <div class="px-6 py-3 lg:px-8">
+                <h3 class="text-3xl font-bold text-primary"><span class="underline underline-offset-8 decoration-7 decoration-secondary">Add Company</span> </h3>
+                  <form class="space-y-6" method="POST" enctype="multipart/form-data">
+                  {% csrf_token %}
+<label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="file_input">Upload Company Image</label>
+<input class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" aria-describedby="file_input_help" name="image" id="image" type="file">
+<p class="mt-1 text-sm text-gray-500 dark:text-gray-300" id="file_input_help">SVG, PNG, JPG or GIF (MAX. 800x400px).</p>
+
+                      <div>
+                          <label for="c_name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Company Name</label>
+                          <input type="text" name="c_name" id="c_name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" placeholder="name@company.com" required>
+                      </div>
+                      
+<label for="about" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">About Company</label>
+<textarea id="about" name="about" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Write your thoughts here..."></textarea>
+
+                      
+<div class="relative w-40 m-auto mt-2">
+  {% include "../../buttons/buttons.html" with main=True btn="Save" secondary=False %}
+</div>
+                      
+                  </form>
+              </div>
+          </div>
+      </div>
+  </div> 
+  <!-- Modal toggle -->
+
+  <div class="relative ml-10  m-auto mt-4">
+    <button data-modal-target="authentication-modal" data-modal-toggle="authentication-modal" type="submit" class="relative inline-flex items-center border-2 border-secondary justify-center  px-4 py-2 
+ m-1
+overflow-hidden transition-all bg-white text-secondary rounded-full group top-0.5 left-0.5 hover:shadow-lg hover:text-white">
+    <span class="w-[120%] h-[110%]  bg-secondary absolute -translate-y-full ease-out duration-500 transition-all group-hover:translate-y-0"></span>
+    <span class="relative w-full text-center duration-300 ease-in-out
+      uppercase font-semibold">Add Company</span>
+</button>
+</div>
+{{MEDIA_URL}}
+  
+<div class="p-3 flex flex-row justify-around items-center flex-wrap ">  
+    <!--Card 1-->
+    {% for company in companies %}
+    <div class="w-64 my-3 rounded overflow-hidden  shadow-lg">
+      <img class="w-full h-56" src="/media/{{company.image}}" alt="Mountain">
+      <div class="px-2 py-4">
+        <div class="font-bold text-xl text-center mb-2">{{company.c_name}}</div>
+        <p class="text-gray-700 text-base text-center">
+          {{company.about}}
+        </p>
+      </div>
+      <div class="flex flex-row justify-center p-2">
+        
+       <a href="{% url 'editCompany' company.id %}" class="btn btn-primary"><button data-modal-target="edit-modal" data-modal-toggle="edit-modal" type="button" class=" mx-3 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-full text-sm p-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+        <svg aria-hidden="true" class="flex-shrink-0 w-6 h-6 text-white transition duration-75 dark:group-hover:text-white" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+           <path d="M5.433 13.917l1.262-3.155A4 4 0 017.58 9.42l6.92-6.918a2.121 2.121 0 013 3l-6.92 6.918c-.383.383-.84.685-1.343.886l-3.154 1.262a.5.5 0 01-.65-.65z"></path>
+           <path d="M3.5 5.75c0-.69.56-1.25 1.25-1.25H10A.75.75 0 0010 3H4.75A2.75 2.75 0 002 5.75v9.5A2.75 2.75 0 004.75 18h9.5A2.75 2.75 0 0017 15.25V10a.75.75 0 00-1.5 0v5.25c0 .69-.56 1.25-1.25 1.25h-9.5c-.69 0-1.25-.56-1.25-1.25v-9.5z"></path>
+        </svg>
+     </button></a>
+         <button id="delete-btn" data-modal-target="delete-modal" data-modal-toggle="delete-modal" class="mx-3 text-white  bg-red-600 hover:bg-red-500  focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-full text-sm p-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button" data-element={{company.pk}} >
+            <svg aria-hidden="true" class="flex-shrink-0 w-6 h-6 text-white transition duration-75 dark:group-hover:text-white" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+               <path clip-rule="evenodd" fill-rule="evenodd" d="M8.75 1A2.75 2.75 0 006 3.75v.443c-.795.077-1.584.176-2.365.298a.75.75 0 10.23 1.482l.149-.022.841 10.518A2.75 2.75 0 007.596 19h4.807a2.75 2.75 0 002.742-2.53l.841-10.52.149.023a.75.75 0 00.23-1.482A41.03 41.03 0 0014 4.193V3.75A2.75 2.75 0 0011.25 1h-2.5zM10 4c.84 0 1.673.025 2.5.075V3.75c0-.69-.56-1.25-1.25-1.25h-2.5c-.69 0-1.25.56-1.25 1.25v.325C8.327 4.025 9.16 4 10 4zM8.58 7.72a.75.75 0 00-1.5.06l.3 7.5a.75.75 0 101.5-.06l-.3-7.5zm4.34.06a.75.75 0 10-1.5-.06l-.3 7.5a.75.75 0 101.5.06l.3-7.5z"></path>
+            </svg>
+          </button>
+      </div>
+    </div>
+    {% endfor %}
+    <div class="w-64 my-3 rounded overflow-hidden  shadow-lg">
+        <img class="w-full h-56" src="https://www.shutterstock.com/image-photo/nov-22-2019-palo-alto-260nw-1569353527.jpg" alt="Mountain">
+        <div class="px-2 py-4">
+          <div class="font-bold text-xl text-center mb-2">Amazon</div>
+          <p class="text-gray-700 text-base text-center">
+            Buy and sell!
+        </div>
+        <div class="flex flex-row justify-center p-2">
+            <button data-modal-target="edit-modal" data-modal-toggle="edit-modal" type="button" class=" mx-3 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-full text-sm p-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                <svg aria-hidden="true" class="flex-shrink-0 w-6 h-6 text-white transition duration-75 dark:group-hover:text-white" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                   <path d="M5.433 13.917l1.262-3.155A4 4 0 017.58 9.42l6.92-6.918a2.121 2.121 0 013 3l-6.92 6.918c-.383.383-.84.685-1.343.886l-3.154 1.262a.5.5 0 01-.65-.65z"></path>
+                   <path d="M3.5 5.75c0-.69.56-1.25 1.25-1.25H10A.75.75 0 0010 3H4.75A2.75 2.75 0 002 5.75v9.5A2.75 2.75 0 004.75 18h9.5A2.75 2.75 0 0017 15.25V10a.75.75 0 00-1.5 0v5.25c0 .69-.56 1.25-1.25 1.25h-9.5c-.69 0-1.25-.56-1.25-1.25v-9.5z"></path>
+                </svg>
+             </button>
+             <button id="delete" data-modal-target="delete-modal" data-modal-toggle="delete-modal" type="button" class="mx-3 text-white  bg-red-600 hover:bg-red-500  focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-full text-sm p-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                <svg aria-hidden="true" class="flex-shrink-0 w-6 h-6 text-white transition duration-75 dark:group-hover:text-white" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                   <path clip-rule="evenodd" fill-rule="evenodd" d="M8.75 1A2.75 2.75 0 006 3.75v.443c-.795.077-1.584.176-2.365.298a.75.75 0 10.23 1.482l.149-.022.841 10.518A2.75 2.75 0 007.596 19h4.807a2.75 2.75 0 002.742-2.53l.841-10.52.149.023a.75.75 0 00.23-1.482A41.03 41.03 0 0014 4.193V3.75A2.75 2.75 0 0011.25 1h-2.5zM10 4c.84 0 1.673.025 2.5.075V3.75c0-.69-.56-1.25-1.25-1.25h-2.5c-.69 0-1.25.56-1.25 1.25v.325C8.327 4.025 9.16 4 10 4zM8.58 7.72a.75.75 0 00-1.5.06l.3 7.5a.75.75 0 101.5-.06l-.3-7.5zm4.34.06a.75.75 0 10-1.5-.06l-.3 7.5a.75.75 0 101.5.06l.3-7.5z"></path>
+                </svg>
+             </button>
+          </div>
+      </div>
+
+      <div class="w-64 my-3 rounded overflow-hidden  shadow-lg">
+        <img class="w-full h-56" src="https://www.shutterstock.com/image-photo/nov-22-2019-palo-alto-260nw-1569353527.jpg" alt="Mountain">
+        <div class="px-2 py-4">
+          <div class="font-bold text-xl text-center mb-2">Amazon</div>
+          <p class="text-gray-700 text-base text-center">
+            Buy and sell!
+          </p>
+        </div>
+        <div class="flex flex-row justify-center p-2">
+            <button data-modal-target="edit-modal" data-modal-toggle="edit-modal" type="button" class=" mx-3 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-full text-sm p-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                <svg aria-hidden="true" class="flex-shrink-0 w-6 h-6 text-white transition duration-75 dark:group-hover:text-white" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                   <path d="M5.433 13.917l1.262-3.155A4 4 0 017.58 9.42l6.92-6.918a2.121 2.121 0 013 3l-6.92 6.918c-.383.383-.84.685-1.343.886l-3.154 1.262a.5.5 0 01-.65-.65z"></path>
+                   <path d="M3.5 5.75c0-.69.56-1.25 1.25-1.25H10A.75.75 0 0010 3H4.75A2.75 2.75 0 002 5.75v9.5A2.75 2.75 0 004.75 18h9.5A2.75 2.75 0 0017 15.25V10a.75.75 0 00-1.5 0v5.25c0 .69-.56 1.25-1.25 1.25h-9.5c-.69 0-1.25-.56-1.25-1.25v-9.5z"></path>
+                </svg>
+             </button>
+             <button id="delete-btn" data-modal-target="delete" data-modal-toggle="delete" data-element="1">
+               <svg aria-hidden="true" class="flex-shrink-0 w-6 h-6 text-white transition duration-75 dark:group-hover:text-white" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                  <path clip-rule="evenodd" fill-rule="evenodd" d="M8.75 1A2.75 2.75 0 006 3.75v.443c-.795.077-1.584.176-2.365.298a.75.75 0 10.23 1.482l.149-.022.841 10.518A2.75 2.75 0 007.596 19h4.807a2.75 2.75 0 002.742-2.53l.841-10.52.149.023a.75.75 0 00.23-1.482A41.03 41.03 0 0014 4.193V3.75A2.75 2.75 0 0011.25 1h-2.5zM10 4c.84 0 1.673.025 2.5.075V3.75c0-.69-.56-1.25-1.25-1.25h-2.5c-.69 0-1.25.56-1.25 1.25v.325C8.327 4.025 9.16 4 10 4zM8.58 7.72a.75.75 0 00-1.5.06l.3 7.5a.75.75 0 101.5-.06l-.3-7.5zm4.34.06a.75.75 0 10-1.5-.06l-.3 7.5a.75.75 0 101.5.06l.3-7.5z"></path>
+               </svg>
+           </button>
+          </div>
+      </div>
+
+      <div class="w-64 my-3 rounded overflow-hidden  shadow-lg">
+        <img class="w-full h-56" src="https://www.shutterstock.com/image-photo/nov-22-2019-palo-alto-260nw-1569353527.jpg" alt="Mountain">
+        <div class="px-2 py-4">
+          <div class="font-bold text-xl text-center mb-2">FlipKart</div>
+          <p class="text-gray-700 text-base text-center">
+            Buy and sell!
+          </p>
+        </div>
+        <div class="flex flex-row justify-center p-2">
+            <button data-modal-target="edit-modal" data-modal-toggle="edit-modal" type="button" class=" mx-3 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-full text-sm p-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                <svg aria-hidden="true" class="flex-shrink-0 w-6 h-6 text-white transition duration-75 dark:group-hover:text-white" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                   <path d="M5.433 13.917l1.262-3.155A4 4 0 017.58 9.42l6.92-6.918a2.121 2.121 0 013 3l-6.92 6.918c-.383.383-.84.685-1.343.886l-3.154 1.262a.5.5 0 01-.65-.65z"></path>
+                   <path d="M3.5 5.75c0-.69.56-1.25 1.25-1.25H10A.75.75 0 0010 3H4.75A2.75 2.75 0 002 5.75v9.5A2.75 2.75 0 004.75 18h9.5A2.75 2.75 0 0017 15.25V10a.75.75 0 00-1.5 0v5.25c0 .69-.56 1.25-1.25 1.25h-9.5c-.69 0-1.25-.56-1.25-1.25v-9.5z"></path>
+                </svg>
+             </button>
+             <button id="delete" data-modal-target="delete-modal" data-element="1" data-modal-toggle="delete-modal" type="button" class="mx-3 text-white  bg-red-600 hover:bg-red-500  focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-full text-sm p-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                <svg aria-hidden="true" class="flex-shrink-0 w-6 h-6 text-white transition duration-75 dark:group-hover:text-white" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                   <path clip-rule="evenodd" fill-rule="evenodd" d="M8.75 1A2.75 2.75 0 006 3.75v.443c-.795.077-1.584.176-2.365.298a.75.75 0 10.23 1.482l.149-.022.841 10.518A2.75 2.75 0 007.596 19h4.807a2.75 2.75 0 002.742-2.53l.841-10.52.149.023a.75.75 0 00.23-1.482A41.03 41.03 0 0014 4.193V3.75A2.75 2.75 0 0011.25 1h-2.5zM10 4c.84 0 1.673.025 2.5.075V3.75c0-.69-.56-1.25-1.25-1.25h-2.5c-.69 0-1.25.56-1.25 1.25v.325C8.327 4.025 9.16 4 10 4zM8.58 7.72a.75.75 0 00-1.5.06l.3 7.5a.75.75 0 101.5-.06l-.3-7.5zm4.34.06a.75.75 0 10-1.5-.06l-.3 7.5a.75.75 0 101.5.06l.3-7.5z"></path>
+                </svg>
+             </button>
+          </div></div>
+      
+</div>
+
+
+
+ 
+ <div id="delete-modal" tabindex="-1" class="fixed top-0 left-0 right-0 z-50 hidden p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] md:h-full">
+     <div class="relative w-full h-full max-w-md md:h-auto">
+         <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+             <button type="button" class="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-800 dark:hover:text-white" data-modal-hide="delete-modal">
+                 <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+                 <span class="sr-only">Close modal</span>
+             </button>
+             <div class="p-6 text-center">
+                 <svg aria-hidden="true" class="mx-auto mb-4 text-gray-400 w-14 h-14 dark:text-gray-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                 <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">Are you sure you want to delete ?</h3>
+                 <a id="delete-link" href="#" >
+                  {% include "../../buttons/buttonsrg.html" with main=False btn="Delete" green=False %}
+              </a>
+                 <button data-modal-hide="delete-modal" type="button" class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">No, cancel</button>
+             </div>
+         </div>
+     </div>
+ </div>
+ 
+
+
+ 
+  <script>
+   const link=document.querySelector('#delete-link')
+   console.log(link)
+   document.querySelectorAll('#delete-btn').forEach((d)=>{
+      console.log(d)
+       d.addEventListener('click', (e)=>{
+           link.href ="/au/company/delete/"+ d.getAttribute('data-element')
+           console.log(link)
+       })
+ 
+   })
+   
+</script>
+
+{% endblock content %}

@@ -30,13 +30,12 @@ class StudentForm(ModelForm):
         model=Student
         exclude=('user','status','editable')
 
-        widgets=   {
+        widgets= {
             'dateOfBirth': forms.DateInput(attrs={'type': 'date'}),
             'phoneNo': forms.NumberInput(attrs={'min': 1000000000,'max':99999999999}),
             'image': forms.FileInput(attrs={'accept': 'image/*','required':True}),
-            'resume': forms.FileInput(attrs={'accept':'application/pdf','required':True}),
-        }
-        
+            'resume': forms.FileInput(attrs={'accept':'application/pdf','required':True})
+        }              
         
 class PreviousJobForm(ModelForm):
     class Meta:
