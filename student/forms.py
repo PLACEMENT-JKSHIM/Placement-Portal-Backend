@@ -30,7 +30,7 @@ class StudentForm(ModelForm):
         model=Student
         exclude=('user','status','editable')
 
-        widgets=   {
+        widgets= {
             'dateOfBirth': forms.DateInput(attrs={'type': 'date'}),
             'phoneNo': forms.NumberInput(attrs={'min': 1000000000,'max':99999999999}),
             'alternatePhoneNo': forms.NumberInput(attrs={'min': 1000000000,'max':99999999999}),

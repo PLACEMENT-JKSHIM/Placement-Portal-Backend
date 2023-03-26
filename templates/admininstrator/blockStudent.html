@@ -24,7 +24,7 @@
           <div class="tab-content tab-space">
             <div class="block" id="tab-profile">
              
-<form class="flex items-center" id="profile">   
+<form class="flex items-center" method="POST" id="profile">   
     {% csrf_token %}
     <label for="voice-search" class="sr-only">Search</label>
     <div class="relative w-full">
@@ -47,7 +47,6 @@
   {% include "../buttons/buttonsrg.html" with btn="Block All" green=False %}
 </form>
 </div>
-<p>Recently Updated</p>
 <div id="profile-display" class="flex flex-row flex-wrap justify-around " >
  
   {% for student in students %}
@@ -150,19 +149,23 @@
         event.preventDefault();  // prevent the form from submitting normally
     
         const searchQuery = inputField.value;
+        console.log(searchQuery)
         fetch(`/au/student/editBlock?q=${searchQuery}`)
             .then(response => response.json())
             .then(data => {
+              console.log(data)
               students=data.students
-              console.log(profiledisplay)
               let html = '';
-              
+              if(students.length === 0){
+                html+=`<div class="flex h-72 items-center"><h1 class="text-2xl text-center"> No results found for ${searchQuery}</h1></div>`
+                profiledisplay.innerHTML = html;
+              }
               for (let i = 0; i < students.length; i++) {
                       const editable = students[i].editable;
                       html += `
                           <div class="shadow-[0px_4px_16px_rgba(17,17,26,0.1),_0px_8px_24px_rgba(17,17,26,0.1),_0px_16px_56px_rgba(17,17,26,0.1)] rounded-lg px-3 w-[400px] md:w-[300px] lg:w-[320px]  py-4 my-3 mx-1">
                               <div class="flex flex-col sm:flex-row items-center justify-center ">
-                                  <img class="w-16 h-16 rounded-full" src="{% static 'mike.jpg' %}" alt="My Image">
+                                  <img class="w-16 h-16 rounded-full" src="${students[i].image.url}" alt="My Image">
                                   <p class="px-3 md:px-5 py-3">${students[i].name}</p>
                                   <p class="">${students[i].user.user}</p>
                               </div>

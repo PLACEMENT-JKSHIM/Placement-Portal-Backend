@@ -71,7 +71,7 @@ class Student(models.Model):
     name=models.CharField(blank=True,max_length=50,verbose_name='Name as in 10th marks card')
     nameAadhar=models.CharField(blank=True,max_length=50,verbose_name='Name as in Aadhar card')
     gender=models.CharField(max_length=1,choices=Gender.choices,default=Gender.MALE,verbose_name="Gender")
-    image=models.ImageField(blank=True,null=True,upload_to='student')
+    image=models.ImageField(blank=True,null=True,upload_to='student',default='blank.png')
     resume=models.FileField(blank=True,null=True,upload_to='resume')
 
     phoneNo=models.IntegerField(blank=True,null=True,verbose_name="Phone number",validators=[MinValueValidator(1000000000),MaxValueValidator(99999999999)])

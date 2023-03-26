@@ -1,18 +1,20 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.core.validators import MaxValueValidator, MinValueValidator
+from datetime import date
 # Create your models here.
 
 class Company(models.Model):
-     c_name=models.CharField( max_length=60,null=True)
-     about=models.CharField( max_length=1000,null=True)
-     image = models.ImageField(upload_to='images')
+     c_name=models.CharField( max_length=60,default='Company Name')
+     about=models.CharField( max_length=1000,null=True,blank=True)
+     image = models.ImageField(upload_to='images', default='blank.png')
      def __str__(self):
          return f"{self.c_name}" 
 
 class Team(models.Model):
     mem_name=models.CharField( max_length=60,null=False)
     mem_designation=models.CharField( max_length=60,null=False)
-    mem_image = models.ImageField(upload_to='teams')
+    mem_image = models.ImageField(upload_to='teams',default='blank.png')
     mem_description=models.TextField(null=True,blank=True, default='')
     def __str__(self):
         return f"{self.mem_name}-{self.mem_designation}-{self.mem_image}-{self.mem_description}"
@@ -30,29 +32,30 @@ class Slider(models.Model):
 
 class Job(models.Model):
     class Status(models.TextChoices):
-        REG_OPEN = 'O'
-        REG_CLOSE = 'C'
+        OPEN = 'O'
+        CLOSE = 'C'
     title=models.CharField(max_length=50,null=True)
-    description=models.CharField( max_length=100,null=True)
+    description=models.TextField(blank=True,null=True)
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
-    academic_year=models.IntegerField()
-    sslc=models.DecimalField(max_digits=4, decimal_places=2)
-    puc=models.DecimalField(max_digits=4, decimal_places=2)
-    degree=models.DecimalField(max_digits=4, decimal_places=2)
-    curr_cgpa=models.DecimalField(max_digits=2, decimal_places=2)
-    gap_edu=models.IntegerField()
-    min_dob=models.DateTimeField()
-    max_dob=models.DateTimeField()
-    ctc_pa=models.DecimalField(max_digits=15, decimal_places=2)
-    max_activebacklog=models.IntegerField()
-    max_histbacklog=models.IntegerField()
-    other_company=models.IntegerField()
-    registration_date=models.DateTimeField()
+    academic_year=models.IntegerField(validators=[MaxValueValidator(2100), MinValueValidator(2010)])
+    sslc=models.DecimalField(max_digits=4, decimal_places=2,default=0.00)
+    puc=models.DecimalField(max_digits=4, decimal_places=2,default=0.00)
+    diploma=models.DecimalField(max_digits=4, decimal_places=2, default=0.00)
+    degree=models.DecimalField(max_digits=4, decimal_places=2,default=0.00)
+    curr_cgpa=models.DecimalField(max_digits=3, decimal_places=2,default=0.00)
+    gap_edu=models.IntegerField(default=0)
+    min_dob = models.DateField(validators=[MinValueValidator(date(1990, 1, 1))])
+    max_dob = models.DateField(validators=[MaxValueValidator(date(2005, 1, 1))])
+    ctc_pa=models.DecimalField(max_digits=15, decimal_places=2,default=0.00)
+    max_activebacklog=models.IntegerField(default=0)
+    max_histbacklog=models.IntegerField(default=0)
+    # other_company=models.IntegerField() 
+    registration_date=models.DateField()
     talk_date=models.DateField()
     interview_date=models.DateField()
     test_date=models.DateField()
-    notes=models.CharField( max_length=1000,null=True)
-    status= status=models.CharField(max_length=2,choices=Status.choices,default=Status.REG_OPEN)
+    notes=models.TextField (blank=True,null=True)
+    status=models.CharField(max_length=2,choices=Status.choices,default=Status.OPEN)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     def __str__(self):

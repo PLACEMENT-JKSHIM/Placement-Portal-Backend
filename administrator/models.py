@@ -1,5 +1,4 @@
 from django.db import models
-
 # Create your models here.
 from home.models import Job
 from student.models import Student
@@ -8,7 +7,7 @@ from student.models import Student
 class Job_student(models.Model):
     class Status(models.TextChoices):
         APPLIED = 'A'
-        OFFERED = 'O'
+        OFFERED = 'OF'
         REJECTED = 'R'
         QUALIFIED = 'Q'
     job = models.ForeignKey(Job, on_delete=models.CASCADE)
@@ -16,6 +15,8 @@ class Job_student(models.Model):
     status=models.CharField(max_length=2,choices=Status.choices,default=Status.APPLIED)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
+    class Meta:
+        unique_together = ('job', 'student')
     def __str__(self):
         return f"{self.job}-{self.student}-{self.status}"
 
@@ -24,7 +25,6 @@ class Job_student(models.Model):
 
 
 class Notice(models.Model):
-    
     title=models.CharField( max_length=60,null=False)
     content=models.CharField( max_length=1000,null=False)
     created_on =models.DateTimeField( auto_now_add=True)

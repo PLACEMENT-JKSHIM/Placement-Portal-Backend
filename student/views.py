@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from .forms import StudentForm,PreviousJobForm
 from .models import Student,PreviousJob
 from django.contrib.auth.decorators import login_required
-from administrator.models import Notice       
+from administrator.models import Notice,Job_student
 from django.contrib import messages
 from django.shortcuts import get_object_or_404
 from home.models import Job
@@ -15,7 +15,7 @@ from django.contrib.auth import logout
 @login_required(login_url='/login')
 def logoutStudent(request):
     logout(request)
-    return render(request,"home/index.html")
+    return redirect('/')
 
 @login_required(login_url='/login')
 def updateProfile(request):
@@ -91,7 +91,8 @@ def editPreviousJob(request,id):
 @login_required(login_url='/login')
 def registerCompany(request):
     jobs = Job.objects.all()
-    return render(request, "student/registerCompany.html",{'jobs': jobs})
+    jobs_students = Job_student.objects.filter(student=request.user.student)
+    return render(request, "student/registerCompany.html",{'jobs': jobs, 'jobs_students': jobs_students})
 
 @login_required(login_url='/login')
 def changePassword(request):
@@ -119,14 +120,43 @@ def changePassword(request):
 def student_home(request):
     l1=Notice.objects.all();
     l2=sorted(l1,key=lambda x:x.updated_on, reverse=True);
-    return render(request,"student/student_newsUpdates.html",{'news':l2})
+    print(l2)
+    return render(request,"student/student_home.html",{'news':l2})
+
+def is_eligible(job, student):
+        if student.cgpa < job.curr_cgpa:
+            return False
+        if student.tenPercentage < job.sslc:
+            return False
+        if student.twelvePercentage < job.puc:
+            return False
+        # elif self.student.diplomaPercentage < self.job.diploma:
+        #     return False
+        if student.degreePercentage < job.degree:
+            return False
+        if student.activeBacklog < job.max_activebacklog:
+            return False
+        if student.totalBacklog < job.max_histbacklog:
+            return False
+        # if self.student.gap_edu > self.job.gap_edu:
+        #     return False
+        if student.dateOfBirth < job.min_dob:
+            return False
+        if student.dateOfBirth > job.max_dob:
+            return False
+        return True
 
 @login_required(login_url='/login')
 def companyPage(request,id):
-    jobs = Job.objects.all()
-    job = None
-    for i in jobs:
-        if i.id == id:
-            job = i
-            break
-    return render(request,"student/companyPage.html",{'job':job})
+    job = get_object_or_404(Job,id=id)
+    student = request.user.student
+    eligible = is_eligible(job,student)
+    print(eligible)
+    job_student = []
+    if request.method == 'POST' and is_eligible:
+            job_student = Job_student.objects.create(job=job,student=request.user.student)
+            job_student.status = 'A'
+            job_student.save()
+            messages.success(request, 'Applied successfully.')
+            return redirect('companyPage',id=id)
+    return render(request,"student/companyPage.html",{'job':job,'id':id,'student':student,'eligible':eligible,'job_student':job_student})
