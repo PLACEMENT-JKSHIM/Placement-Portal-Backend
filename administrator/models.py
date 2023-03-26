@@ -47,7 +47,6 @@ class Job_student(models.Model):
         return f"{self.job}-{self.student}-{self.status}"
 
 class Notice(models.Model):
-    
     title=models.CharField( max_length=60,null=False)
     content=models.CharField( max_length=1000,null=False)
     created_on =models.DateTimeField( auto_now_add=True)
