@@ -15,7 +15,7 @@ from django.contrib.auth import logout
 @login_required(login_url='/login')
 def logoutStudent(request):
     logout(request)
-    return render(request,"home/index.html")
+    return redirect('/')
 
 @login_required(login_url='/login')
 def updateProfile(request):

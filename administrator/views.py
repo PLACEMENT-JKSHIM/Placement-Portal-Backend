@@ -22,7 +22,7 @@ User = get_user_model()
 @login_required(login_url='/login')
 def logoutAdmin(request):
     logout(request)
-    return render(request,"home/index.html")
+    return redirect('/')
 
 @login_required(login_url='/login')
 def index(request):
@@ -68,35 +68,6 @@ def addStudent(request):
     form=UserForm()
 
     return render(request, "admininstrator/student/add.html",context={'student':form})
-
-@login_required(login_url='/login')
-def adminEditor(request):
-    if request.method=='POST' and  request.FILES.get('slider_image') :
-        form = SliderForm(request.POST,request.FILES)
-        if form.is_valid():
-            form.save()
-            # Slider(slider=slider).save()
-            messages.success(request, message="Image added successfully")
-        else:
-            for field,errors in form.errors.items():
-                for error in errors:
-                    messages.error(request, message=f"{field} : {error}")
-    
-    elif request.method=='POST':
-        form = TeamForm(request.POST,request.FILES)
-        if form.is_valid():
-            form.save()
-            messages.success(request, message="Member added successfully")
-        else:
-            for field,errors in form.errors.items():
-                for error in errors:
-                    messages.error(request, message=f"{field} : {error}")
-
-    sliderForm=SliderForm()
-    teamForm=TeamForm()
-    members = Team.objects.all()
-    sliders = Slider.objects.all()
-    return render(request, "admininstrator/adminEditor.html",context={'members':members,'sliders':sliders,'sliderForm':sliderForm,'teamForm':teamForm})
 
 @login_required(login_url='/login')
 def blockStudent(request):
@@ -256,11 +227,57 @@ def addNewsUpdates(request):
     return render(request,"admininstrator/admin_newsUpdates.html")
 
 @login_required(login_url='/login')
+def adminEditor(request):
+    if request.method=='POST' and  request.FILES.get('slider_image') :
+        form = SliderForm(request.POST,request.FILES)
+        if form.is_valid():
+            form.save()
+            # Slider(slider=slider).save()
+            messages.success(request, message="Image added successfully")
+        else:
+            for field,errors in form.errors.items():
+                for error in errors:
+                    messages.error(request, message=f"{field} : {error}")
+    
+    elif request.method=='POST':
+        form = TeamForm(request.POST,request.FILES)
+        if form.is_valid():
+            form.save()
+            messages.success(request, message="Member added successfully")
+        else:
+            for field,errors in form.errors.items():
+                for error in errors:
+                    messages.error(request, message=f"{field} : {error}")
+
+    sliderForm=SliderForm()
+    teamForm=TeamForm()
+    members = Team.objects.all()
+    sliders = Slider.objects.all()
+    return render(request, "admininstrator/adminEditor.html",context={'members':members,'sliders':sliders,'sliderForm':sliderForm,'teamForm':teamForm})
+
+@login_required(login_url='/login')
 def deleteTeamMember(request,id):
     teamobj=get_object_or_404(Team,id=id)
     teamobj.delete()
     messages.success(request, message="Member deleted successfully")
     return redirect('/au/adminEditor')
+
+@login_required(login_url='/login')
+def editTeamMember(request,id):
+    teamobj=get_object_or_404(Team,id=id)
+    if request.method=="POST":
+        form=TeamForm(request.POST,instance=teamobj)
+        if form.is_valid():
+            form.save()
+            messages.success(request, message="Edited successfully")
+            return redirect(to='/au/adminEditor')
+        else:
+            for field,errors in form.errors.items():
+                for error in errors:
+                    messages.error(request, message=f"{field} : {error}")
+
+    form=TeamForm()
+    return render(request, "admininstrator/editTeamMember.html",context={'form':form,'member':teamobj})
 
 @login_required(login_url='/login')
 def deleteSlider(request,id):
