@@ -7,7 +7,7 @@
     <div class="py-8 px-4 mx-auto max-w-screen-xl sm:py-16 lg:px-6">
         <!-- <div class="p-3 max-w-screen lg:mb-16 text-center shadow-md border-2 border-secondary shadow-secondary"> -->
         <div class="p-3 max-w-screen lg:mb-16 text-center border-2 shadow-md shadow-gray-400">
-            <h2 class="mb-4 text-2xl tracking-tight font-bold text-primary"><span class="underline underline-offset-8 decoration-7 decoration-secondary">4NM20</span>CSXXXX</h2>
+            <h2 class="mb-4 text-2xl tracking-tight font-bold text-primary"><span class="underline underline-offset-8 decoration-7 decoration-secondary">{{request.user.username|slice:"0:5"}}</span>{{request.user.username|slice:"5:"}}</h2>
             <p id="typer" class="text-primary text-xl font-semibold sm:text-3xl"><span class="typed-text"></span><span class="cursor">&nbsp;</span></p>
         </div>
         <hr class="w-48 h-1 mx-auto my-2 bg-primary border-0 rounded md:my-2 dark:bg-gray-700">
@@ -42,5 +42,46 @@
         </div>
     </div>
 </section>
+<script>
+    const typedTextSpan = document.querySelector(".typed-text");
+    const cursorSpan = document.querySelector(".cursor");
+    const textArray = ["Hello! "+"{{request.user.student.name }}","Welcome to placement portal","Keep your company's lights on with customizable"];
+    const typingDelay = 200;
+    const erasingDelay = 100;
+    const newTextDelay = 2000; // Delay between current and next text
+    let textArrayIndex = 0;
+    let charIndex = 0;
 
+    function type() {
+    if (charIndex < textArray[textArrayIndex].length) {
+        if(!cursorSpan.classList.contains("typing")) cursorSpan.classList.add("typing");
+        typedTextSpan.textContent += textArray[textArrayIndex].charAt(charIndex);
+        charIndex++;
+        setTimeout(type, typingDelay);
+    } 
+    else {
+        cursorSpan.classList.remove("typing");
+        setTimeout(erase, newTextDelay);
+    }
+    }
+
+    function erase() {
+        if (charIndex > 0) {
+        if(!cursorSpan.classList.contains("typing")) cursorSpan.classList.add("typing");
+        typedTextSpan.textContent = textArray[textArrayIndex].substring(0, charIndex-1);
+        charIndex--;
+        setTimeout(erase, erasingDelay);
+    } 
+    else {
+        cursorSpan.classList.remove("typing");
+        textArrayIndex++;
+        if(textArrayIndex>=textArray.length) textArrayIndex=0;
+        setTimeout(type, typingDelay + 1100);
+    }
+    }
+
+    document.addEventListener("DOMContentLoaded", function() { // On DOM Load initiate the effect
+    if(textArray.length) setTimeout(type, newTextDelay + 250);
+    });
+</script>
 {% endblock content %}
