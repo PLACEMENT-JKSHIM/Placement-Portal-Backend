@@ -6,8 +6,9 @@ from home.models import Slider, Team
 from .forms import TeamForm, UserForm,SliderForm
 from django.http import HttpResponse,JsonResponse
 import json
-from student.models import Student
-from administrator.models import Notice
+from student.models import Student,PreviousJob
+from home.models import Job
+from administrator.models import Notice,Job_student
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from django.db import IntegrityError
@@ -16,8 +17,21 @@ from django.core.cache import cache
 from django.contrib.auth import authenticate, login,get_user_model
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.decorators import login_required
+from django.forms.models import model_to_dict
+import json
+import zipfile
+import os
+import io
+from django.conf import settings
 
 User = get_user_model()
+heads=['USN']
+unwanted=['id','user','editable','created_at','updated_at','status','job_student','image','resume','previousjob']
+for s in Student._meta.get_fields():
+    if s.name not in unwanted:
+        heads.append(s.verbose_name)
+
+heads.append('Previous Experience')
 
 def index(request):
     return render(request, "admininstrator/index.html")
@@ -159,7 +173,7 @@ def addNewsUpdates(request):
         title=request.POST.get("news_title")
         content=request.POST.get("news_content")
         addNewsUpdates=Notice(title=title,content=content)
-        addNewsUpdates.save();
+        addNewsUpdates.save()
     return render(request,"admininstrator/admin_newsUpdates.html")
 
 def deleteTeamMember(request,id):
@@ -174,3 +188,76 @@ def deleteSlider(request,id):
     slidobj.delete()
     messages.success(request, message="Slider image deleted successfully")
     return redirect('/au/adminEditor')
+
+def registerHome(request):
+    jobs=Job.objects.all()
+    selected={'id':-1}
+        
+    students = zip([],[])
+
+    return render(request,"admininstrator/registerList.html",context={'heads':heads,'jobs':jobs,'students':students,'selected':selected,})
+
+
+def registerList(request,id):
+    students=[]
+    pjs=[]
+    selected={'id':id}
+    jobs=Job.objects.all()
+    if id==0:
+        jobSt=Job_student.objects.all().select_related('student','student__user')
+        selected['job']='ALL'
+    else:
+        job=get_object_or_404(Job,id=id)
+        jobSt=Job_student.objects.filter(job=job).select_related('student','student__user')
+        selected['job']=str(job)
+    for j in jobSt:
+        students.append(j.student)
+        pjs.append(PreviousJob.objects.filter(user=j.student.user))
+        
+    students = zip(students, pjs)
+
+    return render(request,"admininstrator/registerList.html",context={'heads':heads,'jobs':jobs,'students':students,'selected':selected,})
+    
+
+def downLoadResumes(request,id):
+    if id==0:
+        jobSt=Job_student.objects.all().select_related('student','student__user')
+    else:
+        job=get_object_or_404(Job,id=id)
+        jobSt=Job_student.objects.filter(job=job).select_related('student','student__user')
+    zip_buffer = io.BytesIO()
+
+    with zipfile.ZipFile(zip_buffer, 'w', zipfile.ZIP_DEFLATED) as zip_file:
+        for jb in jobSt:
+            if not jb.student.resume:
+                continue
+            file_path = os.path.join(settings.MEDIA_ROOT, str(jb.student.resume))
+            zip_file.write(file_path, jb.student.user.username+".pdf")
+
+    zip_buffer.seek(0)
+
+    response = HttpResponse(zip_buffer, content_type='application/zip')
+    response['Content-Disposition'] = 'attachment;filename="resume.zip"'
+    return response
+
+def downLoadImages(request,id):
+    if id==0:
+        jobSt=Job_student.objects.all().select_related('student','student__user')
+    else:
+        job=get_object_or_404(Job,id=id)
+        jobSt=Job_student.objects.filter(job=job).select_related('student','student__user')
+
+    zip_buffer = io.BytesIO()
+
+    with zipfile.ZipFile(zip_buffer, 'w', zipfile.ZIP_DEFLATED) as zip_file:
+        for jb in jobSt:
+            if not jb.student.resume:
+                continue
+            file_path = os.path.join(settings.MEDIA_ROOT, str(jb.student.image))
+            zip_file.write(file_path, jb.student.user.username+'.jpg')
+
+    zip_buffer.seek(0)
+
+    response = HttpResponse(zip_buffer, content_type='application/zip')
+    response['Content-Disposition'] = 'attachment;filename="images.zip"'
+    return response

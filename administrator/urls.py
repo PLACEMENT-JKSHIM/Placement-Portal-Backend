@@ -13,4 +13,8 @@ path('au/addNewsUpdates',views.addNewsUpdates,name='addNewsUpdates'),
 path('au/adminEditor',views.adminEditor,name='adminEditor'), 
 path('au/adminEditor/deleteMember/<int:id>',views.deleteTeamMember, name='deleteTeamMember'),
 path('au/adminEditor/deleteSlider/<int:id>',views.deleteSlider, name='deleteSlider'),
+path('au/registerlist',views.registerHome,name='registerHome'),
+path('au/registerlist/resumes/<int:id>',views.downLoadResumes,name='downLoadResumes'),
+path('au/registerlist/images/<int:id>',views.downLoadImages,name='downLoadImages'),
+path('au/registerlist/<int:id>',views.registerList,name='registerList'),
 ]

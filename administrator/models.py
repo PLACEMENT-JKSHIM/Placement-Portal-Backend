@@ -11,13 +11,16 @@ class Job_student(models.Model):
         OFFERED = 'O'
         REJECTED = 'R'
         QUALIFIED = 'Q'
-    job = models.OneToOneField(Job, on_delete=models.CASCADE)
-    student = models.OneToOneField(Student, on_delete=models.CASCADE)
+    job = models.ForeignKey(Job, on_delete=models.CASCADE)
+    student = models.ForeignKey(Student, on_delete=models.CASCADE)
     status=models.CharField(max_length=2,choices=Status.choices,default=Status.APPLIED)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     def __str__(self):
         return f"{self.job}-{self.student}-{self.status}"
+
+    class Meta:
+        unique_together = (('job', 'student'),)
 
 
 class Notice(models.Model):
