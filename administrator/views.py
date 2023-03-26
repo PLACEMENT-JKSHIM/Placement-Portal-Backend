@@ -76,35 +76,60 @@ def blockStudent(request):
 
 @login_required(login_url='/login')
 def editBlock(request):
-    query = request.GET.get('q', '')#get the query
-    students = []
-    users = User.objects.filter(username__icontains=query) if query else []
-    for user in users:
-        if student := Student.objects.filter(user=user).first():
-            # convert Student object to a dictionary
-            user_dict = {
-                'id': student.user.id,
-                'user': student.user.username
-            }
-            student_dict = {
-                'editable': student.editable,
-                'user': user_dict,
-                'name': student.name,
-                'image':{
-                'url':student.image.url
+    if request.method == 'POST':
+        query = json.loads(request.body).get('q', '')
+        students = []
+        users = User.objects.filter(username__icontains=query) if query else []
+        for user in users:
+            if student := Student.objects.filter(user=user).first():
+                # convert Student object to a dictionary
+                print(student.status)
+                user_dict = {
+                    'id': student.user.id,
+                    'user': student.user.username
                 }
-                # add any other fields you want to include here
-            }
-            print(student_dict)
-            students.append(student_dict)
-    context = {'students': students}
-    return JsonResponse(context, safe=False)
+                student_dict = {
+                    'editable': student.editable,
+                    'user': user_dict,
+                    'name': student.name,
+                    'image':{
+                        'url':student.image.url
+                    },
+                'status':student.status
+                    # add any other fields you want to include here
+                }
+                print(student_dict)
+                students.append(student_dict)
+        context = {'students': students}
+        return JsonResponse(context, safe=False)
+    
 
 @login_required(login_url='/login')
 def profileEditBlock(request,id):
     user=User.objects.get(id=id)
     student=Student.objects.get(user=user)
+    print(student)
     student.editable = student.editable == False
+    student.save()
+    return redirect("blockStudent")
+
+
+@login_required(login_url='/login')
+def loginBlockEdit(request,id):
+    user=User.objects.get(id=id)
+    student=Student.objects.get(user=user)
+    student.status = 'N' if student.status=='LB' else 'LB'#this and the logic below,though they follow the different approach,yeild same expexted output
+    student.save()
+    return redirect("blockStudent")
+
+@login_required(login_url='/login')
+def applyBlockEdit(request,id):
+    user=User.objects.get(id=id)
+    student=Student.objects.get(user=user)
+    if student.status in ['N', 'LB']:
+        student.status = 'AB'
+    elif student.status == 'AB':
+        student.status = 'N'
     student.save()
     return redirect("blockStudent")
 
@@ -116,6 +141,28 @@ def profileEditBlockAll(req):
 @login_required(login_url='/login')
 def profileEditUnblockAll(req):
     Student.objects.all().update(editable=True)
+    return redirect("blockStudent")
+
+#Login Block for all students
+@login_required(login_url='/login')
+def LoginBlockAll(req):
+    Student.objects.all().update(status='LB')
+    return redirect("blockStudent")
+
+@login_required(login_url='/login')
+def LoginUnblockAll(req):
+    Student.objects.all().update(status='N')
+    return redirect("blockStudent")
+
+#applying block for all students
+@login_required(login_url='/login')
+def applyBlockAll(req):
+    Student.objects.all().update(status='AB')
+    return redirect("blockStudent")
+
+@login_required(login_url='/login')
+def applyUnblockAll(req):
+    Student.objects.all().update(status='N')
     return redirect("blockStudent")
 
 @login_required(login_url='/login')
