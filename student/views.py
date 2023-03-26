@@ -123,18 +123,40 @@ def student_home(request):
     print(l2)
     return render(request,"student/student_home.html",{'news':l2})
 
+def is_eligible(job, student):
+        if student.cgpa < job.curr_cgpa:
+            return False
+        if student.tenPercentage < job.sslc:
+            return False
+        if student.twelvePercentage < job.puc:
+            return False
+        # elif self.student.diplomaPercentage < self.job.diploma:
+        #     return False
+        if student.degreePercentage < job.degree:
+            return False
+        if student.activeBacklog < job.max_activebacklog:
+            return False
+        if student.totalBacklog < job.max_histbacklog:
+            return False
+        # if self.student.gap_edu > self.job.gap_edu:
+        #     return False
+        if student.dateOfBirth < job.min_dob:
+            return False
+        if student.dateOfBirth > job.max_dob:
+            return False
+        return True
+
 @login_required(login_url='/login')
 def companyPage(request,id):
     job = get_object_or_404(Job,id=id)
-    if request.method == 'POST':
-        if job_student.is_eligible():
-            job_student = Job_student.create(job=job,student=request.user.student)
+    student = request.user.student
+    eligible = is_eligible(job,student)
+    print(eligible)
+    job_student = []
+    if request.method == 'POST' and is_eligible:
+            job_student = Job_student.objects.create(job=job,student=request.user.student)
             job_student.status = 'A'
             job_student.save()
             messages.success(request, 'Applied successfully.')
             return redirect('companyPage',id=id)
-        else:
-            messages.error(request, 'You are not eligible for this job.')
-            return redirect('companyPage',id=id)
-    job_students = Job_student.objects.filter(job=job,student=request.user.student)
-    return render(request,"student/companyPage.html",{'job':job,'job_students':job_students})
+    return render(request,"student/companyPage.html",{'job':job,'id':id,'student':student,'eligible':eligible,'job_student':job_student})

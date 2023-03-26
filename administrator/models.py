@@ -17,32 +17,6 @@ class Job_student(models.Model):
     updated = models.DateTimeField(auto_now=True)
     class Meta:
         unique_together = ('job', 'student')
-    def is_eligible(self):
-        if self.student.status != 'N':
-            return False
-        if self.job.status != 'O':
-            return False
-        if self.student.cgpa < self.job.curr_cgpa:
-            return False
-        if self.student.tenPercentage < self.job.sslc:
-            return False
-        if self.student.twelvePercentage < self.job.puc:
-            return False
-        elif self.student.diplomaPercentage < self.job.diploma:
-            return False
-        if self.student.degreePercentage > self.job.degree:
-            return False
-        if self.student.activeBacklog > self.job.max_activebacklog:
-            return False
-        if self.student.totalBacklog > self.job.max_histbacklog:
-            return False
-        if self.student.gap_edu > self.job.gap_edu:
-            return False
-        if self.student.dateOfBirth > self.job.min_dob:
-            return False
-        if self.student.dateOfBirth < self.job.max_dob:
-            return False
-        return True
     def __str__(self):
         return f"{self.job}-{self.student}-{self.status}"
 

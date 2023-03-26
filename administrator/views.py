@@ -172,7 +172,7 @@ def companies(request):
         print(form)
         if form.is_valid():
             companynew = form.save()
-            messages.success(request,message=" {0} deleted Successfully!".format(companynew))
+            messages.success(request,message=" {0} added Successfully!".format(companynew))
         else:
             for field,errors in form.errors.items():
                 for error in errors:
