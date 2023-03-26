@@ -13,11 +13,16 @@ from django.contrib.auth.forms import UserCreationForm
 from django.db import IntegrityError
 from django.contrib import messages
 from django.core.cache import cache
-from django.contrib.auth import authenticate, login,get_user_model
+from django.contrib.auth import authenticate, login,get_user_model,logout
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.decorators import login_required
 
 User = get_user_model()
+
+@login_required(login_url='/login')
+def logoutAdmin(request):
+    logout(request)
+    return render(request,"home/index.html")
 
 def index(request):
     return render(request, "admininstrator/index.html")
