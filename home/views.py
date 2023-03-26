@@ -1,6 +1,6 @@
 from django.shortcuts import HttpResponse
 from django.contrib.auth.models import User
-from .models import Company, Job
+from .models import Company, Job, Rule
 from django.shortcuts import render,redirect
 from django.contrib.auth import authenticate
 from django.contrib import auth
@@ -44,9 +44,10 @@ def gallery(request):
     return render(request, "home/gallery.html")
 
 
+@login_required(login_url='/login')
 def rules(request):
-    return render(request, "student/rules.html")
-
+    srules = Rule.objects.all()
+    return render(request, "student/rules.html",context={'srules':srules})
 
 @login_required(login_url='/login')
 def profile(request):

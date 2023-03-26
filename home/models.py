@@ -5,7 +5,7 @@ from datetime import date
 # Create your models here.
 
 class Company(models.Model):
-     c_name=models.CharField( max_length=60)
+     c_name=models.CharField( max_length=60,default='Company Name')
      about=models.CharField( max_length=1000,null=True,blank=True)
      image = models.ImageField(upload_to='images', default='blank.png')
      def __str__(self):
@@ -35,7 +35,7 @@ class Job(models.Model):
         OPEN = 'O'
         CLOSE = 'C'
     title=models.CharField(max_length=50,null=True)
-    description=models.TextField(blank=True)
+    description=models.TextField(blank=True,null=True)
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
     academic_year=models.IntegerField(validators=[MaxValueValidator(2100), MinValueValidator(2010)])
     sslc=models.DecimalField(max_digits=4, decimal_places=2,default=0.00)
@@ -54,7 +54,7 @@ class Job(models.Model):
     talk_date=models.DateField()
     interview_date=models.DateField()
     test_date=models.DateField()
-    notes=models.TextField (blank=True)
+    notes=models.TextField (blank=True,null=True)
     status=models.CharField(max_length=2,choices=Status.choices,default=Status.OPEN)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
