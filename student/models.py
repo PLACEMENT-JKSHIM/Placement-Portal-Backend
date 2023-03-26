@@ -43,16 +43,6 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 #total backlog
 #status:login blocked,application blocked
 
-class PreviousJob(models.Model):
-    user=models.ForeignKey(User, on_delete=models.CASCADE)
-    role=models.CharField(max_length=50)
-    yearsofExperience=models.IntegerField(default=0)
-    monthsofExperience=models.IntegerField(default=0)
-    company=models.CharField(max_length=50)
-
-    def __str__(self):
-        return self.role
-
 
 class Student(models.Model):
 
@@ -78,67 +68,67 @@ class Student(models.Model):
     status=models.CharField(blank=True,max_length=2,choices=Blocked.choices,default=Blocked.NOT_BLOCKED)
     editable=models.BooleanField(default=True)
 
-    name=models.CharField(blank=True,max_length=50)
-    nameAadhar=models.CharField(blank=True,max_length=50)
-    gender=models.CharField(max_length=1,choices=Gender.choices,default=Gender.MALE)
+    name=models.CharField(blank=True,max_length=50,verbose_name='Name as in 10th marks card')
+    nameAadhar=models.CharField(blank=True,max_length=50,verbose_name='Name as in Aadhar card')
+    gender=models.CharField(max_length=1,choices=Gender.choices,default=Gender.MALE,verbose_name="Gender")
     image=models.ImageField(blank=True,null=True,upload_to='student',default='blank.png')
     resume=models.FileField(blank=True,null=True,upload_to='resume')
 
-    phoneNo=models.IntegerField(blank=True,null=True,validators=[MinValueValidator(1000000000),MaxValueValidator(99999999999)])
-    alternatePhoneNo=models.IntegerField(blank=True,null=True,validators=[MinValueValidator(1000000000),MaxValueValidator(99999999999)])
-    email=models.EmailField(blank=True,max_length=50)
-    aadhar=models.CharField(blank=True,max_length=12)
-    pancard= models.CharField(blank=True,max_length=12)
+    phoneNo=models.IntegerField(blank=True,null=True,verbose_name="Phone number",validators=[MinValueValidator(1000000000),MaxValueValidator(99999999999)])
+    alternatePhoneNo=models.IntegerField(blank=True,null=True,verbose_name="Alternate Phone number",validators=[MinValueValidator(1000000000),MaxValueValidator(99999999999)])
+    email=models.EmailField(blank=True,max_length=50,verbose_name="Personal Email ID")
+    aadhar=models.CharField(blank=True,max_length=12,verbose_name="Aadhar card number")
+    pancard= models.CharField(blank=True,max_length=12,verbose_name="Pancard number")
 
-    dateOfBirth=models.DateField(blank=True,null=True)
-    homeTown=models.CharField(blank=True,max_length=50)
-    homeState=models.CharField(blank=True,max_length=50)
-    address=models.TextField(blank=True)
+    dateOfBirth=models.DateField(blank=True,null=True,verbose_name="Date of birth")
+    homeTown=models.CharField(blank=True,max_length=50,verbose_name="Home town")
+    homeState=models.CharField(blank=True,max_length=50,verbose_name="Home town state")
+    address=models.TextField(blank=True,verbose_name="Permanent address")
     
-    tenPercentage=models.FloatField(blank=True,null=True,validators=[MinValueValidator(0),MaxValueValidator(100)])
-    tenBoard=models.CharField(blank=True,max_length=10)
-    tenSchool=models.CharField(blank=True,max_length=50)
-    tenPassYear=models.PositiveSmallIntegerField(blank=True,null=True,validators=[MinValueValidator(1950),MaxValueValidator(2040)])
-    tenState=models.CharField(blank=True,max_length=50)
-    tenCountry=models.CharField(blank=True,max_length=50)
+    tenPercentage=models.FloatField(blank=True,null=True,validators=[MinValueValidator(0),MaxValueValidator(100)],verbose_name="10th percentage")
+    tenBoard=models.CharField(blank=True,max_length=10,verbose_name="10th board")
+    tenSchool=models.CharField(blank=True,max_length=50,verbose_name="10th school")
+    tenPassYear=models.PositiveSmallIntegerField(blank=True,null=True,validators=[MinValueValidator(1950),MaxValueValidator(2040)],verbose_name="10th pass year")
+    tenState=models.CharField(blank=True,max_length=50,verbose_name="10th state")
+    tenCountry=models.CharField(blank=True,max_length=50,verbose_name="10th country")
 
-    twelvePercentage=models.FloatField(blank=True,null=True,validators=[MinValueValidator(0),MaxValueValidator(100)])
-    twelveBoard=models.CharField(blank=True,max_length=10)
-    twelveSchool=models.CharField(blank=True,max_length=50)
-    twelvePassYear=models.PositiveSmallIntegerField(blank=True,null=True,validators=[MinValueValidator(1950),MaxValueValidator(2040)])
-    twelveState=models.CharField(blank=True,max_length=50)
-    twelveCountry=models.CharField(blank=True,max_length=50)
+    twelvePercentage=models.FloatField(blank=True,null=True,validators=[MinValueValidator(0),MaxValueValidator(100)],verbose_name="12th percentage")
+    twelveBoard=models.CharField(blank=True,max_length=10,verbose_name="12th board")
+    twelveSchool=models.CharField(blank=True,max_length=50,verbose_name="12th college")
+    twelvePassYear=models.PositiveSmallIntegerField(blank=True,null=True,validators=[MinValueValidator(1950),MaxValueValidator(2040)],verbose_name="12th pass year")
+    twelveState=models.CharField(blank=True,max_length=50,verbose_name="12th state")
+    twelveCountry=models.CharField(blank=True,max_length=50,verbose_name="12th country")
 
-    diplomaPercentage=models.FloatField(blank=True,null=True,validators=[MinValueValidator(0),MaxValueValidator(100)])
-    diplomaBoard=models.CharField(blank=True,max_length=10)
-    diplomaSchool=models.CharField(blank=True,max_length=50)
-    diplomaPassYear=models.PositiveSmallIntegerField(blank=True,null=True,validators=[MinValueValidator(1950),MaxValueValidator(2040)])
-    diplomaState=models.CharField(blank=True,max_length=50)
-    diplomaCountry=models.CharField(blank=True,max_length=50)
+    diplomaPercentage=models.FloatField(blank=True,null=True,validators=[MinValueValidator(0),MaxValueValidator(100)],verbose_name="Diploma percentage")
+    diplomaBoard=models.CharField(blank=True,max_length=10,verbose_name="Diploma board")
+    diplomaSchool=models.CharField(blank=True,max_length=50,verbose_name="Diploma college")
+    diplomaPassYear=models.PositiveSmallIntegerField(blank=True,null=True,validators=[MinValueValidator(1950),MaxValueValidator(2040)],verbose_name="Diploma pass year")
+    diplomaState=models.CharField(blank=True,max_length=50,verbose_name="Diploma state")
+    diplomaCountry=models.CharField(blank=True,max_length=50,verbose_name="Diploma country")
 
-    degreePercentage=models.FloatField(blank=True,null=True,validators=[MinValueValidator(0),MaxValueValidator(100)])
-    degreeStream=models.CharField(blank=True,max_length=30)
-    degreeCourse=models.CharField(blank=True,max_length=30)
-    degreeCollege=models.CharField(blank=True,max_length=50)
-    degreeUniversity=models.CharField(blank=True,max_length=50)
-    degreePassYear=models.PositiveSmallIntegerField(blank=True,null=True,validators=[MinValueValidator(1950),MaxValueValidator(2040)])
-    degreeState=models.CharField(blank=True,max_length=50)
-    degreeCountry=models.CharField(blank=True,max_length=50)
+    degreePercentage=models.FloatField(blank=True,null=True,validators=[MinValueValidator(0),MaxValueValidator(100)],verbose_name="Degree percentage")
+    degreeStream=models.CharField(blank=True,max_length=30,verbose_name="Degree stream")
+    degreeCourse=models.CharField(blank=True,max_length=30,verbose_name="Degree course")
+    degreeCollege=models.CharField(blank=True,max_length=50,verbose_name="Degree college")
+    degreeUniversity=models.CharField(blank=True,max_length=50,verbose_name="Degree university")
+    degreePassYear=models.PositiveSmallIntegerField(blank=True,null=True,validators=[MinValueValidator(1950),MaxValueValidator(2040)],verbose_name="Degree pass year")
+    degreeState=models.CharField(blank=True,max_length=50,verbose_name="Degree state")
+    degreeCountry=models.CharField(blank=True,max_length=50,verbose_name="Degree country")
 
-    mbaSpecialisation=models.CharField(blank=True,max_length=2,choices=Specialisation.choices)
-    sgpa1=models.FloatField(blank=True,null=True,validators=[MinValueValidator(0),MaxValueValidator(10)])
-    sgpa2=models.FloatField(blank=True,null=True,validators=[MinValueValidator(0),MaxValueValidator(10)])
-    sgpa3=models.FloatField(blank=True,null=True,validators=[MinValueValidator(0),MaxValueValidator(10)])
-    sgpa4=models.FloatField(blank=True,null=True,validators=[MinValueValidator(0),MaxValueValidator(10)])
-    cgpa=models.FloatField(blank=True,null=True,validators=[MinValueValidator(0),MaxValueValidator(10)])
+    mbaSpecialisation=models.CharField(blank=True,max_length=2,choices=Specialisation.choices,verbose_name="MBA specialisation")
+    sgpa1=models.FloatField(blank=True,null=True,validators=[MinValueValidator(0),MaxValueValidator(10)],verbose_name="SGPA 1")
+    sgpa2=models.FloatField(blank=True,null=True,validators=[MinValueValidator(0),MaxValueValidator(10)],verbose_name="SGPA 2")
+    sgpa3=models.FloatField(blank=True,null=True,validators=[MinValueValidator(0),MaxValueValidator(10)],verbose_name="SGPA 3")
+    sgpa4=models.FloatField(blank=True,null=True,validators=[MinValueValidator(0),MaxValueValidator(10)],verbose_name="SGPA 4")
+    cgpa=models.FloatField(blank=True,null=True,validators=[MinValueValidator(0),MaxValueValidator(10)],verbose_name="CGPA")
 
-    activeBacklog=models.IntegerField(blank=True,default=0,validators=[MinValueValidator(0)])
-    totalBacklog=models.IntegerField(blank=True,default=0,validators=[MinValueValidator(0)])
+    activeBacklog=models.IntegerField(blank=True,default=0,validators=[MinValueValidator(0)],verbose_name="Number of Active backlogs")
+    totalBacklog=models.IntegerField(blank=True,default=0,validators=[MinValueValidator(0)],verbose_name="Number of Total backlogs")
 
 
-    projects=models.TextField(blank=True)
+    projects=models.TextField(blank=True,verbose_name="Projects decription")
 
-    preferredJobLocation=models.CharField(blank=True,max_length=30)
+    preferredJobLocation=models.CharField(blank=True,max_length=30,verbose_name="Preferred job location")
 
     created_at=models.DateTimeField(auto_now_add=True)
     updated_at=models.DateTimeField(auto_now=True)
@@ -146,3 +136,13 @@ class Student(models.Model):
     def __str__(self):
         return self.user.username
      
+
+class PreviousJob(models.Model):
+    user=models.ForeignKey(User, on_delete=models.CASCADE)
+    role=models.CharField(max_length=50,verbose_name="Role")
+    yearsofExperience=models.IntegerField(default=0,verbose_name="Years of Experience")
+    monthsofExperience=models.IntegerField(default=0,verbose_name="Months of Experience")
+    company=models.CharField(max_length=50,verbose_name="Company Name")
+
+    def __str__(self):
+        return self.role

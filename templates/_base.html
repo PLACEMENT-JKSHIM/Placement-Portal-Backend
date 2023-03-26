@@ -24,6 +24,11 @@
         {% block blocks %}
         {% endblock blocks %}
         <script src="{% static 'src/js/student_home.js' %}"></script>
+        <script>
+            if ( window.history.replaceState ) {
+                window.history.replaceState( null, null, window.location.href );
+            }
+        </script>
 </body>
 
 </html>

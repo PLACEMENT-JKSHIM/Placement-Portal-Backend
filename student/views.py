@@ -88,13 +88,13 @@ def editPreviousJob(request,id):
     form=PreviousJobForm(instance=pj)
     return render(request, "student/editpreviousjob.html",context={'form':form})
 
-@login_required
+@login_required(login_url='/login')
 def registerCompany(request):
     jobs = Job.objects.all()
     jobs_students = Job_student.objects.filter(student=request.user.student)
     return render(request, "student/registerCompany.html",{'jobs': jobs, 'jobs_students': jobs_students})
 
-@login_required
+@login_required(login_url='/login')
 def changePassword(request):
     if request.method == 'POST':
         current_password = request.POST.get('password')

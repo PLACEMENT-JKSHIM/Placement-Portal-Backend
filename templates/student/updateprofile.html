@@ -223,8 +223,8 @@
                             <a href="/previousjob/edit/{{pj.pk}}">
                                 <img alt="edit" class="w-7 h-7" src="{% static 'assets/edit.svg' %}" type="image/svg+xml">
                             </a>
-                            <button id="delete-btn" data-modal-target="delete" data-modal-toggle="delete" data-element={{pj.pk}}>
-                                <img alt="delte" class="w-7 h-7" src="{% static 'assets/delete.svg' %}" type="image/svg+xml">
+                            <button type="button" id="delete-btn" data-modal-target="delete" data-modal-toggle="delete" data-element={{pj.pk}}>
+                                <img alt="delete" class="w-7 h-7" src="{% static 'assets/delete.svg' %}" type="image/svg+xml">
                             </button>
                         </div>
                     {% endfor %}

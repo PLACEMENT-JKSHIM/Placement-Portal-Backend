@@ -12,13 +12,17 @@ class Job_student(models.Model):
         QUALIFIED = 'Q'
     job = models.ForeignKey(Job, on_delete=models.CASCADE)
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
-    status=models.CharField(max_length=2,choices=Status.choices,default=Status.REJECTED)
+    status=models.CharField(max_length=2,choices=Status.choices,default=Status.APPLIED)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     class Meta:
         unique_together = ('job', 'student')
     def __str__(self):
         return f"{self.job}-{self.student}-{self.status}"
+
+    class Meta:
+        unique_together = (('job', 'student'),)
+
 
 class Notice(models.Model):
     title=models.CharField( max_length=60,null=False)
