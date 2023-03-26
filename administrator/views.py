@@ -24,9 +24,11 @@ def logoutAdmin(request):
     logout(request)
     return render(request,"home/index.html")
 
+@login_required(login_url='/login')
 def index(request):
     return render(request, "admininstrator/index.html")
 
+@login_required(login_url='/login')
 def addStudent(request):
     if request.method=='POST' and request.POST.get('students'):
         data=json.loads(request.POST.get('students'))
@@ -67,6 +69,7 @@ def addStudent(request):
 
     return render(request, "admininstrator/student/add.html",context={'student':form})
 
+@login_required(login_url='/login')
 def adminEditor(request):
     if request.method=='POST' and  request.FILES.get('slider_image') :
         form = SliderForm(request.POST,request.FILES)
@@ -95,10 +98,12 @@ def adminEditor(request):
     sliders = Slider.objects.all()
     return render(request, "admininstrator/adminEditor.html",context={'members':members,'sliders':sliders,'sliderForm':sliderForm,'teamForm':teamForm})
 
+@login_required(login_url='/login')
 def blockStudent(request):
     students = Student.objects.all().order_by('-updated_at')[:5]
     return render(request,"admininstrator/blockStudent.html",{'students':students})
 
+@login_required(login_url='/login')
 def editBlock(request):
     query = request.GET.get('q', '')#get the query
     students = []
@@ -124,6 +129,7 @@ def editBlock(request):
     context = {'students': students}
     return JsonResponse(context, safe=False)
 
+@login_required(login_url='/login')
 def profileEditBlock(request,id):
     user=User.objects.get(id=id)
     student=Student.objects.get(user=user)
@@ -131,15 +137,17 @@ def profileEditBlock(request,id):
     student.save()
     return redirect("blockStudent")
 
+@login_required(login_url='/login')
 def profileEditBlockAll(req):
     Student.objects.all().update(editable=False)
     return redirect("blockStudent")
 
+@login_required(login_url='/login')
 def profileEditUnblockAll(req):
     Student.objects.all().update(editable=True)
     return redirect("blockStudent")
 
-
+@login_required(login_url='/login')
 def addJob(request):
     if request.method == 'POST':
         form = JobForm(request.POST)
@@ -174,6 +182,7 @@ def companies(request):
         form = CompanyForm()
     return render(request, "admininstrator/company/companies.html",{'companies':companies})
 
+@login_required(login_url='/login')
 def jobs(request):
     jobs=Job.objects.all()
     context={
@@ -214,10 +223,7 @@ def editCompany(request,id):
         return redirect('companies')
     return redirect('companies')
 
-
-
-    
-@login_required
+@login_required(login_url='/login')
 def changePasswordAdmin(request):
     if request.method == 'POST':
         # get the input values from the POST request
@@ -240,6 +246,7 @@ def changePasswordAdmin(request):
 
     return render(request, 'admininstrator/student/changePasswordAdmin.html')
 
+@login_required(login_url='/login')
 def addNewsUpdates(request):
     if request.method=='POST':
         title=request.POST.get("news_title")
@@ -248,12 +255,14 @@ def addNewsUpdates(request):
         addNewsUpdates.save();
     return render(request,"admininstrator/admin_newsUpdates.html")
 
+@login_required(login_url='/login')
 def deleteTeamMember(request,id):
     teamobj=get_object_or_404(Team,id=id)
     teamobj.delete()
     messages.success(request, message="Member deleted successfully")
     return redirect('/au/adminEditor')
 
+@login_required(login_url='/login')
 def deleteSlider(request,id):
     print(id)
     slidobj = get_object_or_404(Slider,id=id)
@@ -261,6 +270,7 @@ def deleteSlider(request,id):
     messages.success(request, message="Slider image deleted successfully")
     return redirect('/au/adminEditor')
 
+@login_required(login_url='/login')
 def viewJob(request,id):
     job=get_object_or_404(Job,id=id)
     context={
@@ -268,6 +278,7 @@ def viewJob(request,id):
     }
     return render(request,"admininstrator/company/viewJob.html",context)
 
+@login_required(login_url='/login')
 def deleteJob(request, id):
     job_code = get_object_or_404(Job, id=id)
     if request.method == 'POST':
@@ -277,6 +288,7 @@ def deleteJob(request, id):
             messages.warning(request, 'Cannot delete')
     return redirect('jobs')
 
+@login_required(login_url='/login')
 def editJob(request,id):
     job=get_object_or_404(Job,id=id)
     jobname=job.title
