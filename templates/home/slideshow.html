@@ -2,9 +2,9 @@
 <div id="image-slideshow" class="relative md:h-[600px] h-[400px] before:absolute before:top-0 
     before:left-0 before:w-full before:h-full before:bg-primary before:bg-opacity-40 before:z-10"
     style="cursor:url('{% static 'assets/cursor.png' %}'),auto;">
-        <div id="slide" class="object-cover w-full transition-opacity duration-1000"><img class="w-full h-full absolute top-0 left-0" src="http://nmamit.in/placement/images/slider/1.jpg"/></div>
-        <div id="slide" class="object-cover w-full transition-opacity opacity-0 duration-1000"><img class="w-full h-full absolute top-0 left-0" src="http://nmamit.in/placement/images/slider/2.jpg"/></div>
-        <div id="slide" class="object-cover w-full transition-opacity opacity-0 duration-1000"><img class="w-full h-full absolute top-0 left-0" src="http://nmamit.in/placement/images/slider/3.jpg"/></div>
+        {% for slide in sliders %}
+            <div id="slide" class="object-cover w-full transition-opacity duration-1000"><img class="w-full h-full absolute top-0 left-0" src="{{slide.slider_image.url}}"/></div>
+        {% endfor %}
         <div class="flex flex-col gap-7 items-center justify-center w-full h-full">
             <div class="md:text-4xl sm:text-2xl text-xl text-center z-10 text-white font-bold uppercase">
                 WELCOME TO
@@ -25,5 +25,5 @@
             images[pos].classList.add(inactive_slide)
             pos=(pos+1)%images.length;
             images[pos].classList.add(active_slide)
-        },6000)
+        },4000);
 </script>

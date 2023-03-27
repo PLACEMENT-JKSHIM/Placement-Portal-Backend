@@ -1,6 +1,6 @@
 from django.shortcuts import HttpResponse
 from django.contrib.auth.models import User
-from .models import Company, Job, Rule
+from .models import Company, Job, Rule, Slider, Team
 from django.shortcuts import render,redirect
 from django.contrib.auth import authenticate
 from django.contrib import auth
@@ -12,7 +12,9 @@ from django.contrib.auth.decorators import login_required
 
 
 def index(request):
-    return render(request, "home/index.html")
+    sliders = Slider.objects.all()
+    teams = Team.objects.all()
+    return render(request, "home/index.html",context={'sliders':sliders,'teams':teams})
 
 def login(request):
     if request.method=='POST':
