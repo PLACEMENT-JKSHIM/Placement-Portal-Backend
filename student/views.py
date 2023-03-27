@@ -116,7 +116,7 @@ def changePassword(request):
         
     return render(request, 'student/changePassword.html')
 
-@login_required(login_url='/login')
+# @login_required(login_url='/login')
 def student_home(request):
     l1=Notice.objects.all();
     l2=sorted(l1,key=lambda x:x.updated_on, reverse=True);

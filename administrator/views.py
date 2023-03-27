@@ -3,7 +3,7 @@ from django.forms.models import model_to_dict
 from django.core import serializers
 from django.shortcuts import render,redirect
 from home.models import Slider,Team,Company,Job
-from .forms import TeamForm, UserForm,SliderForm,JobForm,CompanyForm
+from .forms import TeamForm, UserForm,SliderForm,JobForm,CompanyForm,NewsForm
 from django.http import HttpResponse,JsonResponse
 import json
 from student.models import Student,PreviousJob
@@ -278,15 +278,43 @@ def changePasswordAdmin(request):
 
     return render(request, 'admininstrator/student/changePasswordAdmin.html')
 
-@login_required(login_url='/login')
-def addNewsUpdates(request):
-    if request.method=='POST':
-        title=request.POST.get("news_title")
-        content=request.POST.get("news_content")
-        addNewsUpdates=Notice(title=title,content=content)
-        addNewsUpdates.save()
-    return render(request,"admininstrator/admin_newsUpdates.html")
 
+# @login_required(login_url='/login')
+def addNewsUpdates(request):
+    form=NewsForm()
+    if request.method=='POST':
+        form=NewsForm(request.POST);
+        if form.is_valid():
+            form.save();
+    context={'news':form}
+    return render(request,"admininstrator/add_newsUpdates.html",context);
+
+def newsAndUpdates(request):
+    l1=Notice.objects.all();
+    l2=sorted(l1,key=lambda x:x.updated_on, reverse=True);
+    return render(request,'admininstrator/newsAndUpdates.html',{'news':l2});
+
+def updateNews(request,id):
+    notice=Notice.objects.get(id=id)
+    form=NewsForm(instance=notice)
+    if request.method=='POST':
+        form=NewsForm(request.POST,instance=notice);
+        if form.is_valid():
+            form.save();
+            messages.success(request, 'Updated successfully.')
+            return redirect('../../newsAndUpdates')
+    context={'news':form}
+    return render(request,'admininstrator/updateNews.html',context)
+
+
+def deleteNews(request,id):
+    notice=Notice.objects.get(id=id)
+    notice.delete();
+    messages.success(request, 'Deleted successfully.')
+    return redirect('../../newsAndUpdates')
+   
+
+   
 @login_required(login_url='/login')
 def adminEditor(request):
     if request.method=='POST' and  request.FILES.get('slider_image') :
