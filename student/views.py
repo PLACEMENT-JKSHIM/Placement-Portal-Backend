@@ -33,7 +33,8 @@ def updateProfile(request):
         form=StudentForm(request.POST,request.FILES,instance=s)
         if form.is_valid():
             st=form.save()
-            messages.success(request, message="Saved successfully")
+            messages.success(request, message="Profile updated successfully")
+            return redirect('profile')
         else:
             for field,errors in form.errors.items():
                 for error in errors:

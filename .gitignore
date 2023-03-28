@@ -96,6 +96,7 @@ db.sqlite3
 .history
 secrets.json
 **/migrations/*
+!**/migrations/__init__.py
 .vscode
 *invoice*
 .DS_Store

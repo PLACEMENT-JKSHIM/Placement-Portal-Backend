@@ -2,6 +2,20 @@
 @tailwind components;
 @tailwind utilities;
 
+#marks  li::before{
+  content: "\00BB";
+  margin-right:10px;
+  font-size:20px;
+  background-image: linear-gradient( rgb(27, 27, 71), rgb(224, 126, 126), rgb(246, 246, 6));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+#marks > ul > li{
+  list-style: none;
+
+
+}
+
 #typer span.cursor {
     display: inline-block;
     background-color: #ccc;

@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'student',
     'administrator',
     'widget_tweaks',
+    'mathfilters'
 ]
 
 MIDDLEWARE = [
