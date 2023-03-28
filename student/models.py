@@ -42,7 +42,11 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 #active_backlog
 #total backlog
 #status:login blocked,application blocked
+class Branch(models.Model):
+    branchname = models.CharField(max_length=100)
 
+    def __str__(self):
+        return self.branchname
 
 class Student(models.Model):
 
@@ -73,7 +77,7 @@ class Student(models.Model):
     gender=models.CharField(max_length=1,choices=Gender.choices,default=Gender.MALE,verbose_name="Gender")
     image=models.ImageField(blank=True,null=True,upload_to='student',default='blank.png')
     resume=models.FileField(blank=True,null=True,upload_to='resume')
-
+    branch=models.ForeignKey(Branch, on_delete=models.CASCADE)
     phoneNo=models.IntegerField(blank=True,null=True,verbose_name="Phone number",validators=[MinValueValidator(1000000000),MaxValueValidator(99999999999)])
     alternatePhoneNo=models.IntegerField(blank=True,null=True,verbose_name="Alternate Phone number",validators=[MinValueValidator(1000000000),MaxValueValidator(99999999999)])
     email=models.EmailField(blank=True,max_length=50,verbose_name="Personal Email ID")
@@ -124,7 +128,7 @@ class Student(models.Model):
 
     activeBacklog=models.IntegerField(blank=True,default=0,validators=[MinValueValidator(0)],verbose_name="Number of Active backlogs")
     totalBacklog=models.IntegerField(blank=True,default=0,validators=[MinValueValidator(0)],verbose_name="Number of Total backlogs")
-
+    edugap=models.IntegerField(blank=True,default=0,validators=[MinValueValidator(0)],verbose_name="Total gap in education")
 
     projects=models.TextField(blank=True,verbose_name="Projects decription")
 
@@ -146,3 +150,5 @@ class PreviousJob(models.Model):
 
     def __str__(self):
         return self.role
+    
+
