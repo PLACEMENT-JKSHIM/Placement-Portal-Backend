@@ -16,15 +16,15 @@ from django.contrib import messages
 from django.core.cache import cache
 from django.contrib.auth import authenticate, login,get_user_model,logout
 from django.shortcuts import get_object_or_404
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required,user_passes_test
 from django.forms.models import model_to_dict
 import json
 import zipfile
 import os
 import io
 from django.conf import settings
+from django.http import Http404
 
-User = get_user_model()
 heads=['USN']
 unwanted=['id','user','editable','created_at','updated_at','status','job_student','image','resume','previousjob']
 for s in Student._meta.get_fields():
@@ -33,16 +33,20 @@ for s in Student._meta.get_fields():
 
 heads.append('Previous Experience')
 
-@login_required(login_url='/login')
-def logoutAdmin(request):
-    logout(request)
-    return redirect('/')
+def superuser_required(view_func):
+    def wrapped_view(request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return redirect(f'/login?next={request.path}')
+        if not request.user.is_superuser:
+            raise Http404
+        return view_func(request, *args, **kwargs)
+    return wrapped_view
 
-@login_required(login_url='/login')
+@superuser_required
 def index(request):
     return render(request, "admininstrator/index.html")
 
-@login_required(login_url='/login')
+@superuser_required
 def addStudent(request):
     if request.method=='POST' and request.POST.get('students'):
         data=json.loads(request.POST.get('students'))
@@ -83,12 +87,12 @@ def addStudent(request):
 
     return render(request, "admininstrator/student/add.html",context={'student':form})
 
-@login_required(login_url='/login')
+@superuser_required
 def blockStudent(request):
     students = Student.objects.all().order_by('-updated_at')[:5]
     return render(request,"admininstrator/blockStudent.html",{'students':students})
 
-@login_required(login_url='/login')
+@superuser_required
 def editBlock(request):
     if request.method == 'POST':
         query = json.loads(request.body).get('q', '')
@@ -118,7 +122,7 @@ def editBlock(request):
         return JsonResponse(context, safe=False)
     
 
-@login_required(login_url='/login')
+@superuser_required
 def profileEditBlock(request,id):
     user=User.objects.get(id=id)
     student=Student.objects.get(user=user)
@@ -128,7 +132,7 @@ def profileEditBlock(request,id):
     return redirect("blockStudent")
 
 
-@login_required(login_url='/login')
+@superuser_required
 def loginBlockEdit(request,id):
     user=User.objects.get(id=id)
     student=Student.objects.get(user=user)
@@ -136,7 +140,7 @@ def loginBlockEdit(request,id):
     student.save()
     return redirect("blockStudent")
 
-@login_required(login_url='/login')
+@superuser_required
 def applyBlockEdit(request,id):
     user=User.objects.get(id=id)
     student=Student.objects.get(user=user)
@@ -147,39 +151,39 @@ def applyBlockEdit(request,id):
     student.save()
     return redirect("blockStudent")
 
-@login_required(login_url='/login')
+@superuser_required
 def profileEditBlockAll(req):
     Student.objects.all().update(editable=False)
     return redirect("blockStudent")
 
-@login_required(login_url='/login')
+@superuser_required
 def profileEditUnblockAll(req):
     Student.objects.all().update(editable=True)
     return redirect("blockStudent")
 
 #Login Block for all students
-@login_required(login_url='/login')
+@superuser_required
 def LoginBlockAll(req):
     Student.objects.all().update(status='LB')
     return redirect("blockStudent")
 
-@login_required(login_url='/login')
+@superuser_required
 def LoginUnblockAll(req):
     Student.objects.all().update(status='N')
     return redirect("blockStudent")
 
 #applying block for all students
-@login_required(login_url='/login')
+@superuser_required
 def applyBlockAll(req):
     Student.objects.all().update(status='AB')
     return redirect("blockStudent")
 
-@login_required(login_url='/login')
+@superuser_required
 def applyUnblockAll(req):
     Student.objects.all().update(status='N')
     return redirect("blockStudent")
 
-@login_required(login_url='/login')
+@superuser_required
 def addJob(request):
     if request.method == 'POST':
         form = JobForm(request.POST)
@@ -196,7 +200,7 @@ def addJob(request):
     context = {'form': form}
     return render(request, "admininstrator/company/addjob.html", context)
 
-@login_required(login_url='/login')
+@superuser_required
 def companies(request):
     companies=Company.objects.all()
     if request.method == 'POST':
@@ -214,7 +218,7 @@ def companies(request):
         form = CompanyForm()
     return render(request, "admininstrator/company/companies.html",{'companies':companies})
 
-@login_required(login_url='/login')
+@superuser_required
 def jobs(request):
     jobs=Job.objects.all()
     context={
@@ -223,7 +227,7 @@ def jobs(request):
     return render(request, "admininstrator/company/jobs.html",context)
 
 
-@login_required(login_url='/login')
+@superuser_required
 def deletecompany(request,id):
     print(request.user.is_superuser)
     c=get_object_or_404(Company,id=id)
@@ -232,7 +236,7 @@ def deletecompany(request,id):
     messages.success(request, message=" {0} deleted Successfully!".format(cname))
     return redirect('companies')
 
-@login_required(login_url='/login')
+@superuser_required
 def editCompany(request,id):
     company=get_object_or_404(Company,id=id)
     cname=company.c_name
@@ -255,7 +259,7 @@ def editCompany(request,id):
         return redirect('companies')
     return redirect('companies')
 
-@login_required(login_url='/login')
+@superuser_required
 def changePasswordAdmin(request):
     if request.method == 'POST':
         # get the input values from the POST request
@@ -278,7 +282,7 @@ def changePasswordAdmin(request):
 
     return render(request, 'admininstrator/student/changePasswordAdmin.html')
 
-@login_required(login_url='/login')
+@superuser_required
 def addNewsUpdates(request):
     if request.method=='POST':
         title=request.POST.get("news_title")
@@ -287,7 +291,7 @@ def addNewsUpdates(request):
         addNewsUpdates.save()
     return render(request,"admininstrator/admin_newsUpdates.html")
 
-@login_required(login_url='/login')
+@superuser_required
 def adminEditor(request):
     if request.method=='POST' and  request.FILES.get('slider_image') :
         form = SliderForm(request.POST,request.FILES)
@@ -316,10 +320,12 @@ def adminEditor(request):
     sliders = Slider.objects.all()
     return render(request, "admininstrator/adminEditor.html",context={'members':members,'sliders':sliders,'sliderForm':sliderForm,'teamForm':teamForm})
 
+@superuser_required
 def blockStudent(request):
     students = Student.objects.all().order_by('-updated_at')[:5]
     return render(request,"admininstrator/blockStudent.html",{'students':students})
 
+@superuser_required
 def editBlock(request):
     query = request.GET.get('q', '')#get the query
     students = []
@@ -342,6 +348,7 @@ def editBlock(request):
     context = {'students': students}
     return JsonResponse(context, safe=False)
 
+@superuser_required
 def profileEditBlock(request,id):
     user=User.objects.get(id=id)
     student=Student.objects.get(user=user)
@@ -349,15 +356,17 @@ def profileEditBlock(request,id):
     student.save()
     return redirect("blockStudent")
 
+@superuser_required
 def profileEditBlockAll(req):
     Student.objects.all().update(editable=False)
     return redirect("blockStudent")
 
+@superuser_required
 def profileEditUnblockAll(req):
     Student.objects.all().update(editable=True)
     return redirect("blockStudent")
 
-@login_required(login_url='/login')
+@superuser_required
 def changePasswordAdmin(request):
     if request.method == 'POST':
         # get the input values from the POST request
@@ -380,6 +389,7 @@ def changePasswordAdmin(request):
 
     return render(request, 'admininstrator/student/changePasswordAdmin.html')
 
+@superuser_required
 def addNewsUpdates(request):
     if request.method=='POST':
         title=request.POST.get("news_title")
@@ -388,14 +398,14 @@ def addNewsUpdates(request):
         addNewsUpdates.save()
     return render(request,"admininstrator/admin_newsUpdates.html")
 
-@login_required(login_url='/login')
+@superuser_required
 def deleteTeamMember(request,id):
     teamobj=get_object_or_404(Team,id=id)
     teamobj.delete()
     messages.success(request, message="Member deleted successfully")
     return redirect('/au/adminEditor')
 
-@login_required(login_url='/login')
+@superuser_required
 def editTeamMember(request,id):
     teamobj=get_object_or_404(Team,id=id)
     if request.method=="POST":
@@ -413,7 +423,7 @@ def editTeamMember(request,id):
     form=TeamForm()
     return render(request, "admininstrator/editTeamMember.html",context={'form':form,'member':teamobj})
 
-@login_required(login_url='/login')
+@superuser_required
 def deleteSlider(request,id):
     print(id)
     slidobj = get_object_or_404(Slider,id=id)
@@ -421,7 +431,7 @@ def deleteSlider(request,id):
     messages.success(request, message="Slider image deleted successfully")
     return redirect('/au/adminEditor')
 
-@login_required(login_url='/login')
+@superuser_required
 def registerHome(request):
     jobs=Job.objects.all()
     selected={'id':-1}
@@ -430,7 +440,7 @@ def registerHome(request):
 
     return render(request,"admininstrator/registerList.html",context={'heads':heads,'jobs':jobs,'students':students,'selected':selected,})
 
-@login_required(login_url='/login')
+@superuser_required
 def registerList(request,id):
     students=[]
     pjs=[]
@@ -451,7 +461,7 @@ def registerList(request,id):
 
     return render(request,"admininstrator/registerList.html",context={'heads':heads,'jobs':jobs,'students':students,'selected':selected,})
     
-@login_required(login_url='/login')
+@superuser_required
 def downLoadResumes(request,id):
     if id==0:
         jobSt=Job_student.objects.all().select_related('student','student__user')
@@ -473,7 +483,7 @@ def downLoadResumes(request,id):
     response['Content-Disposition'] = 'attachment;filename="resume.zip"'
     return response
 
-@login_required(login_url='/login')
+@superuser_required
 def downLoadImages(request,id):
     if id==0:
         jobSt=Job_student.objects.all().select_related('student','student__user')
@@ -496,7 +506,7 @@ def downLoadImages(request,id):
     response['Content-Disposition'] = 'attachment;filename="images.zip"'
     return response
     
-@login_required(login_url='/login')
+@superuser_required
 def viewJob(request,id):
     job=get_object_or_404(Job,id=id)
     context={
@@ -504,7 +514,7 @@ def viewJob(request,id):
     }
     return render(request,"admininstrator/company/viewJob.html",context)
 
-@login_required(login_url='/login')
+@superuser_required
 def deleteJob(request, id):
     job_code = get_object_or_404(Job, id=id)
     if request.method == 'POST':
@@ -514,7 +524,7 @@ def deleteJob(request, id):
             messages.warning(request, 'Cannot delete')
     return redirect('jobs')
 
-@login_required(login_url='/login')
+@superuser_required
 def editJob(request,id):
     job=get_object_or_404(Job,id=id)
     jobname=job.title

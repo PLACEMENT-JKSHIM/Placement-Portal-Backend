@@ -7,16 +7,22 @@ from django.contrib import auth
 from student.models import Student
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-
+from django.views.decorators.cache import cache_page
 # Create your views here.
 
-
+@cache_page(60 * 60)
 def index(request):
     sliders = Slider.objects.all()
     teams = Team.objects.all()
     return render(request, "home/index.html",context={'sliders':sliders,'teams':teams})
 
 def login(request):
+    if request.user.is_authenticated:
+        if request.user.is_superuser:   
+            return redirect('/au')
+        else:   
+            return redirect('/student_home')
+            
     if request.method=='POST':
         usn=request.POST['username']
         password=request.POST['password']
@@ -26,12 +32,18 @@ def login(request):
             auth.login(request, user)
             if request.user.is_superuser:
                 messages.success(request, message='Successfully logged in')
-                return redirect("/au")
+                if request.GET.getlist("next"):
+                    return redirect(to=request.GET.getlist("next")[0])
+                else:    
+                    return redirect('/au')
             s=Student.objects.filter(user=user).first()
             if s.status == 'LB':
                 messages.error(request, message="Login blocked")
             else:
-                return redirect("/student_home")
+                if request.GET.getlist("next"):
+                    return redirect(to=request.GET.getlist("next")[0])
+                else:    
+                    return redirect('/student_home')
         else:
             messages.error(request, message="Invaild username or password")
             
@@ -55,3 +67,8 @@ def rules(request):
 def profile(request):
     return render(request, "student/profile.html")
 
+
+@login_required(login_url='/login')
+def logout(request):
+    auth.logout(request)
+    return redirect('/login')

@@ -45,7 +45,7 @@ class Job(models.Model):
     curr_cgpa=models.DecimalField(max_digits=3, decimal_places=2,default=0.00)
     gap_edu=models.IntegerField(default=0)
     min_dob = models.DateField(validators=[MinValueValidator(date(1990, 1, 1))])
-    max_dob = models.DateField(validators=[MaxValueValidator(date(2005, 1, 1))])
+    max_dob = models.DateField(validators=[MaxValueValidator(date(2040, 1, 1))])
     ctc_pa=models.DecimalField(max_digits=15, decimal_places=2,default=0.00)
     max_activebacklog=models.IntegerField(default=0)
     max_histbacklog=models.IntegerField(default=0)

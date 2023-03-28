@@ -9,15 +9,19 @@ from django.shortcuts import get_object_or_404
 from home.models import Job
 from django.contrib.auth import authenticate
 from django.contrib.auth import logout
+from django.http import Http404
 
 
+def normaluser_required(view_func):
+    def wrapped_view(request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return redirect(f'/login?next={request.path}')
+        if request.user.is_superuser:
+            raise Http404
+        return view_func(request, *args, **kwargs)
+    return wrapped_view
 
-@login_required(login_url='/login')
-def logoutStudent(request):
-    logout(request)
-    return redirect('/')
-
-@login_required(login_url='/login')
+@normaluser_required
 def updateProfile(request):
     if request.user.is_superuser:
         return redirect('/au/')
@@ -40,11 +44,8 @@ def updateProfile(request):
     return render(request, "student/updateprofile.html",context={'form':form,'previousJobs':pjs,'pjForm':pjForm})
 
 
-@login_required(login_url='/login')
+@normaluser_required
 def addPreviousJob(request):
-    if request.user.is_superuser:
-        return redirect('/au/')
-
     if request.method=="POST":
         form=PreviousJobForm(request.POST)
         if form.is_valid():
@@ -58,20 +59,16 @@ def addPreviousJob(request):
                     messages.error(request, message=f"{field} : {error}")
     return redirect('/profile/update')
 
-@login_required(login_url='/login')
+@normaluser_required
 def deletePreviousJob(request,id):
-    if request.user.is_superuser:
-        return redirect('/au/')
 
     pj=get_object_or_404(PreviousJob,id=id)
     pj.delete()
     messages.success(request, message="Deleted successfully")
     return redirect('/profile/update')
 
-@login_required(login_url='/login')
+@normaluser_required
 def editPreviousJob(request,id):
-    if request.user.is_superuser:
-        return redirect('/au/')
 
     pj=get_object_or_404(PreviousJob,id=id)
     if request.method=="POST":
@@ -88,13 +85,13 @@ def editPreviousJob(request,id):
     form=PreviousJobForm(instance=pj)
     return render(request, "student/editpreviousjob.html",context={'form':form})
 
-@login_required(login_url='/login')
+@normaluser_required
 def registerCompany(request):
     jobs = Job.objects.all()
     jobs_students = Job_student.objects.filter(student=request.user.student)
     return render(request, "student/registerCompany.html",{'jobs': jobs, 'jobs_students': jobs_students})
 
-@login_required(login_url='/login')
+@normaluser_required
 def changePassword(request):
     if request.method == 'POST':
         current_password = request.POST.get('password')
@@ -116,14 +113,16 @@ def changePassword(request):
         
     return render(request, 'student/changePassword.html')
 
-@login_required(login_url='/login')
+@normaluser_required
 def student_home(request):
-    l1=Notice.objects.all();
-    l2=sorted(l1,key=lambda x:x.updated_on, reverse=True);
+    l1=Notice.objects.all()
+    l2=sorted(l1,key=lambda x:x.updated_on, reverse=True)
     print(l2)
     return render(request,"student/student_home.html",{'news':l2})
 
 def is_eligible(job, student):
+        if not student.name:
+            return False
         if student.cgpa < job.curr_cgpa:
             return False
         if student.tenPercentage < job.sslc:
@@ -131,32 +130,36 @@ def is_eligible(job, student):
         if student.twelvePercentage < job.puc:
             return False
         # elif self.student.diplomaPercentage < self.job.diploma:
-        #     return False
+
+        # return False
         if student.degreePercentage < job.degree:
             return False
-        if student.activeBacklog < job.max_activebacklog:
+        if student.activeBacklog > job.max_activebacklog:
             return False
-        if student.totalBacklog < job.max_histbacklog:
+        if student.totalBacklog > job.max_histbacklog:
             return False
         # if self.student.gap_edu > self.job.gap_edu:
         #     return False
-        if student.dateOfBirth < job.min_dob:
+        if not student.dateOfBirth or student.dateOfBirth < job.min_dob:
             return False
-        if student.dateOfBirth > job.max_dob:
+        if not student.dateOfBirth or student.dateOfBirth > job.max_dob:
             return False
         return True
 
-@login_required(login_url='/login')
+@normaluser_required
 def companyPage(request,id):
     job = get_object_or_404(Job,id=id)
     student = request.user.student
     eligible = is_eligible(job,student)
-    print(eligible)
-    job_student = []
-    if request.method == 'POST' and is_eligible:
-            job_student = Job_student.objects.create(job=job,student=request.user.student)
-            job_student.status = 'A'
-            job_student.save()
-            messages.success(request, 'Applied successfully.')
+    job_student = Job_student.objects.filter(job=job,student=student).first()
+
+    if request.method == 'POST' and eligible:
+            if not job_student:
+                job_student = Job_student.objects.create(job=job,student=request.user.student)
+                job_student.save()
+                messages.success(request, 'Applied successfully.')
+            else:
+                messages.error(request, 'Already applied.')
             return redirect('companyPage',id=id)
+
     return render(request,"student/companyPage.html",{'job':job,'id':id,'student':student,'eligible':eligible,'job_student':job_student})
