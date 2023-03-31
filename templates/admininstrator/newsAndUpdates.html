@@ -1,29 +1,27 @@
 {% extends "../admininstrator/_base_admin.html" %}admininstrator
-{% block meta %}
-<!-- use version 0.19.2 -->
-<script lang="javascript" src="https://cdn.sheetjs.com/xlsx-0.19.2/package/dist/xlsx.full.min.js"></script>
-{% endblock meta %}
 {% block content %}
 
-<div class="p-2 overflow-auto text-center ">
+<div class="text-center">
     <div class="p-2 text-2xl pb-7">Add Latest News And Updates</div>
     {% comment %} <div class="grid md:grid-cols-2 gap-4"> {% endcomment %}
-        <div class="rounded-lg border-slate-300 text-left overflow-auto border-2">
-            <div class="bg-primary h-10 text-white px-4 pt-2 font-semibold">News And Updates</div>
-                <div class="px-4 pt-3">
+        <div class="rounded-lg border-slate-300 text-left border-2">
+            <div class="bg-primary rounded-t-md h-10 text-white px-4 pt-2 font-semibold">News And Updates</div>
+                {% if news %}
+                <div class="px-2 pt-3">
                     {% for latest in news%}
-                    <a data-drawer-target={{latest.title}} data-drawer-show={{latest.title}} data-drawer-placement="bottom" aria-controls={{latest.title}} class="hover:cursor-pointer w-full block  px-4 pt-4 mb-4 bg-white rounded-lg shadow hover:bg-gray-100 hover:ring-4 shadow-primary dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
-                        <h5 class="mb-2  w-75text-2xl font-bold tracking-tight text-gray-900 dark:text-white text-ellipsis overflow-hidden ...">{{latest.title}} </h5>
-                        <p class="font-normal w-75 text-gray-700 dark:text-gray-400">Campus drive 2023 - Super Dream Option</p>
+                    <div data-drawer-target={{latest.title}} data-drawer-show={{latest.title}} data-drawer-placement="bottom" aria-controls={{latest.title}} class="hover:cursor-pointer w-full block  px-4 pt-4 mb-4 bg-white rounded-lg shadow hover:bg-gray-100 hover:ring-2 shadow-primary/40 {% if latest.hidden %}opacity-60{% endif %} ">
+                        <h5 class="mb-2 capitalize w-75 text-2xl font-bold tracking-tight text-gray-900 dark:text-white text-ellipsis">{{latest.title}} 
+                        {% if latest.hidden %}<span class="text-primary text-[12px] bg-secondary rounded-full lowercase p-1">hidden</span>{% endif %} </h5>
+                        <p class="font-normal w-75 text-gray-700 dark:text-gray-400">{{latest.content|slice:":10"|linebreaks}}...</p>
                         <div class="pt-2">
-                        <button type="button" onclick="window.location.href ='{% url 'updateNews' id=latest.id %}'" class="text- right text-white bg-yellow-400 hover:bg-yellow-500 focus:outline-none focus:ring-4 focus:ring-yellow-300 font-medium rounded-full text-sm px-4 py-2.5 text-center mr-2 mb-2 dark:focus:ring-yellow-900">
+                        <a type="button" onclick="event.stopPropagation()" href="{% url 'updateNews' id=latest.id %}" class="text-white bg-yellow-400 hover:bg-yellow-500 focus:outline-none focus:ring-4 focus:ring-yellow-300 font-medium rounded-full text-sm px-4 py-2.5 text-center mr-2 mb-2 dark:focus:ring-yellow-900">
                             <svg xmlns="http://www.w3.org/2000/svg" class="inline icon icon-tabler icon-tabler-edit" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="#2c3e50" fill="white" stroke-linecap="round" stroke-linejoin="round">
                             <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
                             <path d="M9 7h-3a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-3" />
                             <path d="M9 15h3l8.5 -8.5a1.5 1.5 0 0 0 -3 -3l-8.5 8.5v3" />
                             <line x1="16" y1="5" x2="19" y2="8" />
-                          </svg>Edit</button>
-                        <button type="button" onclick="window.location.href ='{% url 'deleteNews' id=latest.id %}'" class="text-white bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-full text-sm px-4 py-2.5 text-center mr-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">
+                          </svg>Edit</a>
+                        <a type="button" onclick="event.stopPropagation()"  href="{% url 'deleteNews' id=latest.id %}" class="text-white bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-full text-sm px-4 py-2.5 text-center mr-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">
                             <svg xmlns="http://www.w3.org/2000/svg" class="inline icon icon-tabler icon-tabler-trash" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="#2c3e50" fill="white" stroke-linecap="round" stroke-linejoin="round">
                                 <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
                                 <line x1="4" y1="7" x2="20" y2="7" />
@@ -32,8 +30,9 @@
                                 <path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" />
                                 <path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" />
                               </svg>Delete</button>
-                        <div>
-                    </a>
+                        </a>
+                        </div>
+                    </div>
                     
                     <div id={{latest.title}} class="max-h-96 fixed bottom-0 left-0 right-0 z-40 w-full p-4 overflow-y-auto bg-blue-50 dark:bg-gray-800 transition-transform translate-y-full" tabindex="-1">
                         <h5 id="drawer-bottom-label" class="inline-flex mr-1 items-center mb-4 text-base font-semibold text-primary dark:text-gray-400">
@@ -49,29 +48,14 @@
                     </div>
                    
                     {% endfor %}
+                </div>
+                {% else %}
+                    <div class="p-2 py-4 text-center rounded-b-md text-gray-500 bg-gray-200 border-t border-gray-300 ">
+                        No news found
+                    </div>
+                {% endif %}
         </div>
       
 
 </div>
-<script>
-    const uploadFile = document.getElementById("uploadFile")
-
-    uploadFile.addEventListener("change", (e) => {
-        if (!e.target.files)
-            return;
-
-        let f = e.target.files[0]
-
-        const reader = new FileReader();
-        reader.onload = function (e) {
-            let data = e.target.result;
-            let workbook = XLSX.read(data);
-            const sheet1 = workbook.Sheets[workbook.SheetNames[0]]
-            const obj = XLSX.utils.sheet_to_row_object_array(sheet1)
-            const input = document.getElementById("multiple")
-            input.value = JSON.stringify(obj)
-        };
-        reader.readAsArrayBuffer(f)
-    })
-</script>
 {% endblock content %}

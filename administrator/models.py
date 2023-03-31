@@ -25,12 +25,9 @@ class Job_student(models.Model):
 
 
 class Notice(models.Model):
-    class Status(models.TextChoices):
-        ENABLE = 'E'
-        DISABLE = 'D'
     title=models.CharField( max_length=60,null=False)
-    content=models.CharField( max_length=1000,null=False)
-    status=models.CharField(max_length=2,choices=Status.choices,default=Status.ENABLE)
+    content=models.TextField(null=False)
+    hidden=models.BooleanField(default=False)
     created_on =models.DateTimeField( auto_now_add=True)
     updated_on=models.DateTimeField(auto_now=True)
     def __str__(self):

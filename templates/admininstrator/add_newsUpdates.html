@@ -1,30 +1,17 @@
-{% extends "../admininstrator/_base_admin.html" %}admininstrator
-{% block meta %}
-<!-- use version 0.19.2 -->
-<script lang="javascript" src="https://cdn.sheetjs.com/xlsx-0.19.2/package/dist/xlsx.full.min.js"></script>
-{% endblock meta %}
+{% extends "../admininstrator/_base_admin.html" %}
 {% block content %}
 
-<div class="p-2 overflow-auto text-center ">
+<div class="text-center">
     <div class="p-2 text-2xl pb-7">Add Latest News And Updates</div>
-    {% comment %} <div class="grid md:grid-cols-2 gap-4"> {% endcomment %}
         <div class="rounded-lg border-slate-300 text-left overflow-auto border-2">
             <div class="bg-primary h-10 text-white px-4 pt-2 font-semibold">News And Updates</div>
             <form action="" method="post">
                 {% csrf_token %}
-                <div class="px-4 pt-3">
-                    <label class="my-3 font-semibold" for="{{news.title.id_for_label}}">Enter the Title</label><br>
-                    <input class="my-3 w-full rounded-lg border-gray-300" type="{{news.title.field.widget.input_type}}"
-                        name="{{news.title.name}}"  placeholder=""><br>
-                    <label class="my-3 font-semibold" for={{news.content.id_for_label}}>Enter the Content</label><br>
-                    <textarea class="my-3 w-full rounded-lg h-40 border-gray-300" 
-                    name="{{news.content.name}}" placeholder=""></textarea><br>
+                <div class="px-4 pt-3 flex flex-col gap-2">
+                    {% include "../custom_fields/_input.html" with field=news.title %}
+                    {% include "../custom_fields/_textarea.html" with field=news.content %}
                        
-                        <label class="relative inline-flex items-center mr-5 cursor-pointer">
-                            <input type="checkbox" value="E" name="{{news.status.name}}" class="sr-only peer">
-                            <div class="w-11 h-6 bg-gray-200 rounded-full peer dark:bg-gray-700 peer-focus:ring-4 peer-focus:ring-green-300 dark:peer-focus:ring-green-800 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-green-600"></div>
-                            <span class="ml-3 text-sm font-medium text-gray-900 dark:text-gray-300">Enable</span>
-                        </label>
+                    {% include "../custom_fields/_toggle.html" with field=news.hidden %}
                         
                 </div>
                 <div class="text-center mt-5 p-1 pb-2 bg-gray-100 font-semibold">
@@ -35,25 +22,4 @@
       
 
 </div>
-<script>
-    const uploadFile = document.getElementById("uploadFile")
-
-    uploadFile.addEventListener("change", (e) => {
-        if (!e.target.files)
-            return;
-
-        let f = e.target.files[0]
-
-        const reader = new FileReader();
-        reader.onload = function (e) {
-            let data = e.target.result;
-            let workbook = XLSX.read(data);
-            const sheet1 = workbook.Sheets[workbook.SheetNames[0]]
-            const obj = XLSX.utils.sheet_to_row_object_array(sheet1)
-            const input = document.getElementById("multiple")
-            input.value = JSON.stringify(obj)
-        };
-        reader.readAsArrayBuffer(f)
-    })
-</script>
 {% endblock content %}

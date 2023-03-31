@@ -3,45 +3,6 @@ from datetime import datetime
 from django.contrib.auth.models import User
 from django.core.validators import MaxValueValidator, MinValueValidator 
 
-# Create your models here.
-
-#usn
-#name as in aadhar
-#name as in 10 marks card
-#gender
-#contact number
-#alternative number
-#personal email id
-#aadhar card number
-#pancard number
-#dob
-#home town
-#home town state
-#permanent address
-#10th percentage,10th board ,school,year
-#12th percentage,10th board ,college,year
-#degree percentage
-#degree stream 
-#degree course
-#degree college name
-#degree university
-#MBA specialisation
-#MBA CGPA
-#MBA SGPA1
-#MBA SGPA2
-#MBA SGPA3
-#MBA SGPA4
-#college location (auto filled)
-# Past experience yes/no
-#if yes role , duration,company
-# projects or interships if any
-#resume
-#passport size photo
-#created at
-#updated at
-#active_backlog
-#total backlog
-#status:login blocked,application blocked
 class Branch(models.Model):
     branchname = models.CharField(max_length=100)
 

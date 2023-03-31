@@ -10,7 +10,7 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.cache import cache_page
 # Create your views here.
 
-@cache_page(60 * 60)
+# @cache_page(60 * 60)
 def index(request):
     sliders = Slider.objects.all()
     teams = Team.objects.all()
@@ -49,11 +49,6 @@ def login(request):
             
     return render(request, "home/login.html")
 
-# @login_required(login_url='/login')
-# def home(request):
-#     return render(request, "student/student_home.html")
-
-
 def gallery(request):
     return render(request, "home/gallery.html")
 
@@ -68,7 +63,7 @@ def profile(request):
     return render(request, "student/profile.html")
 
 
-@login_required(login_url='/login')
+@login_required(login_url='/login',redirect_field_name=None)
 def logout(request):
     auth.logout(request)
     return redirect('/login')

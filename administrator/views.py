@@ -287,37 +287,46 @@ def changePasswordAdmin(request):
 def addNewsUpdates(request):
     form=NewsForm()
     if request.method=='POST':
-        form=NewsForm(request.POST);
+        form=NewsForm(request.POST)
         if form.is_valid():
-            form.save();
+            form.save()
+            messages.success(request, 'Added successfully.')
+            return redirect('/au/newsAndUpdates')
+        else:
+            for field,errors in form.errors.items():
+                for error in errors:
+                    messages.error(request, message=f"{field} : {error}")
     context={'news':form}
-    return render(request,"admininstrator/add_newsUpdates.html",context);
+    return render(request,"admininstrator/add_newsUpdates.html",context)
 
 
 @superuser_required
 def newsAndUpdates(request):
-    l1=Notice.objects.all();
-    l2=sorted(l1,key=lambda x:x.updated_on, reverse=True);
-    return render(request,'admininstrator/newsAndUpdates.html',{'news':l2});
+    news=Notice.objects.all().order_by('-updated_on')
+    return render(request,'admininstrator/newsAndUpdates.html',{'news':news})
 
 @superuser_required
 def updateNews(request,id):
     notice=Notice.objects.get(id=id)
     form=NewsForm(instance=notice)
     if request.method=='POST':
-        form=NewsForm(request.POST,instance=notice);
+        form=NewsForm(request.POST,instance=notice)
         if form.is_valid():
-            form.save();
+            form.save()
             messages.success(request, 'Updated successfully.')
-            return redirect('../../newsAndUpdates')
+            return redirect('/au/newsAndUpdates')
+        else:
+            for field,errors in form.errors.items():
+                for error in errors:
+                    messages.error(request, message=f"{field} : {error}")
     context={'news':form}
     return render(request,'admininstrator/updateNews.html',context)
 
 
 @superuser_required
 def deleteNews(request,id):
-    notice=Notice.objects.get(id=id)
-    notice.delete();
+    notice=get_object_or_404(klass=Notice,id=id)
+    notice.delete()
     messages.success(request, 'Deleted successfully.')
     return redirect('../../newsAndUpdates')
    
@@ -418,15 +427,6 @@ def changePasswordAdmin(request):
             return redirect('changePasswordAdmin')
 
     return render(request, 'admininstrator/student/changePasswordAdmin.html')
-
-@superuser_required
-def addNewsUpdates(request):
-    if request.method=='POST':
-        title=request.POST.get("news_title")
-        content=request.POST.get("news_content")
-        addNewsUpdates=Notice(title=title,content=content)
-        addNewsUpdates.save()
-    return render(request,"admininstrator/admin_newsUpdates.html")
 
 @superuser_required
 def deleteTeamMember(request,id):

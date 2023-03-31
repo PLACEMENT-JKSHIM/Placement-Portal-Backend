@@ -116,10 +116,8 @@ def changePassword(request):
 
 @normaluser_required
 def student_home(request):
-    l1=Notice.objects.all()
-    l2=sorted(l1,key=lambda x:x.updated_on, reverse=True)
-    print(l2)
-    return render(request,"student/student_home.html",{'news':l2})
+    news=Notice.objects.filter(hidden=False).order_by('-updated_on')
+    return render(request,"student/student_home.html",{'news':news})
 
 def is_eligible(job, student):
         if not student.name:
