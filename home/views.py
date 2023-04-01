@@ -16,6 +16,8 @@ def index(request):
     teams = Team.objects.all()
     return render(request, "home/index.html",context={'sliders':sliders,'teams':teams})
 
+
+
 def login(request):
     if request.user.is_authenticated:
         if request.user.is_superuser:   
