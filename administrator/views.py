@@ -2,8 +2,8 @@ import http
 from django.forms.models import model_to_dict
 from django.core import serializers
 from django.shortcuts import render,redirect
-from home.models import Slider,Team,Company,Job
-from .forms import TeamForm, UserForm,SliderForm,JobForm,CompanyForm,NewsForm
+from home.models import Slider,Team,Company,Job,Rule
+from .forms import TeamForm, UserForm,SliderForm,JobForm,CompanyForm,NewsForm,RuleForm
 from django.http import HttpResponse,JsonResponse
 import json
 from student.models import Student,PreviousJob
@@ -341,13 +341,21 @@ def adminEditor(request):
         form = SliderForm(request.POST,request.FILES)
         if form.is_valid():
             form.save()
-            # Slider(slider=slider).save()
             messages.success(request, message="Image added successfully")
         else:
             for field,errors in form.errors.items():
                 for error in errors:
                     messages.error(request, message=f"{field} : {error}")
-    
+    elif request.method=='POST' and request.POST['rule'] :
+        form = RuleForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, message="Rule added successfully")
+        else:
+            for field,errors in form.errors.items():
+                for error in errors:
+                    messages.error(request, message=f"{field} : {error}")
+
     elif request.method=='POST':
         form = TeamForm(request.POST,request.FILES)
         if form.is_valid():
@@ -360,9 +368,11 @@ def adminEditor(request):
 
     sliderForm=SliderForm()
     teamForm=TeamForm()
+    ruleForm=RuleForm()
     members = Team.objects.all()
     sliders = Slider.objects.all()
-    return render(request, "admininstrator/adminEditor.html",context={'members':members,'sliders':sliders,'sliderForm':sliderForm,'teamForm':teamForm})
+    rules=Rule.objects.all()
+    return render(request, "admininstrator/adminEditor.html",context={'members':members,'sliders':sliders,'rules':rules,'sliderForm':sliderForm,'teamForm':teamForm,'ruleForm':ruleForm})
 
 @superuser_required
 def blockStudent(request):
@@ -465,6 +475,27 @@ def deleteSlider(request,id):
     slidobj.delete()
     messages.success(request, message="Slider image deleted successfully")
     return redirect('/au/adminEditor')
+
+def editRule(request,id):
+    rule=get_object_or_404(klass=Rule,id=id)
+    form=RuleForm(instance=rule)
+    if request.POST:
+        form=RuleForm(request.POST,instance=rule)
+        if form.is_valid():
+            form.save()
+            messages.success(request, message="Rule Edited successfully")
+            return redirect(to="/au/adminEditor")
+        else:
+            for field,errors in form.errors.items():
+                for error in errors:
+                    messages.error(request, message=f"{field} : {error}")
+    return render(request, template_name="admininstrator/editRule.html",context={'form':form})
+
+def deleteRule(request,id):
+    rule=get_object_or_404(klass=Rule,id=id)
+    rule.delete()
+    messages.success(request, message="Deleted successfully")
+    return redirect(to="/au/adminEditor")
 
 @superuser_required
 def registerHome(request):

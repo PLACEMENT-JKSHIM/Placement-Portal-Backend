@@ -1,12 +1,17 @@
 from django.forms import ModelForm 
 from django.contrib.auth.models import User
 from django import forms
-from home.models import Slider, Team,Job,Company
+from home.models import Slider, Team,Job,Company,Rule
 from administrator.models import Notice
 class UserForm(ModelForm):
     class Meta:
         model=User
         fields=['username','password']
+
+class RuleForm(ModelForm):
+    class Meta:
+        model=Rule
+        fields='__all__'
 
 class SliderForm(ModelForm):
     class Meta:
@@ -46,5 +51,5 @@ class CompanyForm(ModelForm):
 
 class NewsForm(ModelForm):
     class Meta:
-        model=Notice;
-        fields='__all__';
+        model=Notice
+        fields='__all__'

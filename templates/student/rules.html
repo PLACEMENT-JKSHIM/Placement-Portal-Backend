@@ -15,7 +15,7 @@
     {% for srule in srules %}
       <div class="block p-6 bg-white border-2 border-gray-200 rounded-lg shadow-lg hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
         <h5 class="mb-2 text-2xl font-bold tracking-tight text-primary dark:text-white">
-          {{srule.id}}
+            {{forloop.counter}}
         </h5>
         <p class="font-normal text-gray-700 dark:text-gray-400">
           {{srule.rule|linebreaksbr}}

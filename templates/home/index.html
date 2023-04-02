@@ -1,5 +1,5 @@
 {% extends "./_base_home.html" %}
-
+{% load custom_filter %}
 {% block content %}
     <div class="flex flex-col gap-16"> 
         <div>
@@ -8,12 +8,16 @@
         <div>
             {% include "./statistics.html" %}
         </div>
-        <div id="teams">
-            {% include "./teams.html" with teams=teams %}
-        </div>
-        <div >
-            {% include "./contact.html" %}
-        </div>
+        {% if teams %}
+            <div id="teams">
+                {% include "./teams.html" with teams=teams %}
+            </div>
+        {% endif %}
+        {% if teams|has_description %}
+            <div>
+                {% include "./contact.html" %}
+            </div>
+        {% endif %}
         <div >
             {% include "./gallery.html" %}
         </div>

@@ -35,4 +35,6 @@ path('au/registerlist',views.registerHome,name='registerHome'),
 path('au/registerlist/resumes/<int:id>',views.downLoadResumes,name='downLoadResumes'),
 path('au/registerlist/images/<int:id>',views.downLoadImages,name='downLoadImages'),
 path('au/registerlist/<int:id>',views.registerList,name='registerList'),
+path('au/rule/delete/<int:id>',views.deleteRule,name='deleteRule'),
+path('au/rule/edit/<int:id>',views.editRule,name='editRule'),
 ]
