@@ -1,6 +1,7 @@
 from django.shortcuts import HttpResponse
 from django.contrib.auth.models import User
 from .models import Company, Job, Rule, Slider, Team
+from administrator.models import Job_student
 from django.shortcuts import render,redirect
 from django.contrib.auth import authenticate
 from django.contrib import auth
@@ -8,14 +9,20 @@ from student.models import Student
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.cache import cache_page
+from django.db.models import Avg
 # Create your views here.
 
 # @cache_page(60 * 60)
 def index(request):
+    total_placed = Job_student.objects.filter(status='Q').values('student').distinct().count()
+    total_offered = (Job_student.objects.filter(status='OF')|Job_student.objects.filter(status='Q')).count()
+    highest_package = (Job_student.objects.filter(status='OF')|Job_student.objects.filter(status='Q')).order_by('-job__ctc_pa').first().job.ctc_pa
+    average_package = Job_student.objects.filter(status='Q').aggregate(Avg('job__ctc_pa')).get('job__ctc_pa__avg')
+    total_companies = Company.objects.all().count()
+    print(total_placed,total_offered,highest_package,average_package,total_companies)
     sliders = Slider.objects.all()
     teams = Team.objects.all()
-    return render(request, "home/index.html",context={'sliders':sliders,'teams':teams})
-
+    return render(request, "home/index.html",context={'sliders':sliders,'teams':teams,'total_placed':total_placed,'total_offered':total_offered,'highest_package':highest_package,'average_package':average_package,'total_companies':total_companies})
 
 
 def login(request):

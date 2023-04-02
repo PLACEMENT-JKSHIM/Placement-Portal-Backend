@@ -44,7 +44,12 @@ def superuser_required(view_func):
 
 @superuser_required
 def index(request):
-    return render(request, "admininstrator/index.html")
+    total_students = Student.objects.all().count()
+    User = get_user_model()
+    registered_users = User.objects.all().count()
+    blocked_students = Student.objects.filter(status='LB').count() | Student.objects.filter(status='AB').count()
+    total_companies = Company.objects.all().count()
+    return render(request, "admininstrator/index.html",context={'total_students':total_students,'registered_users':registered_users,'total_companies':total_companies,'blocked_students':blocked_students})
 
 @superuser_required
 def addStudent(request):
