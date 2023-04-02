@@ -126,7 +126,7 @@ def is_eligible(job, student):
             return False
         if student.tenPercentage < job.sslc:
             return False
-        if student.twelvePercentage < job.puc and student.diplomaPercentage < self.job.diploma:
+        if student.twelvePercentage < job.puc and student.diplomaPercentage < job.diploma:
             return False
         if student.degreePercentage < job.degree:
             return False
