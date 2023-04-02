@@ -1,6 +1,6 @@
 from django.shortcuts import HttpResponse
 from django.contrib.auth.models import User
-from .models import Company, Job, Rule, Slider, Team
+from .models import Company, Job, Rule, Slider, Team,Gallery
 from administrator.models import Job_student
 from django.shortcuts import render,redirect
 from django.contrib.auth import authenticate
@@ -59,7 +59,8 @@ def login(request):
     return render(request, "home/login.html")
 
 def gallery(request):
-    return render(request, "home/gallery.html")
+        title = Gallery.objects.all()
+        return render(request, "home/index.html",context={'title':title})
 
 
 @login_required(login_url='/login')
