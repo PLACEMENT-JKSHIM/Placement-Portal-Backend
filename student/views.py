@@ -126,19 +126,16 @@ def is_eligible(job, student):
             return False
         if student.tenPercentage < job.sslc:
             return False
-        if student.twelvePercentage < job.puc:
+        if student.twelvePercentage < job.puc and student.diplomaPercentage < self.job.diploma:
             return False
-        # elif self.student.diplomaPercentage < self.job.diploma:
-
-        # return False
         if student.degreePercentage < job.degree:
             return False
         if student.activeBacklog > job.max_activebacklog:
             return False
         if student.totalBacklog > job.max_histbacklog:
             return False
-        # if self.student.gap_edu > self.job.gap_edu:
-        #     return False
+        if student.gap_edu > job.gap_edu:
+            return False
         if not student.dateOfBirth or student.dateOfBirth < job.min_dob:
             return False
         if not student.dateOfBirth or student.dateOfBirth > job.max_dob:

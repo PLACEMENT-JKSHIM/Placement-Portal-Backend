@@ -4,12 +4,12 @@
 </div>
 <div class="flex flex-wrap justify-center gap-6">
     {% for member in teams %}
-        <div class="px-2 text-primary hover:opacity-95  transform transition duration-500 hover:scale-105 "> 
-            <div class="w-64 h-80  flex flex-col justify-center items-center  max-w-sm bg-white border border-gray-200 rounded-lg shadow-[0_2.8px_2.2px_rgba(0,_0,_0,_0.034),_0_6.7px_5.3px_rgba(0,_0,_0,_0.048),_0_12.5px_10px_rgba(0,_0,_0,_0.06),_0_22.3px_17.9px_rgba(0,_0,_0,_0.072),_0_41.8px_33.4px_rgba(0,_0,_0,_0.086),_0_100px_80px_rgba(0,_0,_0,_0.12)] dark:bg-gray-800 dark:border-gray-700">
-                <div class="flex flex-col justify-center items-center pb-5">
-                    <img class=" object-contain  transition duration-300 ease-in   hover:ease-out w-36 h-36 mb-3 rounded-full shadow-[4.0px_8.0px_8.0px_rgba(0,0,0,0.38)]  " src="{{member.mem_image.url}}"/>
-                    <h5 class="mb-1 mt-3 text-xl font-medium">{{member.mem_name}}</h5>
-                    <span class="text-sm">{{member.mem_designation}}</span>
+        <div class="text-primary transform transition duration-500 "> 
+            <div class="w-60 h-80 max-w-sm bg-white border border-gray-200 rounded-xl shadow-md group hover:rounded-3xl">
+                <div class="flex h-full flex-col justify-center gap-3 items-center">
+                    <img class=" object-contain transition-all duration-300 w-36 h-36 rounded-[50%] shadow-md group-hover:scale-105 group-hover:shadow-lg" src="{{member.mem_image.url}}"/>
+                    <h5 class="mb-1 mt-3 text-xl transition-transform font-medium group-hover:scale-125 group-hover:font-semibold">{{member.mem_name}}</h5>
+                    <span class="text-sm transition-transform group-hover:scale-105">{{member.mem_designation|linebreaks}}</span>
                 </div>
             </div>
         </div>
