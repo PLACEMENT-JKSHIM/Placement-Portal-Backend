@@ -29,6 +29,12 @@ class Slider(models.Model):
     def __str__(self):
         return f"{self.slider_image}"
 
+class Gallery(models.Model):
+    title = models.CharField(max_length=40)
+    description = models.CharField(max_length=40)
+    image= models.ImageField(upload_to='gallery', default='blank.png')
+    def __str__(self):
+        return f"{self.title}"
 
 class Job(models.Model):
     class Status(models.TextChoices):
