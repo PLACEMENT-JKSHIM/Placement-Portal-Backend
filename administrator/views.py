@@ -346,7 +346,7 @@ def adminEditor(request):
             for field,errors in form.errors.items():
                 for error in errors:
                     messages.error(request, message=f"{field} : {error}")
-    elif request.method=='POST' and request.POST['rule'] :
+    elif request.method=='POST' and request.POST.get('rule') :
         form = RuleForm(request.POST)
         if form.is_valid():
             form.save()

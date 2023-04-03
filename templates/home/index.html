@@ -13,7 +13,7 @@
                 {% include "./teams.html" with teams=teams %}
             </div>
         {% endif %}
-        {% if teams|has_description %}
+        {% if teams and teams|has_description %}
             <div>
                 {% include "./contact.html" %}
             </div>

@@ -4,7 +4,7 @@
 </div>
 <div class="flex flex-wrap justify-center px-2 md:px-5">
     {% for member in teams %}
-    {% if member  %}
+    {% if member.mem_description  %}
   <div
     class="container md:w-5/12 my-16 md:mx-5 px-6 border rounded-md py-6 shadow-xl bg-white">
         <section class="text-gray-800">
@@ -19,7 +19,7 @@
             </p>
         </div>
         </section>
-        {% endif %}
-        {% endfor %}
-  </div>
+    </div>
+    {% endif %}
+    {% endfor %}
 </div>
