@@ -1,98 +1,92 @@
 {% extends "../_base_admin.html" %}
+
 {% block meta %}
 <!-- use version 0.19.2 -->
 <script lang="javascript" src="https://cdn.sheetjs.com/xlsx-0.19.2/package/dist/xlsx.full.min.js"></script>
 {% endblock meta %}
+
 {% block content %}
 
-<div class="p-2 sm:ml-2 overflow-auto">
+<div class="p-4 sm:ml-4 overflow-auto">
 
-    <div class="p-2 sm:ml-2 overflow-auto">
-        <h1 class="text-3xl mt-5 font-bold text-primary"><span class="underline underline-offset-8 decoration-7 decoration-secondary">Update Job</span> Details </h1>
-        <div class=" bg-white p-2">
+  <div class="p-4 sm:ml-4 overflow-auto">
+    <h1 class="text-3xl font-bold text-primary"><span class="underline underline-offset-8 decoration-7 decoration-secondary">Edit Job</span> Details</h1>
+    <div class="bg-white p-4">
 
-            <form method="POST">
-                {% csrf_token %}
-                <div class="grid grid-cols-12 gap-2 text-sm">
-                    <div class="col-span-6">
-                        {% include "../../custom_fields/_input.html" with field=form.title %}
-                    </div>
-                    <div class="col-span-6">
-                        {% include "../../custom_fields/_select.html" with field=form.company %}
-                    </div>
-                    <div class="col-span-6">
-                        {% include "../../custom_fields/_textarea.html" with field=form.description %}
-                    </div>
-                    <div class="col-span-6">
-                        {% include "../../custom_fields/_input.html" with field=form.academic_year %}
-                    </div>
-                      <div class="col-span-6">
-                        {% include "../../custom_fields/_input.html" with field=form.sslc %}
-                    </div>
-                    <div class="col-span-6">
-                        {% include "../../custom_fields/_input.html" with field=form.puc %}
-                    </div>
-                    <div class="col-span-6">
-                        {% include "../../custom_fields/_input.html" with field=form.diploma %}
-                    </div>
-                    <div class="col-span-6">
-                        {% include "../../custom_fields/_input.html" with field=form.degree %}
-                    </div>
-                    <div class="col-span-6">
-                        {% include "../../custom_fields/_input.html" with field=form.curr_cgpa %}
-                    </div>
-                    <div class="col-span-6">
-                        {% include "../../custom_fields/_input.html" with field=form.gap_edu %}
-                    </div>
-                    <div class="col-span-6">
-                        {% include "../../custom_fields/_input.html" with field=form.min_dob %}
-                    </div>
-                    <div class="col-span-6">
-                        {% include "../../custom_fields/_input.html" with field=form.max_dob %}
-                    </div>
-                    <div class="col-span-6">
+      <form method="POST">
+        {% csrf_token %}
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-12 gap-2 text-sm">
+          <div class="sm:col-span-1 md:col-span-6">
+            {% include "../../custom_fields/_input.html" with field=form.title %}
+          </div>
+          <div class="sm:col-span-1 md:col-span-6">
+            {% include "../../custom_fields/_select.html" with field=form.company %}
+          </div>
+          <div class="sm:col-span-1 md:col-span-6 m-1">
+            {% include "../../custom_fields/_textarea.html" with field=form.description %}
+          </div>
+          <div class="sm:col-span-1 md:col-span-6">
+            {% include "../../custom_fields/_input.html" with field=form.academic_year %}
+            {% include "../../custom_fields/_input.html" with field=form.sslc %}
+          </div>
+          {% comment %} <div class="col-span-6">
+          {% include "../../custom_fields/_input.html" with field=form.sslc %}
+          </div> {% endcomment %}
+          <div class="sm:col-span-1 md:col-span-6">
+            {% include "../../custom_fields/_input.html" with field=form.puc %}
+          </div>
+          <div class="sm:col-span-1 md:col-span-6">
+            {% include "../../custom_fields/_input.html" with field=form.diploma %}
+          </div>
+          <div class="sm:col-span-1 md:col-span-6">
+            {% include "../../custom_fields/_input.html" with field=form.degree %}
+          </div>
+          <div class="sm:col-span-1 md:col-span-6">
+            {% include "../../custom_fields/_input.html" with field=form.curr_cgpa %}
+          </div>
+          <div class="sm:col-span-1 md:col-span-6">
+            {% include "../../custom_fields/_input.html" with field=form.gap_edu %}
+          </div>
+          <div class="sm:col-span-1 md:col-span-6">
+            {% include "../../custom_fields/_input.html" with field=form.min_dob %}
+          </div>
+          <div class="sm:col-span-1 md:col-span-6">
+            {% include "../../custom_fields/_input.html" with field=form.max_dob %}
+          </div>
+                    <div class="sm:col-span-1 md:col-span-6">
                         {% include "../../custom_fields/_input.html" with field=form.ctc_pa %}
                     </div>
-                    <div class="col-span-6">
+                    <div class="sm:col-span-1 md:col-span-6">
                         {% include "../../custom_fields/_input.html" with field=form.max_activebacklog %}
                     </div>
-                    <div class="col-span-6">
-                        {% include "../../custom_fields/_input.html" with field=form.max_activebacklog %}
-                    </div>
-                    <div class="col-span-6">
+                    <div class="sm:col-span-1 md:col-span-6">
                         {% include "../../custom_fields/_input.html" with field=form.max_histbacklog %}
                     </div>
-                    <div class="col-span-6">
+                    {% comment %} <div class="col-span-6">
                         {% include "../../custom_fields/_input.html" with field=form.other_company %}
-                    </div>
-                    <div class="col-span-6">
+                    </div> {% endcomment %}
+                    <div class="sm:col-span-1 md:col-span-6">
                         {% include "../../custom_fields/_input.html" with field=form.registration_date %}
                     </div>
-                    <div class="col-span-6">
+                    <div class="sm:col-span-1 md:col-span-6">
                         {% include "../../custom_fields/_input.html" with field=form.talk_date %}
                     </div>
-                    <div class="col-span-6">
+                    <div class="sm:col-span-1 md:col-span-6">
                         {% include "../../custom_fields/_input.html" with field=form.interview_date %}
                     </div>
-                    <div class="col-span-6">
+                    <div class="sm:col-span-1 md:col-span-6">
                         {% include "../../custom_fields/_input.html" with field=form.test_date %}
                     </div>
-                    <div class="col-span-6">
+                    <div class="sm:col-span-1 md:col-span-6">
                         {% include "../../custom_fields/_textarea.html" with field=form.notes %}
                     </div>
-                    <div class="col-span-6">
-                        Registration:
-                        {% for value, label in form.status.field.choices %}
-    <label>
-        <input type="radio" name="{{ form.status.name }}" value="{{ value }}" {% if form.status.value == value %}checked{% endif %}>
-        {{ label }}
-    </label>
-{% endfor %}
-                      </div>
-                     
-                    <div class="col-span-10">
-                      <div class="relative block w-40 m-auto mt-4">
-                        {% include "../../buttons/buttons.html" with main=True btn="Update Job" secondary=True %}
+                    <div class="sm:col-span-1 md:col-span-6">
+                        {% include "../../custom_fields/_toggle.html" with field=form.reg_open %}
+                    </div>
+                   
+
+                      <div class="relative w-40 m-auto mt-4">
+                        {% include "../../buttons/buttons.html" with main=True btn="Update" secondary=False %}
                     </div>
             </form>
         </div>

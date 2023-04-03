@@ -2,11 +2,11 @@ import http
 from django.forms.models import model_to_dict
 from django.core import serializers
 from django.shortcuts import render,redirect
-from home.models import Slider,Team,Company,Job
+from home.models import Slider,Team,Company,Job,Rule
 from .forms import TeamForm, UserForm,SliderForm,JobForm,CompanyForm,NewsForm
 from django.http import HttpResponse,JsonResponse
 import json
-from student.models import Student,PreviousJob
+from student.models import Student,PreviousJob,Branch
 from home.models import Job
 from administrator.models import Notice,Job_student
 from django.contrib.auth.models import User
@@ -44,7 +44,22 @@ def superuser_required(view_func):
 
 @superuser_required
 def index(request):
-    return render(request, "admininstrator/index.html")
+    student_count = Student.objects.count()
+    toppers = Student.objects.all().order_by('-cgpa')[:10]
+    active_jobs=Job.objects.filter(reg_open=True).count()
+    login_blocked_count = Student.objects.filter(status__exact='LB').count()
+    app_blocked_count = Student.objects.filter(status__exact='AB').count()
+    recently_updated=Student.objects.all().order_by('-updated_at')[:10]
+    context={
+        'student_count':student_count,
+        'toppers':toppers,
+        'login_blocked_count':login_blocked_count,
+        'app_blocked_count':app_blocked_count,
+        'active_jobs':active_jobs,
+        'recently_updated':recently_updated
+
+    }
+    return render(request, "admininstrator/index.html",context)
 
 @superuser_required
 def addStudent(request):
@@ -111,12 +126,12 @@ def editBlock(request):
                     'user': user_dict,
                     'name': student.name,
                     'image':{
-                        'url':student.image.url
+                        'url':student.image.url if student.image else None
                     },
                 'status':student.status
                     # add any other fields you want to include here
                 }
-                print(student_dict)
+                # print(student_dict)
                 students.append(student_dict)
         context = {'students': students}
         return JsonResponse(context, safe=False)
@@ -126,7 +141,7 @@ def editBlock(request):
 def profileEditBlock(request,id):
     user=User.objects.get(id=id)
     student=Student.objects.get(user=user)
-    print(student)
+    # print(student)
     student.editable = student.editable == False
     student.save()
     return redirect("blockStudent")
@@ -205,7 +220,7 @@ def companies(request):
     companies=Company.objects.all()
     if request.method == 'POST':
         form = CompanyForm(request.POST,request.FILES)
-        print(form)
+        # print(form)
         if form.is_valid():
             companynew = form.save()
             messages.success(request,message=" {0} added Successfully!".format(companynew))
@@ -229,7 +244,7 @@ def jobs(request):
 
 @superuser_required
 def deletecompany(request,id):
-    print(request.user.is_superuser)
+    # print(request.user.is_superuser)
     c=get_object_or_404(Company,id=id)
     cname=c.c_name
     c.delete()
@@ -364,28 +379,7 @@ def blockStudent(request):
     students = Student.objects.all().order_by('-updated_at')[:5]
     return render(request,"admininstrator/blockStudent.html",{'students':students})
 
-@superuser_required
-def editBlock(request):
-    query = request.GET.get('q', '')#get the query
-    students = []
-    users = User.objects.filter(username__icontains=query) if query else []
-    for user in users:
-        if student := Student.objects.filter(user=user).first():
-            # convert Student object to a dictionary
-            user_dict = {
-                'id': student.user.id,
-                'user': student.user.username
-            }
-            student_dict = {
-                'editable': student.editable,
-                'user': user_dict,
-                'name': student.name,
-                # add any other fields you want to include here
-            }
-            students.append(student_dict)
-    print(students)
-    context = {'students': students}
-    return JsonResponse(context, safe=False)
+
 
 @superuser_required
 def profileEditBlock(request,id):
@@ -575,3 +569,36 @@ def editJob(request,id):
         return render(request,"admininstrator/company/editJob.html",context)
     return redirect('viewJob', id=job.id)
 
+@superuser_required
+def search(request):
+    recently_logged_in_users = User.objects.filter(last_login__isnull=False).exclude(username='admin').order_by('-last_login')[:10]
+    print(recently_logged_in_users)
+    students=[]
+    for user in recently_logged_in_users:
+        student = get_object_or_404(Student,user=user)
+        print(student)
+        if student:
+            students.append(student)
+    return render(request,"admininstrator/search.html",{'students':students})
+
+@superuser_required
+def viewprofile(request,id):
+    user=User.objects.get(id=id)
+    student=Student.objects.get(user=user)
+    return render(request,"admininstrator/student/viewprofile.html",{'student':student})
+
+@superuser_required
+def resetportal(request):
+    users = User.objects.exclude(is_superuser=True)
+    users.delete()
+    students=Student.objects.all()
+    students.delete()
+    jobs=Job.objects.all()
+    jobs.delete()
+    job_student=Job_student.objects.all()
+    job_student.delete()
+    companys=Company.objects.all()
+    companys.delete()
+    notices=Notice.objects.all()
+    notices.delete()
+    return redirect('admin')

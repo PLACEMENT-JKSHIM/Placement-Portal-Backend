@@ -14,9 +14,13 @@
             <form method="POST" action="{% url 'editCompany' company.id %}" enctype="multipart/form-data">
                 {% csrf_token %}
                 <div class="w-full flex justify-center ">
+                 
 
                 {% if form.instance.image %}
   <img src="{{ form.instance.image.url }}" alt="Previous Image" class="h-56 w-56 rounded-3xl">
+  {% else %}
+  <img class="company-image relative h-56 w-56 rounded-lg" alt="H" data-name="{{ company.c_name|slice:'1'|upper }}">
+  
 {% endif %}</div>
                 <div class="mt-5">
                     <label for="company_logo" class="block mb-2 text-sm font-semibold text-gray-900 dark:text-white mt-5">Update Company Logo</label>

@@ -2,94 +2,29 @@
 <div class="overflow-auto text-center">
     <div class="grid grid-cols-4 gap-2 text-white">
         <div class="bg-teal-500 text-left border rounded-md overflow-auto">
-            <div class="text-3xl font-semibold p-2">4001</div>
+            <div class="text-3xl font-semibold p-2">{{student_count}}</div>
             <div class="pb-2 px-2">Total No. Of Students</div>
 
-            <div class="text-center mt-5 pt-1 text-sm bg-teal-600">
-                More info
-                <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke-width="1.5"
-                    stroke="currentColor"
-                    class="inline w-6 h-6"
-                >
-                    <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        d="M12.75 15l3-3m0 0l-3-3m3 3h-7.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                    />
-                </svg>
-            </div>
+            
         </div>
         <div
             class="text-black bg-yellow-300 text-left border rounded-md overflow-auto"
         >
-            <div class="text-3xl font-semibold p-2">3501</div>
-            <div class="pb-2 px-2">User Registrations</div>
+            <div class="text-3xl font-semibold p-2">{{active_jobs}}</div>
+            <div class="pb-2 px-2">Jobs Currently open</div>
 
-            <div class="text-center mt-5 pt-1 text-sm text-black bg-yellow-400">
-                More info
-                <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke-width="1.5"
-                    stroke="currentColor"
-                    class="inline w-6 h-6"
-                >
-                    <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        d="M12.75 15l3-3m0 0l-3-3m3 3h-7.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                    />
-                </svg>
-            </div>
+           
         </div>
         <div class="bg-red-600 text-left border rounded-md overflow-auto">
-            <div class="text-3xl font-semibold p-2">151</div>
-            <div class="pb-2 px-2">Blocked Students</div>
+            <div class="text-3xl font-semibold p-2">{{login_blocked_count}}</div>
+            <div class="pb-2 px-2">Login Blocked Students</div>
 
-            <div class="text-center mt-5 pt-1 text-sm bg-red-700">
-                More info
-                <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke-width="1.5"
-                    stroke="currentColor"
-                    class="inline w-6 h-6"
-                >
-                    <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        d="M12.75 15l3-3m0 0l-3-3m3 3h-7.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                    />
-                </svg>
-            </div>
+           
         </div>
         <div class="bg-emerald-600 text-left border rounded-md overflow-auto">
-            <div class="text-3xl font-semibold p-2">101</div>
-            <div class="pb-2 px-2">Company Visits</div>
+            <div class="text-3xl font-semibold p-2">{{app_blocked_count}}</div>
+            <div class="pb-2 px-2">Application Blocked</div>
 
-            <div class="text-center mt-5 pt-1 text-sm bg-green-700">
-                More info
-                <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke-width="1.5"
-                    stroke="currentColor"
-                    class="inline w-6 h-6"
-                >
-                    <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        d="M12.75 15l3-3m0 0l-3-3m3 3h-7.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                    />
-                </svg>
-            </div>
         </div>
     </div>
 
@@ -101,20 +36,19 @@
                 <hr />
                 <div class="flex flex-wrap pt-3 gap-2 justify-center">
 
-                    {% for i in "12833"|make_list %}
-                        <div class="text-center w-36 p-1">
-                            <div class="rounded-full px-8">
-                                <img
-                                    class="rounded-full"
-                                    src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTN2vVVG2BOns1aicnn0wKmKn3aYtHCcBiysWlpz_c&s"
-                                    alt=""
-                                    srcset=""
-                                />
-                            </div>
+                    {% for student in recently_updated %}
+                        <div class="text-center w-36 p-3">
+                            <div class=" flex justify-center items-center ">
+                                {% if student.image %}
+                                <img class="profile-image relative w-20 h-20 rounded-full" src="{{ student.image.url }}" alt="{{ student.name }}">
+                            {% else %}
+                                <img class="profile-image relative w-20 h-20 rounded-full" alt="H" data-name="{{ student.name|slice:'1'|upper }}">
+                            {% endif %}
+                        </div>
                             <div class="text-black">
-                                <div class="text-md">4NM20MC111</div>
-                                <div class="text-sm">Rocky</div>
-                                <div class="text-xs">2023-0-14 15:12:58</div>
+                                <div class="text-md">{{student.user.username}}</div>
+                                <div class="text-sm">{{student.name}}</div>
+                                <div class="text-xs">{{student.updated_at}}</div>
                             </div>
                         </div>
                     {% endfor %}
@@ -129,20 +63,19 @@
                 <hr />
                 <div class="flex flex-wrap pt-3 gap-2 justify-center">
 
-                    {% for i in "12833"|make_list %}
-                        <div class="text-center w-36 p-1">
-                            <div class="rounded-full px-8">
-                                <img
-                                    class="rounded-full"
-                                    src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTN2vVVG2BOns1aicnn0wKmKn3aYtHCcBiysWlpz_c&s"
-                                    alt=""
-                                    srcset=""
-                                />
-                            </div>
+                    {% for student in toppers %}
+                        <div class="text-center w-36 p-3">
+                            <div class=" flex justify-center items-center ">
+                                {% if student.image %}
+                                <img class="profile-image relative w-20 h-20 rounded-full" src="{{ student.image.url }}" alt="{{ student.name }}">
+                            {% else %}
+                                <img class="profile-image relative w-20 h-20 rounded-full" alt="H" data-name="{{ student.name|slice:'1'|upper }}">
+                            {% endif %}
+                        </div>
                             <div class="text-black">
-                                <div class="text-md">4NM20MC111</div>
-                                <div class="text-sm">Rocky</div>
-                                <div class="text-xs">2023-0-14 15:12:58</div>
+                                <div class="text-md">{{student.user.username}}</div>
+                                <div class="text-sm">{{student.name}}</div>
+                                <div class="text-xs">{{student.cgpa}}</div>
                             </div>
                         </div>
                     {% endfor %}

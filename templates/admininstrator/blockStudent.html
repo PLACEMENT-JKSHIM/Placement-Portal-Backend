@@ -1,20 +1,25 @@
 {% extends "./_base_admin.html" %} {% load static %} {% block content %}
-<div class="flex flex-wrap relative top-5 px-1" id="tabs-id">
-    <p class="text-2xl w-full text-center ">Block/Unblock and Enable/Disable Students</p>
+<div class="flex flex-wrap relative top-0  px-1" id="tabs-id">
+  <h1 class="text-3xl mt-5 mb-3 font-bold text-primary">
+    <span class="underline underline-offset-8 decoration-7 decoration-secondary"
+      >Block</span
+    >
+    Students
+  </h1>
     <div class="w-full">
       <ul class="flex mb-0 list-none flex-wrap pt-3 pb-4 flex-row">
-        <li class="-mb-px mr-2 last:mr-0 flex-auto text-center">
-          <a class="text-xs font-bold uppercase px-5 py-3 shadow-lg rounded block leading-normal text-white bg-blue-600" onclick="changeAtiveTab(event,'tab-profile')">
+        <li class="-mb-px  last:mr-0 flex-auto text-center">
+          <a class="text-xs font-bold uppercase px-5 py-3 shadow block leading-normal border border-t-2 border-t-blue-600 text-blue-600 bg-white" onclick="changeAtiveTab(event,'tab-profile')">
             <i class="fas fa-space-shuttle text-base mr-1"></i> Profile Editing
           </a>
         </li>
-        <li class="-mb-px mr-2 last:mr-0 flex-auto text-center">
-          <a class="text-xs font-bold uppercase px-5 py-3 shadow-lg rounded block leading-normal text-blue-600 bg-white" onclick="changeAtiveTab(event,'tab-apply')">
+        <li class="-mb-px  last:mr-0 flex-auto text-center">
+          <a class="text-xs font-medium uppercase px-5 py-3 shadow  block leading-normal border border-t-2 text-gray-600 bg-gray-200" onclick="changeAtiveTab(event,'tab-apply')">
             <i class="fas fa-cog text-base mr-1"></i> Portal Login
           </a>
         </li>
-        <li class="-mb-px mr-2 last:mr-0 flex-auto text-center">
-          <a class="text-xs font-bold uppercase px-5 py-3 shadow-lg rounded block leading-normal text-blue-600 bg-white" onclick="changeAtiveTab(event,'tab-login')">
+        <li class="-mb-px  last:mr-0 flex-auto text-center">
+          <a class="text-xs font-medium uppercase px-5 py-3 shadow  block leading-normal border border-t-2 text-gray-600 bg-gray-200" onclick="changeAtiveTab(event,'tab-login')">
             <i class="fas fa-briefcase text-base mr-1"></i>  Applying Company
           </a>
         </li>
@@ -40,11 +45,11 @@
 <div class="flex flex-col justify-center ">
  <div class="flex justify-center"> <form class="flex items-center" id="profile" method="POST" action="{% url 'profileEditUnblockAll'  %}">
   {% csrf_token %}
-  {% include "../buttons/buttonsrg.html" with btn="Edit Unblock All" green=True %}
+  {% include "../buttons/buttonsrg.html" with btn="Unblock Editing for all" green=True id=69 %}
 </form>
 <form class="flex items-center" id="profile" method="POST" action="{% url 'profileEditBlockAll'  %}">
   {% csrf_token %}
-  {% include "../buttons/buttonsrg.html" with btn="Edit Block All" green=False %}
+  {% include "../buttons/buttonsrg.html" with btn="Block Editing for all" green=False id=81 %}
 </form>
 </div>
 <div id="profile-display" class="flex flex-row flex-wrap justify-around " >
@@ -52,19 +57,23 @@
   {% for student in students %}
   <div class="shadow-[0px_4px_16px_rgba(17,17,26,0.1),_0px_8px_24px_rgba(17,17,26,0.1),_0px_16px_56px_rgba(17,17,26,0.1)] rounded-lg px-3 w-[400px] md:w-[300px] lg:w-[320px] py-4 my-3 mx-1">
       <div class="flex flex-col sm:flex-row items-center justify-center">
-          <img class="w-16 h-16 rounded-full" src="{% static 'mike.jpg' %}" alt="My Image">
+        {% if student.image %}
+        <img class="profile-image relative w-16 h-16 rounded-full" src="{{ student.image.url }}" alt="{{ student.name }}">
+    {% else %}
+        <img class="profile-image relative w-16 h-16 rounded-full" alt="H" data-name="{{ student.name|slice:'1'|upper }}">
+    {% endif %}
           <p class="px-3 md:px-5 py-3">{{ student.name }}</p>
           <p>{{ student.user.username }}</p>
       </div>
       {% if student.editable %}
           <form method="post" action="{% url 'profileEditBlock' id=student.user.id %}" class="text-center">
               {% csrf_token %}
-              {% include "../buttons/buttonsrg.html" with btn="Block Edit " green=False %}
+              {% include "../buttons/buttonsrg.html" with btn="Block profile Editing " green=False id=student.user.id %}
           </form>
       {% else %}
           <form method="post" action="{% url 'profileEditBlock' id=student.user.id %}" class="text-center">
               {% csrf_token %}
-              {% include "../buttons/buttonsrg.html" with btn="Unblock Edit" green=True %}
+              {% include "../buttons/buttonsrg.html" with btn="Unblock profile Editing" green=True id=student.user.id %}
           </form>
       {% endif %}
   </div>
@@ -97,24 +106,30 @@
                    {% include "../buttons/buttonsrg.html" with btn="Login Block All" green=False %}
                  </form>
                  </div>
+
+                 
                  <div id="login-display" class="flex flex-row flex-wrap justify-around " >
                   
                    {% for student in students %}
                    <div class="shadow-[0px_4px_16px_rgba(17,17,26,0.1),_0px_8px_24px_rgba(17,17,26,0.1),_0px_16px_56px_rgba(17,17,26,0.1)] rounded-lg px-3 w-[400px] md:w-[300px] lg:w-[320px] py-4 my-3 mx-1">
                        <div class="flex flex-col sm:flex-row items-center justify-center">
-                           <img class="w-16 h-16 rounded-full" src="{% static 'mike.jpg' %}" alt="My Image">
+                        {% if student.image %}
+                        <img class="profile-image relative w-16 h-16 rounded-full" src="{{ student.image.url }}" alt="{{ student.name }}">
+                    {% else %}
+                        <img class="profile-image relative w-16 h-16 rounded-full" alt="H" data-name="{{ student.name|slice:'1'|upper }}">
+                    {% endif %}
                            <p class="px-3 md:px-5 py-3">{{ student.name }}</p>
                            <p>{{ student.user.username }}</p>
                        </div>
                        {% if student.status == 'N' or student.status == 'AB' %}
                            <form method="post" action="{% url 'loginBlockEdit' id=student.user.id %}" class="text-center">
                                {% csrf_token %}
-                               {% include "../buttons/buttonsrg.html" with btn="Login Block" green=False %}
+                               {% include "../buttons/buttonsrg.html" with btn="Login Block" green=False id=student.user.id %}
                            </form>
                        {% else %}
                            <form method="post" action="{% url 'loginBlockEdit' id=student.user.id %}" class="text-center">
                                {% csrf_token %}
-                               {% include "../buttons/buttonsrg.html" with btn="Login Unblock" green=True %}
+                               {% include "../buttons/buttonsrg.html" with btn="Login Unblock" green=True id=student.user.id %}
                            </form>
                        {% endif %}
                    </div>
@@ -139,29 +154,36 @@
                   {% csrf_token %}
                   {% include "../buttons/buttonsrg.html" with btn="Apply Unblock All" green=True %}
                 </form>
-                <form class="flex items-center" id="profile" method="POST" action="{% url 'applyBlockAll'  %}">
+                <form class="flex items-center" id="profile" method="POST" action="{% url 'applyBlockAll'   %}">
                   {% csrf_token %}
-                  {% include "../buttons/buttonsrg.html" with btn="Apply Block All" green=False %}
+                  {% include "../buttons/buttonsrg.html" with btn="Apply Block All" green=False  %}
                 </form>
                 </div>
                 <div id="apply-display" class="flex flex-row flex-wrap justify-around " >
                   
                   {% for student in students %}
-                  <div class="shadow-[0px_4px_16px_rgba(17,17,26,0.1),_0px_8px_24px_rgba(17,17,26,0.1),_0px_16px_56px_rgba(17,17,26,0.1)] rounded-lg px-3 w-[400px] md:w-[300px] lg:w-[320px] py-4 my-3 mx-1">
+                  <div class="shadow-[0px_4px_16px_rgba(17,17,26,0.1),_0px_8px_24px_rgba(17,17,26,0.1),_0px_16px_56px_rgba(17,17,26,0.1)] rounded-lg px-3 w-96 md:w-80  py-4 my-3 mx-1">
                       <div class="flex flex-col sm:flex-row items-center justify-center">
-                          <img class="w-16 h-16 rounded-full" src="{% static 'mike.jpg' %}" alt="My Image">
+                        {% if student.image %}
+                        <img class="profile-image relative w-16 h-16 rounded-full" src="{{ student.image.url }}" alt="{{ student.name }}">
+                    {% else %}
+                        <img class="profile-image relative w-16 h-16 rounded-full" alt="H" data-name="{{ student.name|slice:'1'|upper }}">
+                    {% endif %}
                           <p class="px-3 md:px-5 py-3">{{ student.name }}</p>
                           <p>{{ student.user.username }}</p>
                       </div>
                       {% if student.status == 'N' or student.status == 'LB' %}
                           <form method="post" action="{% url 'applyBlockEdit' id=student.user.id %}" class="text-center">
                               {% csrf_token %}
-                              {% include "../buttons/buttonsrg.html" with btn="Apply Block" green=False %}
+                              {% include "../buttons/buttonsrg.html" with btn="Apply Block" green=False id=student.user.id %}
                           </form>
                       {% else %}
                           <form method="post" action="{% url 'applyBlockEdit' id=student.user.id %}" class="text-center">
                               {% csrf_token %}
-                              {% include "../buttons/buttonsrg.html" with btn="Apply Unblock" green=True %}
+                              {% include "../buttons/buttonsrg.html" with btn="Apply Unblock" green=True id=student.user.id %}
+                              
+                               
+</div>
                           </form>
                       {% endif %}
                   </div>
@@ -191,17 +213,23 @@ const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;//C
       aElements = ulElement.querySelectorAll("li > a");
       tabContents = document.getElementById("tabs-id").querySelectorAll(".tab-content > div");
       for(let i = 0 ; i < aElements.length; i++){
-        aElements[i].classList.remove("text-white");
-        aElements[i].classList.remove("bg-blue-600");
-        aElements[i].classList.add("text-blue-600");
-        aElements[i].classList.add("bg-white");
+        aElements[i].classList.remove("text-blue-600");
+        aElements[i].classList.remove("bg-white");
+        aElements[i].classList.remove("border-t-blue-600");
+        aElements[i].classList.remove("font-bold");
+        aElements[i].classList.add("text-gray-600");
+        aElements[i].classList.add("bg-gray-200");
+        aElements[i].classList.add("font-medium");
         tabContents[i].classList.add("hidden");
         tabContents[i].classList.remove("block");
       }
-      element.classList.remove("text-blue-600");
-      element.classList.remove("bg-white");
-      element.classList.add("text-white");
-      element.classList.add("bg-blue-600");
+      element.classList.remove("text-gray-600");
+      element.classList.remove("bg-gray-200");
+      element.classList.remove("font-medium");
+      element.classList.add("text-blue-600");
+      element.classList.add("bg-white");
+      element.classList.add("border-t-blue-600");
+      element.classList.add("font-bold");
       document.getElementById(tabID).classList.remove("hidden");
       document.getElementById(tabID).classList.add("block");
     }
@@ -240,7 +268,13 @@ fetch('/au/student/editBlock', {
                   html += `
                       <div class="shadow-[0px_4px_16px_rgba(17,17,26,0.1),_0px_8px_24px_rgba(17,17,26,0.1),_0px_16px_56px_rgba(17,17,26,0.1)] rounded-lg px-3 w-[400px] md:w-[300px] lg:w-[320px]  py-4 my-3 mx-1">
                           <div class="flex flex-col sm:flex-row items-center justify-center ">
-                              <img class="w-16 h-16 rounded-full" src="${students[i].image.url}" alt="My Image">
+                            <div class="relative">
+                              ${students[i].image.url  ? `
+                                <img class="profile-image w-16 h-16 rounded-full" src="${students[i].image.url}" alt="${students[i].name}">
+                              ` : `
+                                <img class="profile-image w-16 h-16 rounded-full bg-gray-800" alt="${students[i].name}" data-name="${students[i].name.slice(0,1).toUpperCase()}">
+                              `}
+                            </div>
                               <p class="px-3 md:px-5 py-3">${students[i].name}</p>
                               <p class="">${students[i].user.user}</p>
                           </div>
@@ -299,7 +333,13 @@ fetch('/au/student/editBlock', {
                   html += `
                       <div class="shadow-[0px_4px_16px_rgba(17,17,26,0.1),_0px_8px_24px_rgba(17,17,26,0.1),_0px_16px_56px_rgba(17,17,26,0.1)] rounded-lg px-3 w-[400px] md:w-[300px] lg:w-[320px]  py-4 my-3 mx-1">
                           <div class="flex flex-col sm:flex-row items-center justify-center ">
-                              <img class="w-16 h-16 rounded-full" src="${students[i].image.url}" alt="My Image">
+                            <div class="relative">
+                              ${students[i].image.url  ? `
+                                <img class="profile-image w-16 h-16 rounded-full" src="${students[i].image.url}" alt="${students[i].name}">
+                              ` : `
+                                <img class="profile-image w-16 h-16 rounded-full bg-gray-800" alt="${students[i].name}" data-name="${students[i].name.slice(0,1).toUpperCase()}">
+                              `}
+                            </div>
                               <p class="px-3 md:px-5 py-3">${students[i].name}</p>
                               <p class="">${students[i].user.user}</p>
                           </div>
@@ -359,7 +399,13 @@ fetch('/au/student/editBlock', {
                   html += `
                       <div class="shadow-[0px_4px_16px_rgba(17,17,26,0.1),_0px_8px_24px_rgba(17,17,26,0.1),_0px_16px_56px_rgba(17,17,26,0.1)] rounded-lg px-3 w-[400px] md:w-[300px] lg:w-[320px]  py-4 my-3 mx-1">
                           <div class="flex flex-col sm:flex-row items-center justify-center ">
-                              <img class="w-16 h-16 rounded-full" src="${students[i].image.url}" alt="My Image">
+                            <div class="relative">
+                              ${students[i].image.url  ? `
+                                <img class="profile-image w-16 h-16 rounded-full" src="${students[i].image.url}" alt="${students[i].name}">
+                              ` : `
+                                <img class="profile-image w-16 h-16 rounded-full" alt="${students[i].name}" data-name="${students[i].name.slice(0,1).toUpperCase()}">
+                              `}
+                            </div>
                               <p class="px-3 md:px-5 py-3">${students[i].name}</p>
                               <p class="">${students[i].user.user}</p>
                           </div>

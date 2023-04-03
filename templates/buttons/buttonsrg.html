@@ -1,8 +1,23 @@
-<button type="submit" class="relative inline-flex items-center border-2 {% if green %}border-green-500{% else %}border-red-500{% endif %} justify-center {% if main %} px-4 py-2 w-full
-{% else %} p-1 px-3 {% endif %} m-1
-overflow-hidden transition-all bg-white {% if  green %}text-green-500{% else %}text-red-500{% endif %} rounded-full group top-0.5 left-0.5 hover:shadow-lg hover:text-white">
-    <span class="w-[120%] h-[110%]  {% if green %}bg-green-500{% else %}bg-red-500{% endif %} absolute -translate-y-full ease-out duration-500 transition-all group-hover:translate-y-0"></span>
-    <span class="relative w-full text-center duration-300 ease-in-out {% if main %}
-      uppercase
-    {% endif %}">{{btn}}</span>
-</button>
+<div class="relative">
+  <button
+    type="submit"
+    data-tooltip-target="{{id}}"
+    class="relative inline-flex items-center border-2 {% if green %}border-green-500{% else %}border-red-500{% endif %} justify-center {% if main %} px-4 py-2 w-full {% else %} p-1 px-3 {% endif %} m-1 overflow-hidden transition-all bg-white {% if green %}text-green-500{% else %}text-red-500{% endif %} rounded-full group top-0.5 left-0.5 hover:shadow-lg hover:text-white"
+  >
+    <span
+      class="w-[120%] h-[110%] {% if green %}bg-green-500{% else %}bg-red-500{% endif %} absolute -translate-y-full ease-out duration-500 transition-all group-hover:translate-y-0"
+    ></span>
+    <span
+      class="relative w-full text-center duration-300 ease-in-out {% if main %} uppercase {% endif %}"
+      >{% if green %}UnBlock{% else %}Block{% endif %}
+    </span>
+  </button>
+  <div
+    id="{{id}}"
+    role="tooltip"
+    class="absolute invisible inline-block z-10 px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700"
+  >
+    {{btn}}
+    <div class="tooltip-arrow" data-popper-arrow></div>
+  </div>
+</div>

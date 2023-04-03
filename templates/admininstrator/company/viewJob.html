@@ -20,7 +20,12 @@ https://cdn.jsdelivr.net/npm/viewerjs@1.11.2/dist/viewer.min.css
         <div data-aos="fade-right" data-aos-duration="1000" lass="profile-main  sm:flex  px-2 md:mx-auto lg:mx-10  md:my-auto xl:space-x-0">
             <div class="w-full max-w-sm dark:bg-gray-800 dark:border-gray-700">
                 <div class="flex flex-col items-center pb-10">
-                    <img class="mt-4 h-40 mb-3 rounded-lg shadow-lg" src="{{ job.company.image.url }}" alt="Company image"/>
+                    {% if job.company.image %}
+                    <img class="company-image relative h-56 w-56" src="{{ job.company.image.url }}" alt="{{ job.company.c_name }}">
+                {% else %}
+                    <img class="company-image relative h-56 w-56" alt="H" data-name="{{ job.company.c_name|slice:'1'|upper }}">
+                    
+                {% endif %}
                 </div>
             </div>
         </div>
@@ -50,7 +55,7 @@ https://cdn.jsdelivr.net/npm/viewerjs@1.11.2/dist/viewer.min.css
                     <span class="font-normal text-gray-700 dark:text-gray-400"><span class="font-bold">Closes On : </span>{{ job.registration_date }}</span>
                 </li>
             </ul>
-                {% if job.status == 'O' %}
+                {% if job.reg_open %}
                 <p class="mt-2 text-center font-extrabold text-primary">REGISTRATION OPEN</p>
                 {% else %}
                 <p class="mt-2 text-center font-extrabold text-red-500">REGISTRATION CLOSED</p>
@@ -118,7 +123,7 @@ https://cdn.jsdelivr.net/npm/viewerjs@1.11.2/dist/viewer.min.css
    <form class="flex items-center" id="profile" method="POST" action="{% url 'deleteJob' job.id  %}">
      {% csrf_token %}
      <div class="m-5 mx-8">
-     {% include "../../buttons/buttonsrg.html" with btn="Delete" green=False %}
+     {% include "../../buttons/buttons.html" with btn="Delete" secondary=False %}
     </div>
    </form>
    </div>

@@ -2,6 +2,7 @@ from django.urls import path
 from . import views
 urlpatterns=[
 path('au/',views.index, name='admin'),   
+path('au/reset',views.resetportal, name='resetportal'),
 path('au/student/add',views.addStudent, name='addStudent'),
 path('au/student/changePasswordAdmin',views.changePasswordAdmin, name='changePasswordAdmin'),
 path('au/student/block',views.blockStudent,name='blockStudent'),
@@ -23,6 +24,8 @@ path('au/student/applyUnblockAll',views.applyUnblockAll,name='applyUnblockAll'),
 path('au/student/loginBlockEdit/<int:id>/',views.loginBlockEdit,name='loginBlockEdit'),
 path('au/student/loginBlockAll',views.LoginBlockAll,name='LoginBlockAll'),
 path('au/student/loginUnBlockAll',views.LoginUnblockAll,name='LoginUnblockAll'),
+path('au/student/search',views.search,name='search'),
+path('au/student/profile/<int:id>',views.viewprofile,name='viewprofile'),
 path('au/addNewsUpdates',views.addNewsUpdates,name='addNewsUpdates'), 
 path('au/newsAndUpdates',views.newsAndUpdates,name='newsAndUpdates'), 
 path('au/updateNews/<int:id>/',views.updateNews,name='updateNews'), 

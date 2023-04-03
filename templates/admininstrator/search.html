@@ -1,0 +1,148 @@
+{% extends "./_base_admin.html" %} {% load static %} {% block content %}
+<div class="flex flex-wrap relative top-5 px-1">
+  <h1 class="text-3xl font-bold text-primary">
+    <span class="underline underline-offset-8 decoration-7 decoration-secondary"
+      >Search</span
+    >
+    Students
+  </h1>
+  <div class="w-full">
+    <form class="flex mt-5 items-center" method="POST" id="profile">
+      {% csrf_token %}
+      <label for="voice-search" class="sr-only">Search</label>
+      <div class="relative w-full">
+        <div
+          class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none"
+        >
+          <svg
+            aria-hidden="true"
+            class="w-5 h-5 text-gray-500 dark:text-gray-400"
+            fill="currentColor"
+            viewBox="0 0 20 20"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+              clip-rule="evenodd"
+            ></path>
+          </svg>
+        </div>
+        <input
+          type="text"
+          name="usn"
+          id="profile-usn"
+          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          placeholder="Enter USN ... eg: 4JK18FDXXX"
+          required
+        />
+        <button
+          type="button"
+          class="absolute inset-y-0 right-0 flex items-center pr-3"
+        ></button>
+      </div>
+    </form>
+    <h1 id="tag-h" class="text-xl block text-center font-bold text-primary">
+      <span class="underline underline-offset-8 decoration-7 decoration-secondary"
+        >Recent Logins</span
+      >
+      Students
+    </h1>
+    <div id="profile-display" class="flex flex-row flex-wrap justify-around">
+      
+      {% for student in students %}
+                   <div class="border border-1 border-primary  flex flex-col  items-center justify-center  shadow-[0px_4px_16px_rgba(17,17,26,0.1),_0px_8px_24px_rgba(17,17,26,0.1),_0px_16px_56px_rgba(17,17,26,0.1)]  rounded-lg px-2 w-72 md:w-72 h-60 py-4  my-3 mx-1">
+                       <div class="flex flex-col  items-center justify-center">
+                        <div class="relative">
+                        {% if student.image %}
+    <img class="profile-image w-16 h-16 rounded-full" src="{{ student.image.url }}" alt="{{ student.name }}">
+{% else %}
+    <img class="profile-image w-16 h-16 rounded-full bg-gray-800" alt="{{ student.name }}" data-name="{{ student.name|slice:'1'|upper }}">
+{% endif %}</div>
+                           <p class="px-3 md:px-5 py-3">{{ student.name }}</p>
+                           <p>{{ student.user.username }}</p>
+                       </div>
+                       
+                       <a href="{% url 'viewprofile' id=student.user.id %}" >
+                        {% include "../buttons/buttons.html" with btn="View Profile " secondary=False %}
+              </a>
+                   </div>
+                 {% endfor %}
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+  const csrftoken = document.querySelector("[name=csrfmiddlewaretoken]").value; //CSRF token for fetch post
+  console.log("Hi");
+
+  //***************************************** Student profile edit block start  **********************************************************8
+  //const form = document.getElementById('profile');
+  const profiledisplay = document.getElementById("profile-display");
+  const inputFieldP = document.getElementById("profile-usn");
+  const tagH = document.getElementById("tag-h");
+
+  inputFieldP.addEventListener("keyup", (event) => {
+    event.preventDefault(); // prevent the form from submitting normally
+    tagH.style.display = "none";
+    const searchQuery = inputFieldP.value;
+    console.log(searchQuery);
+
+    fetch("/au/student/editBlock", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRFToken": csrftoken,
+      },
+      body: JSON.stringify({
+        q: searchQuery,
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+        students = data.students;
+        let html = "";
+        if ( searchQuery && students.length === 0) {
+          html += `<div class="flex h-72 items-center"><h1 class="text-2xl text-center"> No results found for ${searchQuery}</h1></div>`;
+          profiledisplay.innerHTML = html;
+        }else if(!searchQuery) {
+          html += `<div class="flex h-72 items-center"><h1 class="text-2xl text-center">Type Something!</h1></div>`;
+          profiledisplay.innerHTML = html;
+        }
+        for (let i = 0; i < students.length; i++) {
+          html += `
+          
+                      <div class="border border-1 border-primary  flex flex-col  items-center justify-center  shadow-[0px_4px_16px_rgba(17,17,26,0.1),_0px_8px_24px_rgba(17,17,26,0.1),_0px_16px_56px_rgba(17,17,26,0.1)]  rounded-lg px-2 w-72 md:w-72 h-60 py-4  my-3 mx-1">
+                          <div class="flex flex-col  items-center justify-center ">
+                            <div class="relative">
+                              ${students[i].image.url  ? `
+                                <img class="profile-image w-16 h-16 rounded-full" src="${students[i].image.url}" alt="${students[i].name}">
+                              ` : `
+                                <img class="profile-image w-16 h-16 rounded-full bg-gray-800" alt="${students[i].name}" data-name="${students[i].name.slice(0,1).toUpperCase()}">
+                              `}
+                            </div>
+                              <p class="px-3 text-xl font-semibold md:px-5 py-3">${
+                                students[i].name
+                              }</p>
+                              <p class=" p-1 text-sm uppercase text-grey-300 ">${students[i].user.user}</p>
+                          </div>
+                          
+                          <a href="/au/student/profile/${students[i].user.id}">
+                                    {% include "../buttons/buttons.html" with btn="View Profile " secondary=False %}
+                          </a>
+                       </div>
+                      
+                     
+
+                  `;
+        }
+        profiledisplay.innerHTML = html;
+      })
+      .catch((error) => {
+        // handle errors
+        console.log(error);
+      });
+  });
+  //***************************************** Student Apply  block end   **********************************************************
+</script>
+{% endblock content %}

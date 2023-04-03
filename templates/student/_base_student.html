@@ -15,7 +15,11 @@
             <ul class="space-y-2">   
                     <div class="flex items-center space-x-4">
                         <div class="relative">
-                            <img class="w-16 h-16 rounded-full" src="{{ request.user.student.image.url }}" alt="Rounded avatar">
+                            {% if request.user.student.image %}
+    <img class="profile-image w-16 h-16 rounded-full" src="{{ request.user.student.image.url }}" alt="{{ request.user.student.name }}">
+{% else %}
+    <img class="profile-image w-16 h-16 rounded-full bg-gray-500 " alt="{{ request.user.student.name }}" data-name="{{ request.user.student.name|slice:'1'|upper }}">
+{% endif %}
                             <span class="absolute bottom-2 left-12 transform translate-y-1/4 w-3.5 h-3.5 bg-green-400 border-2 border-white dark:border-gray-800 rounded-full"></span>
                         </div>
                         <div class="font-medium text-white">
