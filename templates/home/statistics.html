@@ -1,3 +1,5 @@
+{% load static %}
+{% block content %}
 <div class="text-center text-3xl uppercase font-extrabold text-primary my-6 hover:text-gray-900">
     <h1>Placement Statistics</h1>
 </div>
@@ -22,11 +24,7 @@
                     <dd class="font-light text-primary text-center dark:text-gray-400">Average Package (LPA)</dd>
                 </div>
                 <div class="flex flex-col items-center justify-center">
-                    <dt class="mb-2 text-3xl font-extrabold hover:scale-125 transition-all  duration-1000" id="animation5">0</dt>
-                    <dd class="font-light text-primary dark:text-gray-400">Median Package (LPA)</dd>
-                </div>
-                <div class="flex flex-col items-center justify-center">
-                    <dt class="mb-2 w-24 text-center text-3xl font-extrabold hover:scale-125 transition-all  duration-1000" id="animation6">0</dt>
+                    <dt class="mb-2 w-24 text-center text-3xl font-extrabold hover:scale-125 transition-all  duration-1000" id="animation5">0</dt>
                     <dd class="font-light text-center text-primary dark:text-gray-400">Companies Participated</dd>
                 </div>
             </dl>
@@ -35,54 +33,57 @@
     </div>
 </div>
 <script>
+const totalPlaced = "{{total_placed}}"
+const totalOffers = "{{total_offered}}"
+const highestPackage = "{{highest_package}}"
+const averagePackage = "{{average_package}}"
+const totalCompanies = "{{total_companies}}"
 
-    const countAnimations = [
-      { id: "animation1", startValue: 0, endValue: 100 },
-      { id: "animation2", startValue: 0, endValue: 200 },
-      { id: "animation3", startValue: 0, endValue: 25 },
-      { id: "animation4", startValue: 0, endValue: 20 },
-      { id: "animation5", startValue: 0, endValue: 10 },
-      { id: "animation6", startValue: 0, endValue: 30 },
-    ];
-    
-    const animationDuration = 2000; // 2 seconds
-    const statisticsContainer = document.getElementById('stats');
-    countAnimations.forEach(animation => {
-      const numberSpan = document.getElementById(animation.id);
-      let currentValue = animation.startValue;
-      const valueDifference = animation.endValue - animation.startValue;
-      const valueIncrement = valueDifference / (animationDuration / 10);
-      const observer = new IntersectionObserver(function(entries, observer) {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-            animateCounters();
-            observer.unobserve(entry.target);
-            }
-        });
-        }, { threshold: 0.5 });
+const countAnimations = [
+  { id: "animation1", startValue: 0, endValue: totalPlaced },
+  { id: "animation2", startValue: 0, endValue: totalOffers },
+  { id: "animation3", startValue: 0, endValue: highestPackage },
+  { id: "animation4", startValue: 0, endValue: averagePackage },
+  { id: "animation5", startValue: 0, endValue: totalCompanies },
+];
 
-        observer.observe(statisticsContainer);
+const animationDuration = 2000; // 2 seconds
+const statisticsContainer = document.getElementById('stats');
 
-        function animateCounters() {
-  countAnimations.forEach(animation => {
-    const numberSpan = document.getElementById(animation.id);
-    let currentValue = animation.startValue;
-    const valueDifference = animation.endValue - animation.startValue;
-    const valueIncrement = valueDifference / (animationDuration / 10);
+countAnimations.forEach(animation => {
+  const numberSpan = document.getElementById(animation.id);
+  let currentValue = animation.startValue;
+  const valueDifference = animation.endValue - animation.startValue;
+  const valueIncrement = valueDifference / (animationDuration / 10);
 
-    function animateNumber() {
-      const intervalId = setInterval(function() {
-        currentValue += valueIncrement;
-        numberSpan.textContent = Math.round(currentValue);
-        if (currentValue >= animation.endValue) {
-          clearInterval(intervalId);
-        }
-      }, 10);
-    }
-
-    animateNumber();
-  });
-}
+  const observer = new IntersectionObserver(function(entries, observer) {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        animateCounters();
+        observer.unobserve(entry.target);
+      }
     });
-    
+  }, { threshold: 0.5 });
+
+  observer.observe(statisticsContainer);
+
+  function animateCounters() {
+  const intervalId = setInterval(function() {
+    currentValue += valueIncrement;
+    if (animation.id === "animation3") {
+      numberSpan.textContent = currentValue.toFixed(2);
+    } else if (animation.id === "animation4") {
+      numberSpan.textContent = currentValue.toFixed(1);
+    } else {
+      numberSpan.textContent = Math.round(currentValue);
+    }
+    if (currentValue >= animation.endValue) {
+      clearInterval(intervalId);
+    }
+  }, 10);
+}
+
+});
+
     </script>
+{% endblock content %}

@@ -89,7 +89,7 @@ class Student(models.Model):
 
     activeBacklog=models.IntegerField(blank=True,default=0,validators=[MinValueValidator(0)],verbose_name="Number of Active backlogs")
     totalBacklog=models.IntegerField(blank=True,default=0,validators=[MinValueValidator(0)],verbose_name="Number of Total backlogs")
-    edugap=models.IntegerField(blank=True,default=0,validators=[MinValueValidator(0)],verbose_name="Total gap in education")
+    gap_edu=models.IntegerField(blank=True,default=0,validators=[MinValueValidator(0)],verbose_name="Total gap in education")
 
     projects=models.TextField(blank=True,verbose_name="Projects decription")
 
@@ -111,5 +111,4 @@ class PreviousJob(models.Model):
 
     def __str__(self):
         return self.role
-    
 

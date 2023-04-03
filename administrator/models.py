@@ -9,7 +9,7 @@ class Job_student(models.Model):
         APPLIED = 'A'
         OFFERED = 'OF'
         REJECTED = 'R'
-        QUALIFIED = 'Q'
+        PLACED = 'P'
     job = models.ForeignKey(Job, on_delete=models.CASCADE)
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
     status=models.CharField(max_length=2,choices=Status.choices,default=Status.APPLIED)

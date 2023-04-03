@@ -66,3 +66,14 @@
 }
 
 
+
+body::before{
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: url("/static/assets/background.svg") center bottom;
+    background-attachment: fixed;
+    z-index: -1;
+    opacity: 0.08;
+}

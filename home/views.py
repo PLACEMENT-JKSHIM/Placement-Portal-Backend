@@ -1,6 +1,7 @@
 from django.shortcuts import HttpResponse
 from django.contrib.auth.models import User
-from .models import Company, Job, Rule, Slider, Team
+from .models import Company, Job, Rule, Slider, Team,Gallery
+from administrator.models import Job_student
 from django.shortcuts import render,redirect
 from django.contrib.auth import authenticate
 from django.contrib import auth
@@ -8,13 +9,28 @@ from student.models import Student
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.cache import cache_page
+from django.db.models import Avg
 # Create your views here.
 
 # @cache_page(60 * 60)
 def index(request):
+    total_placed = Job_student.objects.filter(status='P').values('student').distinct().count()
+    total_offered = (Job_student.objects.filter(status='OF'or 'P')|Job_student.objects.filter(status='P')).count()
+    highest_package = (Job_student.objects.filter(status='OF')|Job_student.objects.filter(status='P')).order_by('-job__ctc_pa').first()
+    if highest_package:
+        highest_package = highest_package.job.ctc_pa
+    else:
+        highest_package = 0
+    if total_placed == 0:
+        average_package = 0
+    else:
+        average_package = Job_student.objects.filter(status='P').aggregate(Avg('job__ctc_pa')).get('job__ctc_pa__avg')
+    total_companies = Company.objects.all().count()
+    print(total_placed,total_offered,highest_package,average_package,total_companies)
     sliders = Slider.objects.all()
     teams = Team.objects.all()
-    return render(request, "home/index.html",context={'sliders':sliders,'teams':teams})
+    return render(request, "home/index.html",context={'sliders':sliders,'teams':teams,'total_placed':total_placed,'total_offered':total_offered,'highest_package':highest_package,'average_package':average_package,'total_companies':total_companies})
+
 
 def login(request):
     if request.user.is_authenticated:
@@ -50,7 +66,8 @@ def login(request):
     return render(request, "home/login.html")
 
 def gallery(request):
-    return render(request, "home/gallery.html")
+        title = Gallery.objects.all()
+        return render(request, "home/index.html",context={'title':title})
 
 
 @login_required(login_url='/login')
