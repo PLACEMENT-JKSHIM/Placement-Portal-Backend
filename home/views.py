@@ -14,14 +14,17 @@ from django.db.models import Avg
 
 # @cache_page(60 * 60)
 def index(request):
-    total_placed = Job_student.objects.filter(status='Q').values('student').distinct().count()
-    total_offered = (Job_student.objects.filter(status='OF'or 'Q')|Job_student.objects.filter(status='Q')).count()
-    highest_package = (Job_student.objects.filter(status='OF')|Job_student.objects.filter(status='Q')).order_by('-job__ctc_pa').first()
+    total_placed = Job_student.objects.filter(status='P').values('student').distinct().count()
+    total_offered = (Job_student.objects.filter(status='OF'or 'P')|Job_student.objects.filter(status='P')).count()
+    highest_package = (Job_student.objects.filter(status='OF')|Job_student.objects.filter(status='P')).order_by('-job__ctc_pa').first()
     if highest_package:
         highest_package = highest_package.job.ctc_pa
     else:
         highest_package = 0
-    average_package = Job_student.objects.filter(status='Q').aggregate(Avg('job__ctc_pa')).get('job__ctc_pa__avg')
+    if total_placed == 0:
+        average_package = 0
+    else:
+        average_package = Job_student.objects.filter(status='P').aggregate(Avg('job__ctc_pa')).get('job__ctc_pa__avg')
     total_companies = Company.objects.all().count()
     print(total_placed,total_offered,highest_package,average_package,total_companies)
     sliders = Slider.objects.all()

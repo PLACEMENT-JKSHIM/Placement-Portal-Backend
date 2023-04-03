@@ -68,18 +68,21 @@ countAnimations.forEach(animation => {
   observer.observe(statisticsContainer);
 
   function animateCounters() {
-    const intervalId = setInterval(function() {
-      currentValue += valueIncrement;
-      if (animation.id === "animation3" || animation.id === "animation4") {
-        numberSpan.textContent = Math.round(currentValue * 100) / 100;
-      } else {
-        numberSpan.textContent = Math.round(currentValue);
-      }
-      if (currentValue >= animation.endValue) {
-        clearInterval(intervalId);
-      }
-    }, 10);
-  }
+  const intervalId = setInterval(function() {
+    currentValue += valueIncrement;
+    if (animation.id === "animation3") {
+      numberSpan.textContent = currentValue.toFixed(2);
+    } else if (animation.id === "animation4") {
+      numberSpan.textContent = currentValue.toFixed(1);
+    } else {
+      numberSpan.textContent = Math.round(currentValue);
+    }
+    if (currentValue >= animation.endValue) {
+      clearInterval(intervalId);
+    }
+  }, 10);
+}
+
 });
 
     </script>
