@@ -4,6 +4,7 @@ from .forms import StudentForm,PreviousJobForm
 from .models import Student,PreviousJob
 from django.contrib.auth.decorators import login_required
 from administrator.models import Notice,Job_student
+from home.models import Company
 from django.contrib import messages
 from django.shortcuts import get_object_or_404
 from home.models import Job
@@ -88,9 +89,14 @@ def editPreviousJob(request,id):
 
 @normaluser_required
 def registerCompany(request):
+    student = Student.objects.get(user=request.user)
     jobs = Job.objects.all()
     jobs_students = Job_student.objects.filter(student=request.user.student)
-    return render(request, "student/registerCompany.html",{'jobs': jobs, 'jobs_students': jobs_students})
+    total_companies = Company.objects.all().count()
+    applied_companies = Job_student.objects.filter(status='A', student=student).count()
+    open_companies = Job.objects.filter(reg_open = True).count()
+    closed_companies = Job.objects.filter(reg_open = False).count()
+    return render(request, "student/registerCompany.html",{'jobs': jobs, 'jobs_students': jobs_students,'total_companies':total_companies,'applied_companies':applied_companies,'open_companies':open_companies,'closed_companies':closed_companies})
 
 @normaluser_required
 def changePassword(request):
