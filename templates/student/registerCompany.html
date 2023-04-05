@@ -1,8 +1,36 @@
 {% extends "./_base_student.html" %}
 {% load static %}
 {% block content %}
-
+<div class="text-center text-3xl uppercase font-extrabold text-primary my-4 hover:text-gray-900">
+    <h1>Company Stats</h1>
+</div>
+<div class="md:m-6 md:mx-3 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 hover:shadow-md">
+    <div id="fullWidthTabContent" class="border-t border-gray-200 dark:border-gray-600">
+        <div class="p-2 bg-white rounded-lg md:p-4 dark:bg-gray-800" id="stats" role="tabpanel" aria-labelledby="stats-tab">
+            <dl class="grid max-w-screen-xl grid-cols-2 gap-8 p-2 mx-auto text-primary sm:grid-cols-3 xl:grid-cols-4 dark:text-white sm:p-8">
+                <div class="flex flex-col items-center justify-center">
+                    <dt class="mb-2 w-24 text-center text-3xl font-extrabold hover:scale-125 transition-all  duration-1000" id="animation1">0</dt>
+                    <dd class="font-light text-primary dark:text-gray-400">Companies To Register</dd>
+                </div>
+                <div class="flex flex-col items-center justify-center">
+                    <dt class="mb-2 w-24 text-center text-3xl font-extrabold hover:scale-125 transition-all  duration-1000" id="animation2">0</dt>
+                    <dd class="font-light text-primary dark:text-gray-400">Applied For</dd>
+                </div>
+                <div class="flex flex-col items-center justify-center">
+                    <dt class="mb-2 text-3xl font-extrabold hover:scale-125 transition-all  duration-1000" id="animation3">0</dt>
+                    <dd class="font-light text-primary dark:text-gray-400">Open To Register</dd>
+                </div>
+                <div class="flex flex-col items-center justify-center">
+                    <dt class="mb-2 text-3xl font-extrabold hover:scale-125 transition-all  duration-1000" id="animation4">0</dt>
+                    <dd class="font-light text-primary text-center dark:text-gray-400">Closed Registrations</dd>
+                </div>
+            </dl>
+        </div>
+        
+    </div>
+</div>
 <div class="flex justify-center">
+
     <div
         class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-6 justify-items-end gap-2 md:gap-4">
         {% for job in jobs %}
@@ -44,17 +72,62 @@
             {% endif %}
             {% endif %}
             {% endfor %}
-            {% if job.status == 'C' %}
-            <span
-                class="bg-red-600 text-white text-sm absolute right-0 font-medium mr-2 mt-2 px-2.5 py-0.5 rounded-full">CLOSED</span>
-            {% else %}
+            {% if job.reg_open %}
             <span
                 class="bg-blue-700 text-white text-sm absolute right-0 font-medium mr-2 mt-2 px-2.5 py-0.5 rounded-full">OPEN</span>
+            {% else %}
+            <span
+                class="bg-red-600 text-white text-sm absolute right-0 font-medium mr-2 mt-2 px-2.5 py-0.5 rounded-full">CLOSED</span>
             {% endif %}
         </a>
         {% endfor %}
 
     </div>
 </div>
-
+<script>
+    const total_companies = "{{total_companies}}";
+    const applied_companies = "{{applied_companies}}";
+    const open_companies = "{{open_companies}}"
+    const closed_companies = "{{closed_companies}}"
+    
+    const countAnimations = [
+      { id: "animation1", startValue: 0, endValue: total_companies },
+      { id: "animation2", startValue: 0, endValue: applied_companies },
+      { id: "animation3", startValue: 0, endValue: open_companies },
+      { id: "animation4", startValue: 0, endValue: closed_companies },
+    ];
+    
+    const animationDuration = 1000; // 2 seconds
+    const statisticsContainer = document.getElementById('stats');
+    
+    countAnimations.forEach(animation => {
+      const numberSpan = document.getElementById(animation.id);
+      let currentValue = animation.startValue;
+      const valueDifference = animation.endValue - animation.startValue;
+      const valueIncrement = valueDifference / (animationDuration / 10);
+    
+      const observer = new IntersectionObserver(function(entries, observer) {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            animateCounters();
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.5 });
+    
+      observer.observe(statisticsContainer);
+    
+      function animateCounters() {
+      const intervalId = setInterval(function() {
+        currentValue += valueIncrement;
+        numberSpan.textContent = Math.round(currentValue);
+        if (currentValue >= animation.endValue) {
+          clearInterval(intervalId);
+        }
+      }, 10);
+    }
+    
+    });
+    
+        </script>
 {% endblock content %}
