@@ -4,9 +4,24 @@
 <script lang="javascript" src="https://cdn.sheetjs.com/xlsx-0.19.2/package/dist/xlsx.full.min.js"></script>
 {% endblock meta %}
 {% block content %}
-
+<ul class="flex mb-0 list-none flex-wrap pt-3 pb-4 flex-row">
+    <li class="-mb-px  last:mr-0 flex-auto text-center">
+      <a class="text-xs font-bold uppercase px-5 py-3 shadow block leading-normal border border-t-2 border-t-blue-600 text-blue-600 bg-white" onclick="changeAtiveTab(event,'tab-usns')">
+        <i class="fas fa-space-shuttle text-base mr-1"></i> Update Students Usernames
+      </a>
+    </li>
+    <li class="-mb-px  last:mr-0 flex-auto text-center">
+      <a class="text-xs font-medium uppercase px-5 py-3 shadow  block leading-normal border border-t-2 text-gray-600 bg-gray-200" onclick="changeAtiveTab(event,'tab-apply')">
+        <i class="fas fa-cog text-base mr-1"></i> Portal Login
+      </a>
+    </li>
+    <li class="-mb-px  last:mr-0 flex-auto text-center">
+      <a class="text-xs font-medium uppercase px-5 py-3 shadow  block leading-normal border border-t-2 text-gray-600 bg-gray-200" onclick="changeAtiveTab(event,'tab-login')">
+        <i class="fas fa-briefcase text-base mr-1"></i>  Applying Company
+      </a>
+    </li>
+  </ul>
 <div class="p-2 overflow-auto text-center ">
-    <div class="p-2 text-2xl pb-7">Update Students Usernames</div>
     <div class="grid md:grid-cols-2 gap-4">
         <div class="rounded-lg border-slate-300 text-left overflow-auto border-2">
             <div class="bg-primary h-10 text-white px-4 pt-2 font-semibold">Update Single Username</div>
