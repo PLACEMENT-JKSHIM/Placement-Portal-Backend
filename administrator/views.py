@@ -602,7 +602,7 @@ def editJob(request,id):
 
 @superuser_required
 def search(request):
-    recently_logged_in_users = User.objects.filter(last_login__isnull=False).exclude(username='admin').order_by('-last_login')[:10]
+    recently_logged_in_users = User.objects.filter(last_login__isnull=False).exclude(is_superuser=True).order_by('-last_login')[:10]
     print(recently_logged_in_users)
     students=[]
     for user in recently_logged_in_users:

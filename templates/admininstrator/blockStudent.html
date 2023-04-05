@@ -284,11 +284,11 @@ fetch('/au/student/editBlock', {
                             editable
                                 ? `<form method="post" action="/au/student/profileEditBlock/${students[i].user.id}/"   class="text-center">
                                     {% csrf_token %}
-                                    {% include "../buttons/buttonsrg.html" with btn="Block Edit" green=False %}
+                                    {% include "../buttons/buttonsrg.html" with btn="Block Edit" green=False id="${students[i].user.id}" %}
                                 </form>` 
                                 : `<form method="post" action="/au/student/profileEditBlock/${students[i].user.id}/"   class="text-center">
                                     {% csrf_token %}
-                                    {% include "../buttons/buttonsrg.html" with btn="Unblock Edit" green=True %}
+                                    {% include "../buttons/buttonsrg.html" with btn="Unblock Edit" green=True id="${students[i].user.id}" %}
                                 </form>`
                         }                      
                        </div>
@@ -311,6 +311,7 @@ inputFieldL.addEventListener('keyup', event => {
 
     const searchQuery = inputFieldL.value;
 
+    
 
 fetch('/au/student/editBlock', {
   method: 'POST',
@@ -349,11 +350,11 @@ fetch('/au/student/editBlock', {
                             login==='N'|| login=='AB'
                                 ? `<form method="post" action="/au/student/loginBlockEdit/${students[i].user.id}/"   class="text-center">
                                     {% csrf_token %}
-                                    {% include "../buttons/buttonsrg.html" with btn="Block Login" green=False %}
+                                    {% include "../buttons/buttonsrg.html" with btn="Block Login" green=False id="${students[i].user.id.toString()+'lb'}" %}
                                 </form>` 
                                 : `<form method="post" action="/au/student/loginBlockEdit/${students[i].user.id}/"   class="text-center">
                                     {% csrf_token %}
-                                    {% include "../buttons/buttonsrg.html" with btn="Unblock Login" green=True %}
+                                    {% include "../buttons/buttonsrg.html" with btn="Unblock Login" green=True id="${students[i].user.id.toString()+'lb'}" %}
                                 </form>`
                         }                      
                        </div>
@@ -415,11 +416,11 @@ fetch('/au/student/editBlock', {
                             apply==='N'|| login=='LB'
                                 ? `<form method="post" action="/au/student/applyBlockEdit/${students[i].user.id}/"   class="text-center">
                                     {% csrf_token %}
-                                    {% include "../buttons/buttonsrg.html" with btn="Apply Block" green=False %}
+                                    {% include "../buttons/buttonsrg.html" with btn="Apply Block" green=False id="${students[i].user.id.toString()+'ab'}" %}
                                 </form>` 
                                 : `<form method="post" action="/au/student/applyBlockEdit/${students[i].user.id}/"   class="text-center">
                                     {% csrf_token %}
-                                    {% include "../buttons/buttonsrg.html" with btn="Apply Unblock" green=True %}
+                                    {% include "../buttons/buttonsrg.html" with btn="Apply Unblock" green=True id="${students[i].user.id.toString()+'ab'}" %}
                                 </form>`
                         }                      
                        </div>
