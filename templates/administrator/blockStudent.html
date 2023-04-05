@@ -1,4 +1,5 @@
 {% extends "./_base_admin.html" %} {% load static %} {% block content %}
+
 <div class="flex flex-wrap relative top-0  px-1" id="tabs-id">
   <h1 class="text-3xl mt-5 mb-3 font-bold text-primary">
     <span class="underline underline-offset-8 decoration-7 decoration-secondary"
@@ -42,14 +43,17 @@
         </button>
     </div>
 </form>
+
+
+
 <div class="flex flex-col justify-center ">
- <div class="flex justify-center"> <form class="flex items-center" id="profile" method="POST" action="{% url 'profileEditUnblockAll'  %}">
+ <div class="flex justify-center"> <form class="flex items-center " id="profile" method="POST" action="{% url 'profileEditUnblockAll'  %}">
   {% csrf_token %}
-  {% include "../buttons/buttonsrg.html" with btn="Unblock Editing for all" green=True id=69 %}
+  {% include "../buttons/buttonsrg.html" with btn="Unblock Editing for all" green=True id="pb" %}
 </form>
-<form class="flex items-center" id="profile" method="POST" action="{% url 'profileEditBlockAll'  %}">
+<form class="flex items-center " id="profile" method="POST" action="{% url 'profileEditBlockAll'  %}">
   {% csrf_token %}
-  {% include "../buttons/buttonsrg.html" with btn="Block Editing for all" green=False id=81 %}
+  {% include "../buttons/buttonsrg.html" with btn="Block Editing for all" green=False id="pu" %}
 </form>
 </div>
 <div id="profile-display" class="flex flex-row flex-wrap justify-around " >
@@ -99,11 +103,11 @@
                 <div class="flex flex-col justify-center ">
                   <div class="flex justify-center"> <form class="flex items-center" id="profile" method="POST" action="{% url 'LoginUnblockAll'  %}">
                    {% csrf_token %}
-                   {% include "../buttons/buttonsrg.html" with btn="Login Unblock All" green=True %}
+                   {% include "../buttons/buttonsrg.html" with btn="Unblock Portal Login for all" green=True id="plu" %}
                  </form>
                  <form class="flex items-center" id="profile" method="POST" action="{% url 'LoginBlockAll'  %}">
                    {% csrf_token %}
-                   {% include "../buttons/buttonsrg.html" with btn="Login Block All" green=False %}
+                   {% include "../buttons/buttonsrg.html" with btn="Block Portal Login for all" green=False id="plb" %}
                  </form>
                  </div>
 
@@ -122,14 +126,15 @@
                            <p>{{ student.user.username }}</p>
                        </div>
                        {% if student.status == 'N' or student.status == 'AB' %}
+                       
                            <form method="post" action="{% url 'loginBlockEdit' id=student.user.id %}" class="text-center">
                                {% csrf_token %}
-                               {% include "../buttons/buttonsrg.html" with btn="Login Block" green=False id=student.user.id %}
+                               {% include "../buttons/buttonsrg.html" with btn="Block portal login" green=False id=student.user.id|stringformat:"i"|add:'lb' %}
                            </form>
                        {% else %}
                            <form method="post" action="{% url 'loginBlockEdit' id=student.user.id %}" class="text-center">
                                {% csrf_token %}
-                               {% include "../buttons/buttonsrg.html" with btn="Login Unblock" green=True id=student.user.id %}
+                               {% include "../buttons/buttonsrg.html" with btn="Unblock Portal login" green=True id=student.user.id|stringformat:"i"|add:'lb' %}
                            </form>
                        {% endif %}
                    </div>
@@ -152,17 +157,17 @@
                 </form>
                 <div class="flex justify-center"> <form class="flex items-center" id="profile" method="POST" action="{% url 'applyUnblockAll'  %}">
                   {% csrf_token %}
-                  {% include "../buttons/buttonsrg.html" with btn="Apply Unblock All" green=True %}
+                  {% include "../buttons/buttonsrg.html" with btn="Unblock all from applying to job" green=True id="aju" %}
                 </form>
                 <form class="flex items-center" id="profile" method="POST" action="{% url 'applyBlockAll'   %}">
                   {% csrf_token %}
-                  {% include "../buttons/buttonsrg.html" with btn="Apply Block All" green=False  %}
+                  {% include "../buttons/buttonsrg.html" with btn="Block all from applying to job" green=False id="ajb" %}
                 </form>
                 </div>
                 <div id="apply-display" class="flex flex-row flex-wrap justify-around " >
                   
                   {% for student in students %}
-                  <div class="shadow-[0px_4px_16px_rgba(17,17,26,0.1),_0px_8px_24px_rgba(17,17,26,0.1),_0px_16px_56px_rgba(17,17,26,0.1)] rounded-lg px-3 w-96 md:w-80  py-4 my-3 mx-1">
+                  <div class="shadow-[0px_4px_16px_rgba(17,17,26,0.1),_0px_8px_24px_rgba(17,17,26,0.1),_0px_16px_56px_rgba(17,17,26,0.1)] rounded-lg px-3 w-[400px] md:w-[300px] lg:w-[320px]  py-4 my-3 mx-1">
                       <div class="flex flex-col sm:flex-row items-center justify-center">
                         {% if student.image %}
                         <img class="profile-image relative w-16 h-16 rounded-full" src="{{ student.image.url }}" alt="{{ student.name }}">
@@ -175,15 +180,12 @@
                       {% if student.status == 'N' or student.status == 'LB' %}
                           <form method="post" action="{% url 'applyBlockEdit' id=student.user.id %}" class="text-center">
                               {% csrf_token %}
-                              {% include "../buttons/buttonsrg.html" with btn="Apply Block" green=False id=student.user.id %}
+                              {% include "../buttons/buttonsrg.html" with btn="Block from applying to jobs" green=False id=student.user.id|stringformat:"i"|add:'ab' %}
                           </form>
                       {% else %}
                           <form method="post" action="{% url 'applyBlockEdit' id=student.user.id %}" class="text-center">
                               {% csrf_token %}
-                              {% include "../buttons/buttonsrg.html" with btn="Apply Unblock" green=True id=student.user.id %}
-                              
-                               
-</div>
+                              {% include "../buttons/buttonsrg.html" with btn="Unblock from applying to jobs" green=True id=student.user.id|stringformat:"i"|add:'ab' %}
                           </form>
                       {% endif %}
                   </div>
@@ -275,11 +277,11 @@ fetch('/au/student/editBlock', {
                             editable
                                 ? `<form method="post" action="/au/student/profileEditBlock/${students[i].user.id}/"   class="text-center">
                                     {% csrf_token %}
-                                    {% include "../buttons/buttonsrg.html" with btn="Block Edit" green=False %}
+                                    {% include "../buttons/buttonsrg.html" with btn="Block Edit" green=False id="${students[i].user.id}" %}
                                 </form>` 
                                 : `<form method="post" action="/au/student/profileEditBlock/${students[i].user.id}/"   class="text-center">
                                     {% csrf_token %}
-                                    {% include "../buttons/buttonsrg.html" with btn="Unblock Edit" green=True %}
+                                    {% include "../buttons/buttonsrg.html" with btn="Unblock Edit" green=True id="${students[i].user.id}" %}
                                 </form>`
                         }                      
                        </div>
@@ -302,6 +304,7 @@ inputFieldL.addEventListener('keyup', event => {
 
     const searchQuery = inputFieldL.value;
 
+    
 
 fetch('/au/student/editBlock', {
   method: 'POST',
@@ -340,11 +343,11 @@ fetch('/au/student/editBlock', {
                             login==='N'|| login=='AB'
                                 ? `<form method="post" action="/au/student/loginBlockEdit/${students[i].user.id}/"   class="text-center">
                                     {% csrf_token %}
-                                    {% include "../buttons/buttonsrg.html" with btn="Block Login" green=False %}
+                                    {% include "../buttons/buttonsrg.html" with btn="Block Login" green=False id="${students[i].user.id.toString()+'lb'}" %}
                                 </form>` 
                                 : `<form method="post" action="/au/student/loginBlockEdit/${students[i].user.id}/"   class="text-center">
                                     {% csrf_token %}
-                                    {% include "../buttons/buttonsrg.html" with btn="Unblock Login" green=True %}
+                                    {% include "../buttons/buttonsrg.html" with btn="Unblock Login" green=True id="${students[i].user.id.toString()+'lb'}" %}
                                 </form>`
                         }                      
                        </div>
@@ -406,11 +409,11 @@ fetch('/au/student/editBlock', {
                             apply==='N'|| login=='LB'
                                 ? `<form method="post" action="/au/student/applyBlockEdit/${students[i].user.id}/"   class="text-center">
                                     {% csrf_token %}
-                                    {% include "../buttons/buttonsrg.html" with btn="Apply Block" green=False %}
+                                    {% include "../buttons/buttonsrg.html" with btn="Apply Block" green=False id="${students[i].user.id.toString()+'ab'}" %}
                                 </form>` 
                                 : `<form method="post" action="/au/student/applyBlockEdit/${students[i].user.id}/"   class="text-center">
                                     {% csrf_token %}
-                                    {% include "../buttons/buttonsrg.html" with btn="Apply Unblock" green=True %}
+                                    {% include "../buttons/buttonsrg.html" with btn="Apply Unblock" green=True id="${students[i].user.id.toString()+'ab'}" %}
                                 </form>`
                         }                      
                        </div>
