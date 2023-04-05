@@ -3,7 +3,7 @@ from django.forms.models import model_to_dict
 from django.core import serializers
 from django.shortcuts import render,redirect
 from home.models import Slider,Team,Company,Job,Rule
-from .forms import TeamForm, UserForm,SliderForm,JobForm,CompanyForm,NewsForm,RuleForm
+from .forms import TeamForm, UserForm,SliderForm,JobForm,CompanyForm,NewsForm,RuleForm,UpdateMarksForm
 from django.http import HttpResponse,JsonResponse
 import json
 from student.models import Student,PreviousJob,Branch
@@ -59,7 +59,7 @@ def index(request):
         'recently_updated':recently_updated
 
     }
-    return render(request, "admininstrator/index.html",context)
+    return render(request, "administrator/index.html",context)
 
 @superuser_required
 def addStudent(request):
@@ -93,19 +93,93 @@ def addStudent(request):
             user.set_password(request.POST['password'])
             user.save()
             Student(user=user).save()
-            messages.success(request, message="Saved successfully")
+            messages.success(request, message="Added successfully")
         else:
             for field,errors in form.errors.items():
                 for error in errors:
                     messages.error(request, message=f"{field} : {error}")
     form=UserForm()
 
-    return render(request, "admininstrator/student/add.html",context={'student':form})
+    return render(request, "administrator/student/add.html",context={'student':form})
+
+@superuser_required
+def updateStudent(request):
+    form=UpdateMarksForm()
+    if request.method=="POST" and request.POST.get("newusn"):
+        if not request.POST.get("usn"):
+            messages.error(request, message=f"Username is required")
+        else:
+            usn=request.POST.get("usn")
+            newusn=request.POST.get("newusn")
+
+            user=User.objects.filter(username=usn,is_superuser=False).first()
+            olduser=User.objects.filter(username=newusn).first()
+            if user:
+                if not olduser:
+                    user.username=newusn
+                    user.save()
+                    messages.success(request, message=f"Student {usn} updated to {newusn}")
+                else:
+                    messages.error(request, message=f"Student {newusn} already exists")
+            else:
+                messages.error(request, message=f"Student {usn} does not exists")
+
+    elif request.method=="POST":
+        usn=request.POST.get("usn")
+        if not usn:
+            messages.error(request, message=f"Username is required")
+        else:
+            user=User.objects.filter(username=usn,is_superuser=False).first()
+            print(user)
+            if user:
+                form=UpdateStudentForm(instance=user.student)
+                if form is valid:
+                    form.save()
+                    messages.success(request, message=f"Studnet {usn} marks updated successfully")
+                else:
+                    for field,errors in form.errors.items():
+                        for error in errors:
+                            messages.error(request, message=f"{field} : {error}")
+            else:
+                messages.error(request, message=f"Student {usn} does not exists")
+
+    return render(request, "administrator/student/update.html",context={'form':form})
+
+
+def updateMultipleUsn(request):
+    if request.method=='POST':
+        if request.POST.get('usns'):
+            data=json.loads(request.POST.get('usns'))
+            error=False
+            print(data)
+            for i,d in enumerate(data,start=1):
+                if d['username'] and d['newusername']:
+                    user=User.objects.filter(username=d['username'],is_superuser=False).first()
+                    olduser=User.objects.filter(username=d['newusername']).first()
+                    if user:
+                        if not olduser:
+                            user.username=d['newusername']
+                            user.save()
+                        else:
+                            error=True
+                            messages.error(request, message=f"Student {d['newusername']} already exists")
+                    else:
+                        error=True
+                        messages.error(request, message=f"Student {d['username']} does not exists")
+                else:
+                    error=True
+                    messages.error(request, message=f"Username is required at row {i}")
+            if not error:
+                messages.success(request, message="updated successfully")
+            else:
+                messages.success(request, message="updated others successfully")
+
+    return redirect(to='/au/student/update')
 
 @superuser_required
 def blockStudent(request):
     students = Student.objects.all().order_by('-updated_at')[:5]
-    return render(request,"admininstrator/blockStudent.html",{'students':students})
+    return render(request,"administrator/blockStudent.html",{'students':students})
 
 @superuser_required
 def editBlock(request):
@@ -213,7 +287,7 @@ def addJob(request):
     else:
         form = JobForm()
     context = {'form': form}
-    return render(request, "admininstrator/company/addjob.html", context)
+    return render(request, "administrator/company/addjob.html", context)
 
 @superuser_required
 def companies(request):
@@ -231,7 +305,7 @@ def companies(request):
             return redirect('admin')
     else:
         form = CompanyForm()
-    return render(request, "admininstrator/company/companies.html",{'companies':companies})
+    return render(request, "administrator/company/companies.html",{'companies':companies})
 
 @superuser_required
 def jobs(request):
@@ -239,7 +313,7 @@ def jobs(request):
     context={
         'jobs':jobs
     }
-    return render(request, "admininstrator/company/jobs.html",context)
+    return render(request, "administrator/company/jobs.html",context)
 
 
 @superuser_required
@@ -261,7 +335,7 @@ def editCompany(request,id):
             'form':form,
             'company':company
         }
-        return render(request,"admininstrator/company/editCompany.html",context)
+        return render(request,"administrator/company/editCompany.html",context)
     if request.method=="POST":
         form = CompanyForm(request.POST,request.FILES, instance=company)
         if form.is_valid():
@@ -295,7 +369,7 @@ def changePasswordAdmin(request):
             messages.success(request, f'Password updated successfully for user {username}')
             return redirect('changePasswordAdmin')
 
-    return render(request, 'admininstrator/student/changePasswordAdmin.html')
+    return render(request, 'administrator/student/changePasswordAdmin.html')
 
 
 @superuser_required
@@ -312,13 +386,13 @@ def addNewsUpdates(request):
                 for error in errors:
                     messages.error(request, message=f"{field} : {error}")
     context={'news':form}
-    return render(request,"admininstrator/add_newsUpdates.html",context)
+    return render(request,"administrator/add_newsUpdates.html",context)
 
 
 @superuser_required
 def newsAndUpdates(request):
     news=Notice.objects.all().order_by('-updated_on')
-    return render(request,'admininstrator/newsAndUpdates.html',{'news':news})
+    return render(request,'administrator/newsAndUpdates.html',{'news':news})
 
 @superuser_required
 def updateNews(request,id):
@@ -335,7 +409,7 @@ def updateNews(request,id):
                 for error in errors:
                     messages.error(request, message=f"{field} : {error}")
     context={'news':form}
-    return render(request,'admininstrator/updateNews.html',context)
+    return render(request,'administrator/updateNews.html',context)
 
 
 @superuser_required
@@ -382,12 +456,12 @@ def adminEditor(request):
     members = Team.objects.all()
     sliders = Slider.objects.all()
     rules=Rule.objects.all()
-    return render(request, "admininstrator/adminEditor.html",context={'members':members,'sliders':sliders,'rules':rules,'sliderForm':sliderForm,'teamForm':teamForm,'ruleForm':ruleForm})
+    return render(request, "administrator/adminEditor.html",context={'members':members,'sliders':sliders,'rules':rules,'sliderForm':sliderForm,'teamForm':teamForm,'ruleForm':ruleForm})
 
 @superuser_required
 def blockStudent(request):
     students = Student.objects.all().order_by('-updated_at')[:5]
-    return render(request,"admininstrator/blockStudent.html",{'students':students})
+    return render(request,"administrator/blockStudent.html",{'students':students})
 
 
 
@@ -430,7 +504,7 @@ def changePasswordAdmin(request):
             messages.success(request, f'Password updated successfully for user {username}')
             return redirect('changePasswordAdmin')
 
-    return render(request, 'admininstrator/student/changePasswordAdmin.html')
+    return render(request, 'administrator/student/changePasswordAdmin.html')
 
 @superuser_required
 def deleteTeamMember(request,id):
@@ -455,7 +529,7 @@ def editTeamMember(request,id):
                     messages.error(request, message=f"{field} : {error}")
 
     form=TeamForm()
-    return render(request, "admininstrator/editTeamMember.html",context={'form':form,'member':teamobj})
+    return render(request, "administrator/editTeamMember.html",context={'form':form,'member':teamobj})
 
 @superuser_required
 def deleteSlider(request,id):
@@ -478,7 +552,7 @@ def editRule(request,id):
             for field,errors in form.errors.items():
                 for error in errors:
                     messages.error(request, message=f"{field} : {error}")
-    return render(request, template_name="admininstrator/editRule.html",context={'form':form})
+    return render(request, template_name="administrator/editRule.html",context={'form':form})
 
 def deleteRule(request,id):
     rule=get_object_or_404(klass=Rule,id=id)
@@ -493,7 +567,7 @@ def registerHome(request):
         
     students = zip([],[])
 
-    return render(request,"admininstrator/registerList.html",context={'heads':heads,'jobs':jobs,'students':students,'selected':selected,})
+    return render(request,"administrator/registerList.html",context={'heads':heads,'jobs':jobs,'students':students,'selected':selected,})
 
 @superuser_required
 def registerList(request,id):
@@ -514,7 +588,7 @@ def registerList(request,id):
         
     students = zip(students, pjs)
 
-    return render(request,"admininstrator/registerList.html",context={'heads':heads,'jobs':jobs,'students':students,'selected':selected,})
+    return render(request,"administrator/registerList.html",context={'heads':heads,'jobs':jobs,'students':students,'selected':selected,})
     
 @superuser_required
 def downLoadResumes(request,id):
@@ -567,7 +641,7 @@ def viewJob(request,id):
     context={
         'job':job
     }
-    return render(request,"admininstrator/company/viewJob.html",context)
+    return render(request,"administrator/company/viewJob.html",context)
 
 @superuser_required
 def deleteJob(request, id):
@@ -597,7 +671,7 @@ def editJob(request,id):
         context={
             'form':form
         }
-        return render(request,"admininstrator/company/editJob.html",context)
+        return render(request,"administrator/company/editJob.html",context)
     return redirect('viewJob', id=job.id)
 
 @superuser_required
@@ -610,13 +684,13 @@ def search(request):
         print(student)
         if student:
             students.append(student)
-    return render(request,"admininstrator/search.html",{'students':students})
+    return render(request,"administrator/search.html",{'students':students})
 
 @superuser_required
 def viewprofile(request,id):
     user=User.objects.get(id=id)
     student=Student.objects.get(user=user)
-    return render(request,"admininstrator/student/viewprofile.html",{'student':student})
+    return render(request,"administrator/student/viewprofile.html",{'student':student})
 
 @superuser_required
 def resetportal(request):

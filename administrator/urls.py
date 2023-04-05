@@ -40,4 +40,6 @@ path('au/registerlist/images/<int:id>',views.downLoadImages,name='downLoadImages
 path('au/registerlist/<int:id>',views.registerList,name='registerList'),
 path('au/rule/delete/<int:id>',views.deleteRule,name='deleteRule'),
 path('au/rule/edit/<int:id>',views.editRule,name='editRule'),
+path('au/student/update',views.updateStudent,name='updateStudent'),
+path('au/student/update/usns',views.updateMultipleUsn,name='updateUsns'),
 ]

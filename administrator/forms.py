@@ -3,6 +3,8 @@ from django.contrib.auth.models import User
 from django import forms
 from home.models import Slider, Team,Job,Company,Rule
 from administrator.models import Notice
+from student.models import Student
+
 class UserForm(ModelForm):
     class Meta:
         model=User
@@ -53,3 +55,8 @@ class NewsForm(ModelForm):
     class Meta:
         model=Notice
         fields='__all__'
+
+class UpdateMarksForm(ModelForm):
+    class Meta:
+        model=Student
+        fields=['sgpa1','sgpa2','sgpa3','sgpa4','cgpa']

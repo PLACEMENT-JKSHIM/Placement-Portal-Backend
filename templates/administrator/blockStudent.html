@@ -213,15 +213,8 @@ const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;//C
       aElements = ulElement.querySelectorAll("li > a");
       tabContents = document.getElementById("tabs-id").querySelectorAll(".tab-content > div");
       for(let i = 0 ; i < aElements.length; i++){
-        aElements[i].classList.remove("text-blue-600");
-        aElements[i].classList.remove("bg-white");
-        aElements[i].classList.remove("border-t-blue-600");
-        aElements[i].classList.remove("font-bold");
-        aElements[i].classList.add("text-gray-600");
-        aElements[i].classList.add("bg-gray-200");
-        aElements[i].classList.add("font-medium");
-        tabContents[i].classList.add("hidden");
-        tabContents[i].classList.remove("block");
+        aElements[i].classList.remove("text-blue-600","bg-white","border-t-blue-600","font-bold","block");
+        aElements[i].classList.add("font-medium","hidden","bg-gray-200","text-gray-600");
       }
       element.classList.remove("text-gray-600");
       element.classList.remove("bg-gray-200");

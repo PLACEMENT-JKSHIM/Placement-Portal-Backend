@@ -38,7 +38,7 @@ class Student(models.Model):
     gender=models.CharField(max_length=1,choices=Gender.choices,default=Gender.MALE,verbose_name="Gender")
     image=models.ImageField(blank=True,null=True,upload_to='student')
     resume=models.FileField(blank=True,null=True,upload_to='resume')
-    branch=models.ForeignKey(Branch,blank=True,null=True, on_delete=models.CASCADE)
+    branch=models.ForeignKey(Branch,blank=True,null=True, on_delete=models.CASCADE,verbose_name="Branch")
     phoneNo=models.IntegerField(blank=True,null=True,verbose_name="Phone number",validators=[MinValueValidator(1000000000),MaxValueValidator(99999999999)])
     alternatePhoneNo=models.IntegerField(blank=True,null=True,verbose_name="Alternate Phone number",validators=[MinValueValidator(1000000000),MaxValueValidator(99999999999)])
     email=models.EmailField(blank=True,max_length=50,verbose_name="Personal Email ID")
@@ -80,7 +80,6 @@ class Student(models.Model):
     degreeState=models.CharField(blank=True,max_length=50,verbose_name="Degree state")
     degreeCountry=models.CharField(blank=True,max_length=50,verbose_name="Degree country")
 
-    mbaSpecialisation=models.CharField(blank=True,max_length=2,choices=Specialisation.choices,verbose_name="MBA specialisation")
     sgpa1=models.FloatField(default=0.0,validators=[MinValueValidator(0),MaxValueValidator(10)],verbose_name="SGPA 1")
     sgpa2=models.FloatField(default=0.0,validators=[MinValueValidator(0),MaxValueValidator(10)],verbose_name="SGPA 2")
     sgpa3=models.FloatField(default=0.0,validators=[MinValueValidator(0),MaxValueValidator(10)],verbose_name="SGPA 3")
