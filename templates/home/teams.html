@@ -8,11 +8,11 @@
             <div class="w-60 h-80 max-w-sm bg-white border border-gray-200 rounded-xl shadow-md group hover:rounded-3xl">
                 <div class="flex h-full flex-col justify-center gap-3 items-center">
                    {% if member.mem_image %}
-<img class=" object-contain  transition duration-300 ease-in   hover:ease-out w-36 h-36 mb-3 rounded-full shadow-[4.0px_8.0px_8.0px_rgba(0,0,0,0.38)]  " src="{{member.mem_image.url}}" />
+<img class=" object-contain transition-all duration-300 w-36 h-36 rounded-[50%] shadow-md group-hover:scale-105 group-hover:shadow-lg" src="{{member.mem_image.url}}" />
 {% else %}
-<img class="  object-cover transition duration-300 ease-in   hover:ease-out w-36 h-36 mb-3 rounded-full shadow-[4.0px_8.0px_8.0px_rgba(0,0,0,0.38)]  " src="{% static 'team.png' %}" />
+<img class=" object-contain transition-all duration-300 w-36 h-36 rounded-[50%] shadow-md group-hover:scale-105 group-hover:shadow-lg" src="{% static 'team.png' %}" />
 {% endif %}
-                    <h5 class="mb-1 mt-3 text-xl transition-transform font-medium group-hover:scale-125 group-hover:font-semibold">{{member.mem_name}}</h5>
+                    <h5 class="capitalize mb-1 mt-3 text-xl transition-transform font-medium group-hover:scale-125 group-hover:font-semibold">{{member.mem_name}}</h5>
                     <span class="text-sm transition-transform group-hover:scale-105">{{member.mem_designation|linebreaks}}</span>
                 </div>
             </div>

@@ -1,0 +1,88 @@
+{% extends "../_base_admin.html" %}
+{% block meta %}
+<!-- use version 0.19.2 -->
+<script lang="javascript" src="https://cdn.sheetjs.com/xlsx-0.19.2/package/dist/xlsx.full.min.js"></script>
+{% endblock meta %}
+{% block content %}
+<ul class="flex mb-0 list-none flex-wrap pt-3 pb-4 flex-row">
+    <li class="-mb-px  last:mr-0 flex-auto text-center">
+      <a class="text-xs font-bold uppercase px-5 py-3 shadow block leading-normal border border-t-2 border-t-blue-600 text-blue-600 bg-white" onclick="changeAtiveTab(event,'tab-usns')">
+        <i class="fas fa-space-shuttle text-base mr-1"></i> Update Students Usernames
+      </a>
+    </li>
+    <li class="-mb-px  last:mr-0 flex-auto text-center">
+      <a class="text-xs font-medium uppercase px-5 py-3 shadow  block leading-normal border border-t-2 text-gray-600 bg-gray-200" onclick="changeAtiveTab(event,'tab-apply')">
+        <i class="fas fa-cog text-base mr-1"></i> Portal Login
+      </a>
+    </li>
+    <li class="-mb-px  last:mr-0 flex-auto text-center">
+      <a class="text-xs font-medium uppercase px-5 py-3 shadow  block leading-normal border border-t-2 text-gray-600 bg-gray-200" onclick="changeAtiveTab(event,'tab-login')">
+        <i class="fas fa-briefcase text-base mr-1"></i>  Applying Company
+      </a>
+    </li>
+  </ul>
+<div class="p-2 overflow-auto text-center ">
+    <div class="grid md:grid-cols-2 gap-4">
+        <div class="rounded-lg border-slate-300 text-left overflow-auto border-2">
+            <div class="bg-primary h-10 text-white px-4 pt-2 font-semibold">Update Single Username</div>
+            <form action="" method="post">
+                {% csrf_token %}
+                <div class="px-4 pt-3">
+                    <label class="my-3 font-semibold" for="usn">Student USN:</label><br>
+                    <input class="my-3 w-full rounded-lg border-gray-300" type="text"
+                        name="usn" placeholder="Enter USN"><br>
+                    <label class="my-3 font-semibold" for="newusn">New USN:</label><br>
+                    <input class="my-3 w-full rounded-lg border-gray-300" type="text"
+                        name="newusn" placeholder="Enter new USN"><br>
+                </div>
+                <div class="text-center mt-5 p-1 pb-2 bg-gray-100 font-semibold">
+                    {% include "../../buttons/buttons.html" with btn="Update" %}
+                </div>
+            </form>
+        </div>
+        <div class="rounded-lg min-h-[300px] border-slate-300 text-left flex flex-col justify-between border-2">
+            <div class="bg-secondary/75 h-10 text-white px-4 pt-2 font-semibold">Update Multiple Username</div>
+
+            <div class="text-center"><b>Upload xlsx/csv file</b><br><b>XLSX File Must Contain username,newusername 
+                <span class="text-red-600 font-extrabold">in same format</span>
+            </b>
+            </div>
+            <div>
+                <form method="POST" action="/au/student/update/usns">
+                    {% csrf_token %}
+                    <div class="p-3">
+                    <label class="my-3 font-semibold" for="S_password">File Input</label><br>
+                    <input class="hidden" name="usns" id="multiple">
+                    <input class="my-3 w-full border-secondary/40 border-2  rounded-lg" id="uploadFile" type="file"
+                        placeholder="Choose File" accept=".xlsx,.xls,.csv">
+                    </div>
+                    <div class="text-center pb-2 p-1 bg-gray-100 font-semibold">
+                        {% include "../../buttons/buttons.html" with btn="Update Usns" secondary=True %}
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    const uploadFile = document.getElementById("uploadFile")
+
+    uploadFile.addEventListener("change", (e) => {
+        if (!e.target.files)
+            return;
+
+        let f = e.target.files[0]
+
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            let data = e.target.result;
+            let workbook = XLSX.read(data);
+            const sheet1 = workbook.Sheets[workbook.SheetNames[0]]
+            const obj = XLSX.utils.sheet_to_row_object_array(sheet1)
+            const input = document.getElementById("multiple")
+            input.value = JSON.stringify(obj)
+        };
+        reader.readAsArrayBuffer(f)
+    })
+</script>
+{% endblock content %}
