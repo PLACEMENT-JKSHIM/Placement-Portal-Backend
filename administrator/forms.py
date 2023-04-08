@@ -1,7 +1,7 @@
 from django.forms import ModelForm 
 from django.contrib.auth.models import User
 from django import forms
-from home.models import Slider, Team,Job,Company,Rule
+from home.models import Slider, Team,Job,Company,Rule,Gallery
 from administrator.models import Notice
 class UserForm(ModelForm):
     class Meta:
@@ -52,4 +52,9 @@ class CompanyForm(ModelForm):
 class NewsForm(ModelForm):
     class Meta:
         model=Notice
+        fields='__all__'
+
+class GalleryForm(ModelForm):
+    class Meta:
+        model=Gallery
         fields='__all__'

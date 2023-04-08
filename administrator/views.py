@@ -102,6 +102,49 @@ def addStudent(request):
 
     return render(request, "admininstrator/student/add.html",context={'student':form})
 
+
+@superuser_required
+def addGallery(request):
+    if request.method=='POST' and request.POST.get('gallery'):
+        data=json.loads(request.POST.get('gallery'))
+        error=False
+        for d in data:
+            print(d)
+            form=UserForm(d)
+            if form.is_valid():
+                user=form.save(commit=False)
+                user.set_password(str(d['password']))
+                user.save()
+                Student(user=user).save()
+            else:
+                error=True
+                for field,errors in form.errors.items():
+                    for error in errors:
+                        messages.error(request, message=f"{field} {d['username']} : {error}")
+        
+        if not error:
+            messages.success(request, message="added successfully")
+        else:
+            messages.success(request, message="added others successfully")
+
+
+    elif request.method=='POST':
+        form=UserForm(request.POST)
+        if form.is_valid():
+            user=form.save(commit=False)
+            user.set_password(request.POST['password'])
+            user.save()
+            Student(user=user).save()
+            messages.success(request, message="Saved successfully")
+        else:
+            for field,errors in form.errors.items():
+                for error in errors:
+                    messages.error(request, message=f"{field} : {error}")
+    form=UserForm()
+
+    return render(request, "admininstrator/student/add.html",context={'student':form})
+
+
 @superuser_required
 def blockStudent(request):
     students = Student.objects.all().order_by('-updated_at')[:5]
