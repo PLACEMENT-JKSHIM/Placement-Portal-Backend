@@ -24,6 +24,7 @@ import os
 import io
 from django.conf import settings
 from django.http import Http404
+from django.core.exceptions import ValidationError
 
 heads=['USN']
 unwanted=['id','user','editable','created_at','updated_at','status','job_student','image','resume','previousjob']
@@ -130,12 +131,12 @@ def updateStudent(request):
             messages.error(request, message=f"Username is required")
         else:
             user=User.objects.filter(username=usn,is_superuser=False).first()
-            print(user)
             if user:
-                form=UpdateStudentForm(instance=user.student)
-                if form is valid:
+                form=UpdateMarksForm(request.POST,instance=user.student)
+                if form.is_valid():
                     form.save()
                     messages.success(request, message=f"Studnet {usn} marks updated successfully")
+                    form=UpdateMarksForm()
                 else:
                     for field,errors in form.errors.items():
                         for error in errors:
@@ -172,6 +173,63 @@ def updateMultipleUsn(request):
             if not error:
                 messages.success(request, message="updated successfully")
             else:
+                messages.success(request, message="updated others successfully")
+
+    return redirect(to='/au/student/update')
+
+def updateMultipleMarks(request):
+    if request.method=='POST':
+        if request.POST.get('marks'):
+            data=json.loads(request.POST.get('marks'))
+            usns=[]
+            marks=[]
+            for d in data:
+                if d.get('username'):
+                    usns.append(d['username'])
+                    m = {}
+                    for key in ['sgpa1','username', 'sgpa2', 'sgpa3', 'sgpa4', 'cgpa']:
+                        if key in d:
+                            m[key] = d[key]
+                    marks.append(m)
+
+            students=Student.objects.filter(user__username__in=usns).select_related('user')
+            print(students)
+            for s in students:
+                for m in marks:
+                    if s.user.username==m['username']:
+                        if m.get('sgpa1'):setattr(s, 'sgpa1',m['sgpa1'] )
+                        if m.get('sgpa2'):s.sgpa2=m['sgpa2']
+                        if m.get('sgpa3'):s.sgpa3=m['sgpa3']
+                        if m.get('sgpa4'):s.sgpa4=m['sgpa4']
+                        if m.get('cgpa'):s.cgpa=m['cgpa']
+                        break
+            
+            for student in students:
+                try:
+                    student.full_clean()
+                except ValidationError as e:
+                    for key in e.message_dict:
+                        for error in e.message_dict[key]:
+                            messages.error(request, message=f"Student {student.user.username} {key} : {error}")
+                    students=students.exclude(pk=student.pk)
+
+            Student.objects.bulk_update(students, fields=['sgpa1', 'sgpa2', 'sgpa3', 'sgpa4', 'cgpa'])
+
+            error=False
+            errorUsns=""
+            for d in data:
+                if d.get('username'):
+                    for s in students:
+                        if s.user.username==d['username']:
+                            break
+                    else:
+                        error=True
+                        messages.error(request, message=f"Student {d['username']} may not exist")
+
+            if not error:
+                messages.success(request, message="updated successfully")
+            else:
+
                 messages.success(request, message="updated others successfully")
 
     return redirect(to='/au/student/update')
