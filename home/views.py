@@ -29,7 +29,8 @@ def index(request):
     print(total_placed,total_offered,highest_package,average_package,total_companies)
     sliders = Slider.objects.all()
     teams = Team.objects.all()
-    return render(request, "home/index.html",context={'sliders':sliders,'teams':teams,'total_placed':total_placed,'total_offered':total_offered,'highest_package':highest_package,'average_package':average_package,'total_companies':total_companies})
+    gallery = Gallery.objects.all()
+    return render(request, "home/index.html",context={'gallery':gallery,'sliders':sliders,'teams':teams,'total_placed':total_placed,'total_offered':total_offered,'highest_package':highest_package,'average_package':average_package,'total_companies':total_companies})
 
 
 def login(request):
@@ -65,9 +66,7 @@ def login(request):
             
     return render(request, "home/login.html")
 
-def gallery(request):
-        title = Gallery.objects.all()
-        return render(request, "home/index.html",context={'title':title})
+        
 
 
 @login_required(login_url='/login')
