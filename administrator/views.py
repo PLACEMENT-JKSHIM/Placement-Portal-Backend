@@ -43,8 +43,18 @@ def superuser_required(view_func):
         return view_func(request, *args, **kwargs)
     return wrapped_view
 
-@superuser_required
+def staff_required(view_func):
+    def wrapped_view(request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return redirect(f'/login?next={request.path}')
+        if not request.user.is_staff:
+            raise Http404
+        return view_func(request, *args, **kwargs)
+    return wrapped_view
+
+@staff_required 
 def index(request):
+    user=request.user
     student_count = Student.objects.count()
     toppers = Student.objects.all().order_by('-cgpa')[:10]
     active_jobs=Job.objects.filter(reg_open=True).count()
@@ -57,8 +67,8 @@ def index(request):
         'login_blocked_count':login_blocked_count,
         'app_blocked_count':app_blocked_count,
         'active_jobs':active_jobs,
-        'recently_updated':recently_updated
-
+        'recently_updated':recently_updated,
+        'user':user,
     }
     return render(request, "administrator/index.html",context)
 
@@ -489,7 +499,7 @@ def addNewsUpdates(request):
     return render(request,"administrator/add_newsUpdates.html",context)
 
 
-@superuser_required
+@staff_required
 def newsAndUpdates(request):
     news=Notice.objects.all().order_by('-updated_on')
     return render(request,'administrator/newsAndUpdates.html',{'news':news})
@@ -518,6 +528,31 @@ def deleteNews(request,id):
     notice.delete()
     messages.success(request, 'Deleted successfully.')
     return redirect('../../newsAndUpdates')
+
+@superuser_required
+def addStaff(request):
+    if request.method=='POST' and request.POST.get('username'):
+        form=UserForm(request.POST)
+        if form.is_valid():
+            user=form.save(commit=False)
+            user.set_password(request.POST['password'])
+            user.is_staff=True
+            user.save()
+            messages.success(request, message="Added staff successfully")
+        else:
+            for field,errors in form.errors.items():
+                for error in errors:
+                    messages.error(request, message=f"{field} : {error}")
+    form=UserForm()
+    staffs=User.objects.filter(is_staff=True,is_superuser=False)
+    return render(request,'administrator/addStaff.html',context={'staffs':staffs,'form':form})
+
+@superuser_required
+def deleteStaff(request,uname):
+    staff=get_object_or_404(User,username=uname)
+    staff.delete()
+    messages.success(request, message="Deleted staff successfully")
+    return redirect(to="/au/addStaff")
    
 @superuser_required
 def adminEditor(request):
@@ -660,7 +695,7 @@ def deleteRule(request,id):
     messages.success(request, message="Deleted successfully")
     return redirect(to="/au/adminEditor")
 
-@superuser_required
+@staff_required
 def registerHome(request):
     jobs=Job.objects.all()
     selected={'id':-1}
@@ -669,7 +704,7 @@ def registerHome(request):
 
     return render(request,"administrator/registerList.html",context={'heads':heads,'jobs':jobs,'students':students,'selected':selected,})
 
-@superuser_required
+@staff_required
 def registerList(request,id):
     students=[]
     pjs=[]
