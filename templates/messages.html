@@ -32,28 +32,28 @@
   
 </div>
 <script>
-    let toastList = document.querySelectorAll('#toast > div');
-    const toast = document.getElementById('toast');
-    toastList.forEach((t,key)=>{
-        if(toastList.length>10 && key<toastList.length-10){
-            setTimeout(()=>{
-                t.classList.add('opacity-0');
-                t.classList.add('translate-x-4');
-            }, 500*(key+1)); 
-            setTimeout(()=>{
-                t.classList.add('hidden');
-            }, 500*(key+1)+200); 
+    let toastList = document.querySelectorAll('#toast > div')
+    const toast = document.getElementById('toast')
+    toastList.forEach((t, key) => {
+        if (toastList.length > 10 && key < toastList.length - 10){
+            setTimeout(() => {
+                t.classList.add('opacity-0')
+                t.classList.add('translate-x-4')
+            }, 500*(key+1))
+            setTimeout(() =>{
+                t.classList.add('hidden')
+            }, 500 *(key+1)+200)
+        } else {
+            let t1=toastList.length>10?toastList.length-key:key
+            let duration = t1 === 1 ? 5000 : (t1 - 1) * 2000 + 5000
+            setTimeout(() => {
+                t.classList.add('opacity-0')
+            }, duration) 
+            setTimeout(() => {
+                t.classList.add('hidden')
+            }, duration+500)
         }
-        else{
-            let t1=toastList.length>10 ? toastList.length-key:key;
-            setTimeout(()=>{
-                t.classList.add('opacity-0');
-            }, t1*2000); 
-            setTimeout(()=>{
-                t.classList.add('hidden');
-            }, t1*2000+500);
-        }
-    });
+    })
 </script>
 {% endif %}
     
