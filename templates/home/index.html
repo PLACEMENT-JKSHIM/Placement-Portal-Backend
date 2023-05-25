@@ -8,6 +8,11 @@
         <div>
             {% include "./statistics.html" %}
         </div>
+        {% if gallery %}
+        <div id="gallery">
+            {% include "./gallery.html" %}
+        </div>
+        {% endif %}
         {% if teams %}
             <div id="teams">
                 {% include "./teams.html" with teams=teams %}
@@ -18,8 +23,5 @@
                 {% include "./contact.html" %}
             </div>
         {% endif %}
-        <div id="gallery">
-            {% include "./gallery.html" %}
-        </div>
     </div>
 {% endblock content %}

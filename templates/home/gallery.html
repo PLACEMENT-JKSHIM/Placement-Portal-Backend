@@ -16,7 +16,7 @@ https://cdn.jsdelivr.net/npm/viewerjs@1.11.2/dist/viewer.min.css
 
         <div class="h-72 w-96 group relative cursor-pointer items-center justify-center overflow-hidden transition-shadow hover:shadow-xl hover:shadow-black/30 rounded-md">
             <div class="absolute w-full h-full">
-              <img class="h-full w-full object-cover transition-transform duration-500 group-hover:rotate-3 group-hover:scale-125" src={{g.image.url}} alt="" />
+              <img class="h-full w-full object-cover transition-transform duration-500 group-hover:rotate-3 group-hover:scale-125" src={{g.image.url}} alt=""/>
             </div>
             <div class="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black group-hover:from-primary/40 group-hover:via-primary/60 group-hover:to-primary/70"></div>
             <div class="absolute inset-0 flex translate-y-[60%] flex-col items-center justify-center px-9 text-center transition-all duration-500 group-hover:translate-y-0">
@@ -40,6 +40,7 @@ https://cdn.jsdelivr.net/npm/viewerjs@1.11.2/dist/viewer.min.css
             next:{show:2,size:"large"},
         } ,
         title:(images,i,key)=>{
+            console.log(images)
             return images.alt
         },
         backdrop:'rgb(0,0,100,0.8)',

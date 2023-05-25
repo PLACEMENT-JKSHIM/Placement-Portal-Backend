@@ -126,23 +126,25 @@ https://cdn.jsdelivr.net/npm/viewerjs@1.11.2/dist/viewer.min.css
     </ul>
 
 </div>
-<div class="flex flex-col justify-around ">
-    <div class="flex justify-center">
-         <form class="flex items-center" id="profile"  action="{% url 'editJob' job.id  %}">
-     {% csrf_token %}
-     <div class="m-5 mx-8">
-        {% include "../../buttons/buttons.html" with btn="Edit Job Details" secondary=True %}
-     </div>
-     
-   </form>
-   <form class="flex items-center" id="profile" method="POST" action="{% url 'deleteJob' job.id  %}">
-     {% csrf_token %}
-     <div class="m-5 mx-8">
-     {% include "../../buttons/buttons.html" with btn="Delete" secondary=False %}
+{% if request.user.is_superuser %}
+    <div class="flex flex-col justify-around ">
+        <div class="flex justify-center">
+            <form class="flex items-center" id="profile"  action="{% url 'editJob' job.id  %}">
+        {% csrf_token %}
+        <div class="m-5 mx-8">
+            {% include "../../buttons/buttons.html" with btn="Edit Job Details" secondary=True %}
+        </div>
+        
+    </form>
+    <form class="flex items-center" id="profile" method="POST" action="{% url 'deleteJob' job.id  %}">
+        {% csrf_token %}
+        <div class="m-5 mx-8">
+        {% include "../../buttons/buttons.html" with btn="Delete" secondary=False %}
+        </div>
+    </form>
     </div>
-   </form>
-   </div>
-</div>
+    </div>
+{% endif %}
 
 </div> 
 <script src="https://unpkg.com/aos@next/dist/aos.js"></script>

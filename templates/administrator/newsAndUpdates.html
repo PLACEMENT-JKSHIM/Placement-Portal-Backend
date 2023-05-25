@@ -4,14 +4,16 @@ administrator
 
     <div class="text-center">
     <div class="p-2 text-2xl pb-7">Add Latest News And Updates</div>
+        {% if user.is_superuser %}
+        <div class="flex justify-center mb-10">
+            <div class="w-40">
+                {% include "../custom_fields/_a.html" with href="/au/addNewsUpdates" text="Add News" secondary=True main=True %}
+            </div>
+        </div>
+        {% endif %}
         <div class="rounded-lg border-slate-300 text-left border-2">
         <div class="bg-primary rounded-t-md h-10 text-white px-4 pt-2 font-semibold">
             News And Updates
-            {% if user.is_superuser %}
-                <a href="/au/addNewsUpdates" class="ml-2 p-1 bg-green-400 text-primary rounded-lg">
-                + Add news
-                </a>
-            {% endif %}
         </div>
         {% if news %}
         <div class="px-2 pt-3">
@@ -27,7 +29,7 @@ administrator
             <!-- class="hover:cursor-pointer w-full block px-4 pt-4 mb-4 bg-white rounded-lg shadow hover:bg-gray-100 hover:ring-2 shadow-primary/40 {% if latest.hidden %}opacity-60{% endif %}" -->
                 <h5 class="mb-2 capitalize w-75 text-2xl font-bold tracking-tight text-gray-900 dark:text-white text-ellipsis">
                     {{latest.title}} {% if latest.hidden %}<span
-                    class="text-primary text-[12px] bg-secondary rounded-full uppercase py-1 px-2"
+                    class="text-white text-[12px] bg-secondary font-normal rounded-full uppercase py-1 px-2"
                     >HIDDEN</span
                     >{% endif %}
                 </h5>

@@ -168,7 +168,7 @@ def updateStudent(request):
 
     return render(request, "administrator/student/update.html",context={'form':form})
 
-
+@superuser_required
 def updateMultipleUsn(request):
     if request.method=='POST':
         if request.POST.get('usns'):
@@ -197,7 +197,7 @@ def updateMultipleUsn(request):
                 messages.success(request, message="updated others successfully")
 
     return redirect(to='/au/student/update')
-
+@superuser_required
 def updateMultipleMarks(request):
     if request.method=='POST':
         if request.POST.get('marks'):
@@ -428,7 +428,7 @@ def companies(request):
         form = CompanyForm()
     return render(request, "administrator/company/companies.html",{'companies':companies})
 
-@superuser_required
+@staff_required
 def jobs(request):
     jobs=Job.objects.all()
     context={
@@ -776,7 +776,7 @@ def registerList(request,id):
 
     return render(request,"administrator/registerList.html",context={'heads':heads,'jobs':jobs,'students':students,'selected':selected,})
     
-@superuser_required
+@staff_required
 def downLoadResumes(request,id):
     if id==0:
         jobSt=Job_student.objects.all().select_related('student','student__user')
@@ -798,7 +798,7 @@ def downLoadResumes(request,id):
     response['Content-Disposition'] = 'attachment;filename="resume.zip"'
     return response
 
-@superuser_required
+@staff_required
 def downLoadImages(request,id):
     if id==0:
         jobSt=Job_student.objects.all().select_related('student','student__user')
@@ -821,7 +821,7 @@ def downLoadImages(request,id):
     response['Content-Disposition'] = 'attachment;filename="images.zip"'
     return response
     
-@superuser_required
+@staff_required
 def viewJob(request,id):
     job=get_object_or_404(Job,id=id)
     context={
@@ -860,19 +860,17 @@ def editJob(request,id):
         return render(request,"administrator/company/editJob.html",context)
     return redirect('viewJob', id=job.id)
 
-@superuser_required
+@staff_required
 def search(request):
-    recently_logged_in_users = User.objects.filter(last_login__isnull=False).exclude(is_superuser=True).order_by('-last_login')[:10]
-    print(recently_logged_in_users)
+    recently_logged_in_users = User.objects.filter(last_login__isnull=False).exclude(is_staff=True).order_by('-last_login')[:10]
     students=[]
     for user in recently_logged_in_users:
         student = get_object_or_404(Student,user=user)
-        print(student)
         if student:
             students.append(student)
     return render(request,"administrator/search.html",{'students':students})
 
-@superuser_required
+@staff_required
 def viewprofile(request,id):
     user=get_object_or_404(User,id=id)
     student=get_object_or_404(Student,user=user)
