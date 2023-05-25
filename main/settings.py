@@ -12,6 +12,10 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 
 from pathlib import Path
 import os
+import environ
+# Initialise environment variables
+env = environ.Env()
+environ.Env.read_env()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -21,7 +25,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-1lym&u*wd9rnxm^28(&ynl9wz$e5&7p(z!s@k#m&re=jvt0r68'
+# SECRET_KEY = 'django-insecure-1lym&u*wd9rnxm^28(&ynl9wz$e5&7p(z!s@k#m&re=jvt0r68'
+SECRET_KEY ="ashufhq28y32s3sdf(0^248"
+if env.get_value("SECRET_KEY",default=False):
+    SECRET_KEY = env('SECRET_KEY') 
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -38,7 +45,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'livereload',
-    'django.contrib.staticfiles',
+    "whitenoise.runserver_nostatic",
+    # 'django.contrib.staticfiles',
     'home',
     'student',
     'administrator',
@@ -48,6 +56,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -90,6 +99,26 @@ DATABASES = {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     }
+    # 'default': {  
+    #     'ENGINE': 'django.db.backends.mysql',  
+    #     'NAME': env('DB_NAME'),  
+    #     'HOST': env('DB_HOST'),
+    #     'PORT': env('DB_PORT'),
+    #     'USER': env('DB_USER'),
+    #     'PASSWORD': env('DB_PASSWORD'),
+    #     'OPTIONS': {  
+    #         'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"  
+    #     }  
+    # }  
+    # 'default': {
+    #     'ENGINE': 'django_psdb_engine',
+    #     'NAME': env('DB_NAME'),
+    #     'HOST': env('DB_HOST'),
+    #     'PORT': env('DB_PORT'),
+    #     'USER': env('DB_USER'),
+    #     'PASSWORD': env('DB_PASSWORD'),
+    #     'OPTIONS': {'ssl': {'ca': env('MYSQL_ATTR_SSL_CA')}, 'charset': 'utf8mb4'}
+    # }
 }
 
 
@@ -128,11 +157,17 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
-STATIC_URL = 'static/'
-
-STATICFILES_DIRS = [
-    BASE_DIR / "static"
-]
+STATIC_URL = '/static/'
+STATIC_ROOT=os.path.join(BASE_DIR,'static')
+STORAGES = {
+    # ...
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+    },
+}
+# STATICFILES_DIRS = [
+#     BASE_DIR / "static"
+# ]
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
