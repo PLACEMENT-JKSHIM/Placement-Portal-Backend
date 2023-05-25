@@ -35,7 +35,7 @@ def index(request):
 
 def login(request):
     if request.user.is_authenticated:
-        if request.user.is_superuser:   
+        if request.user.is_superuser or request.user.is_staff:   
             return redirect('/au')
         else:   
             return redirect('/student_home')
@@ -47,7 +47,7 @@ def login(request):
         print(usn,password)
         if user is not None:
             auth.login(request, user)
-            if request.user.is_superuser:
+            if request.user.is_superuser or request.user.is_staff:
                 messages.success(request, message='Successfully logged in')
                 if request.GET.getlist("next"):
                     return redirect(to=request.GET.getlist("next")[0])

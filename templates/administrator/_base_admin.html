@@ -1,205 +1,503 @@
-{% extends "_base.html" %}
-{% load static %}
-{% block blocks %}
+{% extends "_base.html" %} {% load static %} {% block blocks %}
 
-<button data-drawer-target="default-sidebar" data-drawer-toggle="default-sidebar" aria-controls="default-sidebar" type="button" class="fixed inline-flex items-center p-2 mt-2 ml-3 text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600">
-        <span class="sr-only">Open sidebar</span>
-        <svg class="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-        <path clip-rule="evenodd" fill-rule="evenodd" d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z"></path>
-        </svg>
-    </button>
- 
-    <aside id="default-sidebar" class="fixed top-0 left-0 z-40 w-64 h-screen transition-transform -translate-x-full sm:translate-x-0" aria-label="Sidebar">
-        <!-- <div class="h-full px-3 py-4 overflow-y-auto bg-gray-50 dark:bg-gray-800"> -->
-        <div class="h-full px-3 py-4 overflow-y-auto bg-primary">
-            <ul class="space-y-2">   
-                    <div class="flex items-center space-x-4">
-                        <div class="font-medium text-white">
-                            <div>ADMIN</div>
-                            <div class="text-sm text-white dark:text-gray-400">Placement@NMAMIT</div>
-                        </div>
-                    </div>
-            </ul>
-            <ul class="pt-4 mt-4 space-y-2 ">
-                <li>
-                    <a href="/logout" class="group flex p-2 justify-center border-2 border-secondary text-center text-base font-normal text-sidebarfont rounded-full hover:text-primary hover:bg-secondary hover:font-semibold  hover:shadow-[0px_0px_10px_2px] hover:shadow-slate-400">
-                        <!-- <svg aria-hidden="true" class="flex-shrink-0 w-6 h-6 text-sidebaricons transition duration-75 group-hover:text-primary dark:group-hover:text-white" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+<button
+  data-drawer-target="default-sidebar"
+  data-drawer-toggle="default-sidebar"
+  aria-controls="default-sidebar"
+  type="button"
+  class="fixed inline-flex items-center p-2 mt-2 ml-3 text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
+>
+  <span class="sr-only">Open sidebar</span>
+  <svg
+    class="w-6 h-6"
+    aria-hidden="true"
+    fill="currentColor"
+    viewBox="0 0 20 20"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      clip-rule="evenodd"
+      fill-rule="evenodd"
+      d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z"
+    ></path>
+  </svg>
+</button>
+
+<aside
+  id="default-sidebar"
+  class="fixed top-0 left-0 z-40 w-64 h-screen transition-transform -translate-x-full sm:translate-x-0"
+  aria-label="Sidebar"
+>
+  <!-- <div class="h-full px-3 py-4 overflow-y-auto bg-gray-50 dark:bg-gray-800"> -->
+  <div class="h-full px-3 py-4 overflow-y-auto bg-primary">
+    <ul class="space-y-2">
+      <div class="flex justify-start space-x-4">
+        <div class="font-medium text-white">
+          <div>
+            {% if user.is_superuser %} SUPERADMIN {% elif user.is_staff %} STAFF
+            {% endif %}
+          </div>
+          <div class="text-sm text-white dark:text-gray-400">
+            Placement@NMAMIT
+          </div>
+        </div>
+      </div>
+    </ul>
+    <ul class="pt-4 mt-4 space-y-2">
+      <li>
+        <a
+          href="/logout"
+          class="group flex p-2 justify-center border-2 border-secondary text-center text-base font-normal text-sidebarfont rounded-full hover:text-primary hover:bg-secondary hover:font-semibold hover:shadow-[0px_0px_10px_2px] hover:shadow-slate-400"
+        >
+          <!-- <svg aria-hidden="true" class="flex-shrink-0 w-6 h-6 text-sidebaricons transition duration-75 group-hover:text-primary dark:group-hover:text-white" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                             <path clip-rule="evenodd" fill-rule="evenodd" d="M3 4.25A2.25 2.25 0 015.25 2h5.5A2.25 2.25 0 0113 4.25v2a.75.75 0 01-1.5 0v-2a.75.75 0 00-.75-.75h-5.5a.75.75 0 00-.75.75v11.5c0 .414.336.75.75.75h5.5a.75.75 0 00.75-.75v-2a.75.75 0 011.5 0v2A2.25 2.25 0 0110.75 18h-5.5A2.25 2.25 0 013 15.75V4.25z"></path>
                             <path clip-rule="evenodd" fill-rule="evenodd" d="M6 10a.75.75 0 01.75-.75h9.546l-1.048-.943a.75.75 0 111.004-1.114l2.5 2.25a.75.75 0 010 1.114l-2.5 2.25a.75.75 0 11-1.004-1.114l1.048-.943H6.75A.75.75 0 016 10z"></path>
                         </svg> -->
-                        <!-- <span class="flex-1 ml-3 whitespace-nowrap">Logout</span> -->
-                        <svg aria-hidden="true" class="w-6 h-6 mr-2 -ml-1 transition duration-75 group-hover:text-primary dark:group-hover:text-white" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                            <path clip-rule="evenodd" fill-rule="evenodd" d="M3 4.25A2.25 2.25 0 015.25 2h5.5A2.25 2.25 0 0113 4.25v2a.75.75 0 01-1.5 0v-2a.75.75 0 00-.75-.75h-5.5a.75.75 0 00-.75.75v11.5c0 .414.336.75.75.75h5.5a.75.75 0 00.75-.75v-2a.75.75 0 011.5 0v2A2.25 2.25 0 0110.75 18h-5.5A2.25 2.25 0 013 15.75V4.25z"></path>
-                            <path clip-rule="evenodd" fill-rule="evenodd" d="M6 10a.75.75 0 01.75-.75h9.546l-1.048-.943a.75.75 0 111.004-1.114l2.5 2.25a.75.75 0 010 1.114l-2.5 2.25a.75.75 0 11-1.004-1.114l1.048-.943H6.75A.75.75 0 016 10z"></path>
-                        </svg>
-                        Logout
-                    </a>
-                </li>
+          <!-- <span class="flex-1 ml-3 whitespace-nowrap">Logout</span> -->
+          <svg
+            aria-hidden="true"
+            class="w-6 h-6 mr-2 -ml-1 transition duration-75 group-hover:text-primary dark:group-hover:text-white"
+            fill="currentColor"
+            viewBox="0 0 20 20"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              clip-rule="evenodd"
+              fill-rule="evenodd"
+              d="M3 4.25A2.25 2.25 0 015.25 2h5.5A2.25 2.25 0 0113 4.25v2a.75.75 0 01-1.5 0v-2a.75.75 0 00-.75-.75h-5.5a.75.75 0 00-.75.75v11.5c0 .414.336.75.75.75h5.5a.75.75 0 00.75-.75v-2a.75.75 0 011.5 0v2A2.25 2.25 0 0110.75 18h-5.5A2.25 2.25 0 013 15.75V4.25z"
+            ></path>
+            <path
+              clip-rule="evenodd"
+              fill-rule="evenodd"
+              d="M6 10a.75.75 0 01.75-.75h9.546l-1.048-.943a.75.75 0 111.004-1.114l2.5 2.25a.75.75 0 010 1.114l-2.5 2.25a.75.75 0 11-1.004-1.114l1.048-.943H6.75A.75.75 0 016 10z"
+            ></path>
+          </svg>
+          Logout
+        </a>
+      </li>
+    </ul>
+    <ul
+      class="pt-4 mt-4 space-y-2 border-t border-gray-200 dark:border-gray-700"
+    >
+      <li>
+        <a
+          href="/au/"
+          class="group flex items-center p-2 text-base font-normal text-sidebarfont rounded-full hover:text-primary hover:bg-white hover:font-semibold hover:shadow-[0px_0px_10px_2px] hover:shadow-slate-400 [&>svg]:hover:animate-[spin_700ms_ease_1] dark:hover:bg-gray-700"
+        >
+          <svg
+            aria-hidden="true"
+            class="flex-shrink-0 w-6 h-6 text-sidebaricons transition duration-75 group-hover:text-primary dark:group-hover:text-white"
+            fill="currentColor"
+            viewBox="0 0 20 20"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              clip-rule="evenodd"
+              fill-rule="evenodd"
+              d="M9.293 2.293a1 1 0 011.414 0l7 7A1 1 0 0117 11h-1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-3a1 1 0 00-1-1H9a1 1 0 00-1 1v3a1 1 0 01-1 1H5a1 1 0 01-1-1v-6H3a1 1 0 01-.707-1.707l7-7z"
+            ></path>
+          </svg>
+          <span class="ml-3">Home</span>
+        </a>
+      </li>
+      <li>
+        <a
+          href="/au/newsAndUpdates"
+          class="group flex items-center p-2 text-base font-normal text-sidebarfont rounded-full hover:text-primary hover:bg-white hover:font-semibold hover:shadow-[0px_0px_10px_2px] hover:shadow-slate-400 [&>svg]:hover:animate-[spin_700ms_ease_1] dark:hover:bg-gray-700"
+        >
+          <svg
+            aria-hidden="true"
+            class="flex-shrink-0 w-6 h-6 text-sidebaricons transition duration-75 group-hover:text-primary dark:group-hover:text-white"
+            fill="currentColor"
+            viewBox="0 0 20 20"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              clip-rule="evenodd"
+              fill-rule="evenodd"
+              d="M9.638 1.093a.75.75 0 01.724 0l2 1.104a.75.75 0 11-.724 1.313L10 2.607l-1.638.903a.75.75 0 11-.724-1.313l2-1.104zM5.403 4.287a.75.75 0 01-.295 1.019l-.805.444.805.444a.75.75 0 01-.724 1.314L3.5 7.02v.73a.75.75 0 01-1.5 0v-2a.75.75 0 01.388-.657l1.996-1.1a.75.75 0 011.019.294zm9.194 0a.75.75 0 011.02-.295l1.995 1.101A.75.75 0 0118 5.75v2a.75.75 0 01-1.5 0v-.73l-.884.488a.75.75 0 11-.724-1.314l.806-.444-.806-.444a.75.75 0 01-.295-1.02zM7.343 8.284a.75.75 0 011.02-.294L10 8.893l1.638-.903a.75.75 0 11.724 1.313l-1.612.89v1.557a.75.75 0 01-1.5 0v-1.557l-1.612-.89a.75.75 0 01-.295-1.019zM2.75 11.5a.75.75 0 01.75.75v1.557l1.608.887a.75.75 0 01-.724 1.314l-1.996-1.101A.75.75 0 012 14.25v-2a.75.75 0 01.75-.75zm14.5 0a.75.75 0 01.75.75v2a.75.75 0 01-.388.657l-1.996 1.1a.75.75 0 11-.724-1.313l1.608-.887V12.25a.75.75 0 01.75-.75zm-7.25 4a.75.75 0 01.75.75v.73l.888-.49a.75.75 0 01.724 1.313l-2 1.104a.75.75 0 01-.724 0l-2-1.104a.75.75 0 11.724-1.313l.888.49v-.73a.75.75 0 01.75-.75z"
+            ></path>
+          </svg>
+          <span class="flex-1 ml-3 whitespace-nowrap">Dashboard News</span>
+        </a>
+      </li>
+      {% if user.is_superuser %}
+      <li>
+        <a
+          href="/au/adminEditor"
+          class="group flex items-center p-2 text-base font-normal text-sidebarfont rounded-full hover:text-primary hover:bg-white hover:font-semibold hover:shadow-[0px_0px_10px_2px] hover:shadow-slate-400 [&>svg]:hover:animate-[spin_700ms_ease_1] dark:hover:bg-gray-700"
+        >
+          <svg
+            aria-hidden="true"
+            class="flex-shrink-0 w-6 h-6 text-sidebaricons transition duration-75 group-hover:text-primary dark:group-hover:text-white"
+            fill="currentColor"
+            viewBox="0 0 20 20"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M5.433 13.917l1.262-3.155A4 4 0 017.58 9.42l6.92-6.918a2.121 2.121 0 013 3l-6.92 6.918c-.383.383-.84.685-1.343.886l-3.154 1.262a.5.5 0 01-.65-.65z"
+            ></path>
+            <path
+              d="M3.5 5.75c0-.69.56-1.25 1.25-1.25H10A.75.75 0 0010 3H4.75A2.75 2.75 0 002 5.75v9.5A2.75 2.75 0 004.75 18h9.5A2.75 2.75 0 0017 15.25V10a.75.75 0 00-1.5 0v5.25c0 .69-.56 1.25-1.25 1.25h-9.5c-.69 0-1.25-.56-1.25-1.25v-9.5z"
+            ></path>
+          </svg>
+          <span class="flex-1 ml-3 whitespace-nowrap">Edit team/homepage</span>
+        </a>
+      </li>
+      {% endif %} {% if user.is_superuser %}
+      <li>
+        <a
+          href="/au/addStaff"
+          class="group flex items-center p-2 text-base font-normal text-sidebarfont rounded-full hover:text-primary hover:bg-white hover:font-semibold hover:shadow-[0px_0px_10px_2px] hover:shadow-slate-400 [&>svg]:hover:animate-[spin_700ms_ease_1] dark:hover:bg-gray-700"
+        >
+          <svg
+            aria-hidden="true"
+            class="flex-shrink-0 w-6 h-6 text-sidebaricons transition duration-75 group-hover:text-primary dark:group-hover:text-white"
+            fill="currentColor"
+            viewBox="0 0 20 20"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z"
+            ></path>
+          </svg>
+          <span class="flex-1 ml-3 whitespace-nowrap">Add/Delete staff</span>
+        </a>
+      </li>
+      {% endif %}
+      <li>
+        <a
+          href="/au/student/search"
+          class="group flex items-center p-2 text-base font-normal text-sidebarfont rounded-full hover:text-primary hover:bg-white hover:font-semibold hover:shadow-[0px_0px_10px_2px] hover:shadow-slate-400 [&>svg]:hover:animate-[spin_700ms_ease_1] dark:hover:bg-gray-700"
+        >
+          <svg
+            aria-hidden="true"
+            class="flex-shrink-0 w-6 h-6 text-sidebaricons transition duration-75 group-hover:text-primary dark:group-hover:text-white"
+            fill="currentColor"
+            viewBox="0 0 20 20"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              clip-rule="evenodd"
+              fill-rule="evenodd"
+              d="M9 3.5a5.5 5.5 0 100 11 5.5 5.5 0 000-11zM2 9a7 7 0 1112.452 4.391l3.328 3.329a.75.75 0 11-1.06 1.06l-3.329-3.328A7 7 0 012 9z"
+            ></path>
+          </svg>
+          <span class="flex-1 ml-3 whitespace-nowrap">Search Students</span>
+        </a>
+      </li>
+    </ul>
+    <ul
+      class="pt-4 mt-4 space-y-2 border-t border-gray-200 dark:border-gray-700"
+    >
+      <li>
+        {% if user.is_superuser %}
+        <button
+          type="button"
+          class="flex items-center w-full p-2 text-white text-base font-normal transition duration-75 rounded-full group hover:font-semibold hover:text-primary hover:bg-gray-100 hover:shadow-[0px_0px_10px_2px] hover:shadow-slate-400 [&>svg]:hover:animate-[spin_700ms_ease_1] dark:text-white dark:hover:bg-gray-700"
+          aria-controls="dropdown-student"
+          data-collapse-toggle="dropdown-student"
+        >
+          <svg
+            aria-hidden="true"
+            class="flex-shrink-0 w-6 h-6 text-sidebaricons transition duration-75 group-hover:text-primary dark:group-hover:text-white"
+            fill="currentColor"
+            viewBox="0 0 20 20"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              clip-rule="evenodd"
+              fill-rule="evenodd"
+              d="M9.664 1.319a.75.75 0 01.672 0 41.059 41.059 0 018.198 5.424.75.75 0 01-.254 1.285 31.372 31.372 0 00-7.86 3.83.75.75 0 01-.84 0 31.508 31.508 0 00-2.08-1.287V9.394c0-.244.116-.463.302-.592a35.504 35.504 0 013.305-2.033.75.75 0 00-.714-1.319 37 37 0 00-3.446 2.12A2.216 2.216 0 006 9.393v.38a31.293 31.293 0 00-4.28-1.746.75.75 0 01-.254-1.285 41.059 41.059 0 018.198-5.424zM6 11.459a29.848 29.848 0 00-2.455-1.158 41.029 41.029 0 00-.39 3.114.75.75 0 00.419.74c.528.256 1.046.53 1.554.82-.21.324-.455.63-.739.914a.75.75 0 101.06 1.06c.37-.369.69-.77.96-1.193a26.61 26.61 0 013.095 2.348.75.75 0 00.992 0 26.547 26.547 0 015.93-3.95.75.75 0 00.42-.739 41.053 41.053 0 00-.39-3.114 29.925 29.925 0 00-5.199 2.801 2.25 2.25 0 01-2.514 0c-.41-.275-.826-.541-1.25-.797a6.985 6.985 0 01-1.084 3.45 26.503 26.503 0 00-1.281-.78A5.487 5.487 0 006 12v-.54z"
+            ></path>
+          </svg>
+          <span
+            class="flex-1 ml-3 text-left text-white whitespace-nowrap group-hover:text-primary"
+            sidebar-toggle-item
+            >Students</span
+          >
+          <svg
+            sidebar-toggle-item
+            class="w-6 h-6"
+            fill="currentColor"
+            viewBox="0 0 20 20"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+              clip-rule="evenodd"
+            ></path>
+          </svg>
+        </button>
+        <ul id="dropdown-student" class="hidden py-2 space-y-2">
+          <li>
+            <a
+              href="/au/student/add"
+              class="flex items-center w-full p-2 text-base font-normal border-2 border-secondary text-white transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 hover:text-primary hover:border-white hover:font-semibold dark:hover:bg-gray-700"
+            >
+              <span class="flex-1 whitespace-nowrap">Add Students</span>
+            </a>
+          </li>
+          <li>
+            <a
+              href="/au/student/changePasswordAdmin"
+              class="flex items-center w-full p-2 text-base font-normal border-2 border-secondary text-white transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 hover:text-primary hover:border-white hover:font-semibold dark:hover:bg-gray-700"
+            >
+              <span class="flex-1 whitespace-nowrap">Change Password</span>
+            </a>
+          </li>
+          <li>
+            <a
+              href="/au/student/block"
+              class="flex items-center w-full p-2 text-base font-normal border-2 border-secondary text-white transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 hover:text-primary hover:border-white hover:font-semibold dark:hover:bg-gray-700"
+            >
+              <span class="flex-1 whitespace-nowrap">Block Students</span>
+            </a>
+          </li>
+        </ul>
+      </li>
+      {% endif %}
+      <li>
+        <ul class="mt-4">
+          <li>
+            <button
+              type="button"
+              class="flex items-center w-full p-2 text-white text-base font-normal transition duration-75 rounded-full group hover:font-semibold hover:text-primary hover:bg-gray-100 hover:shadow-[0px_0px_10px_2px] hover:shadow-slate-400 [&>svg]:hover:animate-[spin_700ms_ease_1] dark:text-white dark:hover:bg-gray-700"
+              aria-controls="dropdown-company"
+              data-collapse-toggle="dropdown-company"
+            >
+              <svg
+                aria-hidden="true"
+                class="flex-shrink-0 w-6 h-6 text-sidebaricons transition duration-75 group-hover:text-primary dark:group-hover:text-white"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  clip-rule="evenodd"
+                  fill-rule="evenodd"
+                  d="M1 2.75A.75.75 0 011.75 2h10.5a.75.75 0 010 1.5H12v13.75a.75.75 0 01-.75.75h-1.5a.75.75 0 01-.75-.75v-2.5a.75.75 0 00-.75-.75h-2.5a.75.75 0 00-.75.75v2.5a.75.75 0 01-.75.75h-2.5a.75.75 0 010-1.5H2v-13h-.25A.75.75 0 011 2.75zM4 5.5a.5.5 0 01.5-.5h1a.5.5 0 01.5.5v1a.5.5 0 01-.5.5h-1a.5.5 0 01-.5-.5v-1zM4.5 9a.5.5 0 00-.5.5v1a.5.5 0 00.5.5h1a.5.5 0 00.5-.5v-1a.5.5 0 00-.5-.5h-1zM8 5.5a.5.5 0 01.5-.5h1a.5.5 0 01.5.5v1a.5.5 0 01-.5.5h-1a.5.5 0 01-.5-.5v-1zM8.5 9a.5.5 0 00-.5.5v1a.5.5 0 00.5.5h1a.5.5 0 00.5-.5v-1a.5.5 0 00-.5-.5h-1zM14.25 6a.75.75 0 00-.75.75V17a1 1 0 001 1h3.75a.75.75 0 000-1.5H18v-9h.25a.75.75 0 000-1.5h-4zm.5 3.5a.5.5 0 01.5-.5h1a.5.5 0 01.5.5v1a.5.5 0 01-.5.5h-1a.5.5 0 01-.5-.5v-1zm.5 3.5a.5.5 0 00-.5.5v1a.5.5 0 00.5.5h1a.5.5 0 00.5-.5v-1a.5.5 0 00-.5-.5h-1z"
+                ></path>
+              </svg>
+              <span
+                class="flex-1 ml-3 text-left text-white whitespace-nowrap group-hover:text-primary"
+                sidebar-toggle-item
+                >Company</span
+              >
+              <svg
+                sidebar-toggle-item
+                class="w-6 h-6"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                  clip-rule="evenodd"
+                ></path>
+              </svg>
+            </button>
+            <ul id="dropdown-company" class="hidden py-2 space-y-2">
+              {% if user.is_superuser %}
+              <li>
+                <a
+                  href="/au/company/addJob"
+                  class="flex items-center w-full p-2 text-base font-normal border-2 border-secondary text-white transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 hover:text-primary hover:border-white hover:font-semibold dark:hover:bg-gray-700"
+                >
+                  <span class="flex-1 whitespace-nowrap">Add Job</span>
+                </a>
+              </li>
+              {% endif %}
+              <li>
+                <a
+                  href="/au/company/jobs"
+                  class="flex items-center w-full p-2 text-base font-normal border-2 border-secondary text-white transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 hover:text-primary hover:border-white hover:font-semibold dark:hover:bg-gray-700"
+                >
+                  <span class="flex-1 whitespace-nowrap">View Jobs</span>
+                </a>
+              </li>
+              <li>
+                <a
+                  href="/au/company/companies"
+                  class="flex items-center w-full p-2 text-base font-normal border-2 border-secondary text-white transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 hover:text-primary hover:border-white hover:font-semibold dark:hover:bg-gray-700"
+                >
+                  <span class="flex-1 whitespace-nowrap">View Companys</span>
+                </a>
+              </li>
             </ul>
-            <ul class="pt-4 mt-4 space-y-2 border-t border-gray-200 dark:border-gray-700">
-                <li>
-                    <a href="/au/" class="group flex items-center p-2 text-base font-normal text-sidebarfont rounded-full hover:text-primary hover:bg-white hover:font-semibold  hover:shadow-[0px_0px_10px_2px] hover:shadow-slate-400 [&>svg]:hover:animate-[spin_700ms_ease_1] dark:hover:bg-gray-700">
-                        <svg aria-hidden="true" class="flex-shrink-0 w-6 h-6 text-sidebaricons transition duration-75 group-hover:text-primary dark:group-hover:text-white" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                            <path clip-rule="evenodd" fill-rule="evenodd" d="M9.293 2.293a1 1 0 011.414 0l7 7A1 1 0 0117 11h-1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-3a1 1 0 00-1-1H9a1 1 0 00-1 1v3a1 1 0 01-1 1H5a1 1 0 01-1-1v-6H3a1 1 0 01-.707-1.707l7-7z"></path>
-                        </svg>
-                        <span class="ml-3">Home</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="/au/addNewsUpdates" class="group flex items-center p-2 text-base font-normal text-sidebarfont rounded-full hover:text-primary hover:bg-white hover:font-semibold  hover:shadow-[0px_0px_10px_2px] hover:shadow-slate-400 [&>svg]:hover:animate-[spin_700ms_ease_1] dark:hover:bg-gray-700">
-                        <svg aria-hidden="true" class="flex-shrink-0 w-6 h-6 text-sidebaricons transition duration-75 group-hover:text-primary dark:group-hover:text-white" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                            <path clip-rule="evenodd" fill-rule="evenodd" d="M9.638 1.093a.75.75 0 01.724 0l2 1.104a.75.75 0 11-.724 1.313L10 2.607l-1.638.903a.75.75 0 11-.724-1.313l2-1.104zM5.403 4.287a.75.75 0 01-.295 1.019l-.805.444.805.444a.75.75 0 01-.724 1.314L3.5 7.02v.73a.75.75 0 01-1.5 0v-2a.75.75 0 01.388-.657l1.996-1.1a.75.75 0 011.019.294zm9.194 0a.75.75 0 011.02-.295l1.995 1.101A.75.75 0 0118 5.75v2a.75.75 0 01-1.5 0v-.73l-.884.488a.75.75 0 11-.724-1.314l.806-.444-.806-.444a.75.75 0 01-.295-1.02zM7.343 8.284a.75.75 0 011.02-.294L10 8.893l1.638-.903a.75.75 0 11.724 1.313l-1.612.89v1.557a.75.75 0 01-1.5 0v-1.557l-1.612-.89a.75.75 0 01-.295-1.019zM2.75 11.5a.75.75 0 01.75.75v1.557l1.608.887a.75.75 0 01-.724 1.314l-1.996-1.101A.75.75 0 012 14.25v-2a.75.75 0 01.75-.75zm14.5 0a.75.75 0 01.75.75v2a.75.75 0 01-.388.657l-1.996 1.1a.75.75 0 11-.724-1.313l1.608-.887V12.25a.75.75 0 01.75-.75zm-7.25 4a.75.75 0 01.75.75v.73l.888-.49a.75.75 0 01.724 1.313l-2 1.104a.75.75 0 01-.724 0l-2-1.104a.75.75 0 11.724-1.313l.888.49v-.73a.75.75 0 01.75-.75z"></path>
-                        </svg>
-                        <span class="flex-1 ml-3 whitespace-nowrap">Dashboard News</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="/au/adminEditor" class="group flex items-center p-2 text-base font-normal text-sidebarfont rounded-full hover:text-primary hover:bg-white hover:font-semibold  hover:shadow-[0px_0px_10px_2px] hover:shadow-slate-400 [&>svg]:hover:animate-[spin_700ms_ease_1] dark:hover:bg-gray-700">
-                        <svg aria-hidden="true" class="flex-shrink-0 w-6 h-6 text-sidebaricons transition duration-75 group-hover:text-primary dark:group-hover:text-white" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M5.433 13.917l1.262-3.155A4 4 0 017.58 9.42l6.92-6.918a2.121 2.121 0 013 3l-6.92 6.918c-.383.383-.84.685-1.343.886l-3.154 1.262a.5.5 0 01-.65-.65z"></path>
-                            <path d="M3.5 5.75c0-.69.56-1.25 1.25-1.25H10A.75.75 0 0010 3H4.75A2.75 2.75 0 002 5.75v9.5A2.75 2.75 0 004.75 18h9.5A2.75 2.75 0 0017 15.25V10a.75.75 0 00-1.5 0v5.25c0 .69-.56 1.25-1.25 1.25h-9.5c-.69 0-1.25-.56-1.25-1.25v-9.5z"></path>
-                        </svg>
-                        <span class="flex-1 ml-3 whitespace-nowrap">Edit team/homepage</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="/au/student/search" class="group flex items-center p-2 text-base font-normal text-sidebarfont rounded-full hover:text-primary hover:bg-white hover:font-semibold  hover:shadow-[0px_0px_10px_2px] hover:shadow-slate-400 [&>svg]:hover:animate-[spin_700ms_ease_1] dark:hover:bg-gray-700">
-                        <svg aria-hidden="true" class="flex-shrink-0 w-6 h-6 text-sidebaricons transition duration-75 group-hover:text-primary dark:group-hover:text-white" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                            <path clip-rule="evenodd" fill-rule="evenodd" d="M9 3.5a5.5 5.5 0 100 11 5.5 5.5 0 000-11zM2 9a7 7 0 1112.452 4.391l3.328 3.329a.75.75 0 11-1.06 1.06l-3.329-3.328A7 7 0 012 9z"></path>
-                        </svg>
-                        <span class="flex-1 ml-3 whitespace-nowrap">Search Students</span>
-                    </a>
-                </li>
+          </li>
+        </ul>
+      </li>
+      <li>
+        <ul class="mt-4">
+          <li>
+            <button
+              type="button"
+              class="flex items-center w-full p-2 text-white text-base font-normal transition duration-75 rounded-full group hover:font-semibold hover:text-primary hover:bg-gray-100 hover:shadow-[0px_0px_10px_2px] hover:shadow-slate-400 [&>svg]:hover:animate-[spin_700ms_ease_1] dark:text-white dark:hover:bg-gray-700"
+              aria-controls="dropdown-report"
+              data-collapse-toggle="dropdown-report"
+            >
+              <svg
+                aria-hidden="true"
+                class="flex-shrink-0 w-6 h-6 text-sidebaricons transition duration-75 group-hover:text-primary dark:group-hover:text-white"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  clip-rule="evenodd"
+                  fill-rule="evenodd"
+                  d="M3 3.5A1.5 1.5 0 014.5 2h6.879a1.5 1.5 0 011.06.44l4.122 4.12A1.5 1.5 0 0117 7.622V16.5a1.5 1.5 0 01-1.5 1.5h-11A1.5 1.5 0 013 16.5v-13zM13.25 9a.75.75 0 01.75.75v4.5a.75.75 0 01-1.5 0v-4.5a.75.75 0 01.75-.75zm-6.5 4a.75.75 0 01.75.75v.5a.75.75 0 01-1.5 0v-.5a.75.75 0 01.75-.75zm4-1.25a.75.75 0 00-1.5 0v2.5a.75.75 0 001.5 0v-2.5z"
+                ></path>
+              </svg>
+              <span
+                class="flex-1 ml-3 text-left text-white whitespace-nowrap group-hover:text-primary"
+                sidebar-toggle-item
+                >Reports</span
+              >
+              <svg
+                sidebar-toggle-item
+                class="w-6 h-6"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                  clip-rule="evenodd"
+                ></path>
+              </svg>
+            </button>
+            <ul id="dropdown-report" class="hidden py-2 space-y-2">
+              <li>
+                <a
+                  href="#"
+                  class="flex items-center w-full p-2 text-base font-normal border-2 border-secondary text-white transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 hover:text-primary hover:border-white hover:font-semibold dark:hover:bg-gray-700"
+                >
+                  <span class="flex-1 whitespace-nowrap">Student List</span>
+                </a>
+              </li>
+              <li>
+                <a
+                  href="#"
+                  class="flex items-center w-full p-2 text-base font-normal border-2 border-secondary text-white transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 hover:text-primary hover:border-white hover:font-semibold dark:hover:bg-gray-700"
+                >
+                  <span class="flex-1 whitespace-nowrap">Company List</span>
+                </a>
+              </li>
+              <li>
+                <a
+                  href="/au/registerlist"
+                  class="flex items-center w-full p-2 text-base font-normal border-2 border-secondary text-white transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 hover:text-primary hover:border-white hover:font-semibold dark:hover:bg-gray-700"
+                >
+                  <span class="flex-1 whitespace-nowrap"
+                    >Registration List</span
+                  >
+                </a>
+              </li>
             </ul>
-            <ul class="pt-4 mt-4 space-y-2 border-t border-gray-200 dark:border-gray-700">
-                <li>
-                    <button type="button" class="flex items-center w-full p-2 text-white text-base font-normal transition duration-75 rounded-full group hover:font-semibold hover:text-primary hover:bg-gray-100 hover:shadow-[0px_0px_10px_2px] hover:shadow-slate-400 [&>svg]:hover:animate-[spin_700ms_ease_1] dark:text-white dark:hover:bg-gray-700" aria-controls="dropdown-student" data-collapse-toggle="dropdown-student">
-                        <svg aria-hidden="true" class="flex-shrink-0 w-6 h-6 text-sidebaricons transition duration-75 group-hover:text-primary dark:group-hover:text-white" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                            <path clip-rule="evenodd" fill-rule="evenodd" d="M9.664 1.319a.75.75 0 01.672 0 41.059 41.059 0 018.198 5.424.75.75 0 01-.254 1.285 31.372 31.372 0 00-7.86 3.83.75.75 0 01-.84 0 31.508 31.508 0 00-2.08-1.287V9.394c0-.244.116-.463.302-.592a35.504 35.504 0 013.305-2.033.75.75 0 00-.714-1.319 37 37 0 00-3.446 2.12A2.216 2.216 0 006 9.393v.38a31.293 31.293 0 00-4.28-1.746.75.75 0 01-.254-1.285 41.059 41.059 0 018.198-5.424zM6 11.459a29.848 29.848 0 00-2.455-1.158 41.029 41.029 0 00-.39 3.114.75.75 0 00.419.74c.528.256 1.046.53 1.554.82-.21.324-.455.63-.739.914a.75.75 0 101.06 1.06c.37-.369.69-.77.96-1.193a26.61 26.61 0 013.095 2.348.75.75 0 00.992 0 26.547 26.547 0 015.93-3.95.75.75 0 00.42-.739 41.053 41.053 0 00-.39-3.114 29.925 29.925 0 00-5.199 2.801 2.25 2.25 0 01-2.514 0c-.41-.275-.826-.541-1.25-.797a6.985 6.985 0 01-1.084 3.45 26.503 26.503 0 00-1.281-.78A5.487 5.487 0 006 12v-.54z"></path>
-                        </svg>
-                        <span class="flex-1 ml-3 text-left text-white whitespace-nowrap group-hover:text-primary" sidebar-toggle-item>Students</span>
-                        <svg sidebar-toggle-item class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
-                    </button>
-                    <ul id="dropdown-student" class="hidden py-2 space-y-2">
-                        <li>
-                            <a href="/au/student/add" class="flex items-center w-full p-2 text-base font-normal border-2 border-secondary text-white transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 hover:text-primary hover:border-white hover:font-semibold dark:hover:bg-gray-700">
-                                <span class="flex-1 whitespace-nowrap">Add Students</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="/au/student/changePasswordAdmin" class="flex items-center w-full p-2 text-base font-normal border-2 border-secondary text-white transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 hover:text-primary hover:border-white hover:font-semibold dark:hover:bg-gray-700">
-                                <span class="flex-1 whitespace-nowrap">Change Password</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="/au/student/block" class="flex items-center w-full p-2 text-base font-normal border-2 border-secondary text-white transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 hover:text-primary hover:border-white hover:font-semibold dark:hover:bg-gray-700">
-                                <span class="flex-1 whitespace-nowrap">Block Students</span>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-                <li>
-                    <ul class="mt-4">
-                        <li>
-                            <button type="button" class="flex items-center w-full p-2 text-white text-base font-normal transition duration-75 rounded-full group hover:font-semibold hover:text-primary hover:bg-gray-100 hover:shadow-[0px_0px_10px_2px] hover:shadow-slate-400 [&>svg]:hover:animate-[spin_700ms_ease_1] dark:text-white dark:hover:bg-gray-700" aria-controls="dropdown-company" data-collapse-toggle="dropdown-company">
-                                <svg aria-hidden="true" class="flex-shrink-0 w-6 h-6 text-sidebaricons transition duration-75 group-hover:text-primary dark:group-hover:text-white" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                    <path clip-rule="evenodd" fill-rule="evenodd" d="M1 2.75A.75.75 0 011.75 2h10.5a.75.75 0 010 1.5H12v13.75a.75.75 0 01-.75.75h-1.5a.75.75 0 01-.75-.75v-2.5a.75.75 0 00-.75-.75h-2.5a.75.75 0 00-.75.75v2.5a.75.75 0 01-.75.75h-2.5a.75.75 0 010-1.5H2v-13h-.25A.75.75 0 011 2.75zM4 5.5a.5.5 0 01.5-.5h1a.5.5 0 01.5.5v1a.5.5 0 01-.5.5h-1a.5.5 0 01-.5-.5v-1zM4.5 9a.5.5 0 00-.5.5v1a.5.5 0 00.5.5h1a.5.5 0 00.5-.5v-1a.5.5 0 00-.5-.5h-1zM8 5.5a.5.5 0 01.5-.5h1a.5.5 0 01.5.5v1a.5.5 0 01-.5.5h-1a.5.5 0 01-.5-.5v-1zM8.5 9a.5.5 0 00-.5.5v1a.5.5 0 00.5.5h1a.5.5 0 00.5-.5v-1a.5.5 0 00-.5-.5h-1zM14.25 6a.75.75 0 00-.75.75V17a1 1 0 001 1h3.75a.75.75 0 000-1.5H18v-9h.25a.75.75 0 000-1.5h-4zm.5 3.5a.5.5 0 01.5-.5h1a.5.5 0 01.5.5v1a.5.5 0 01-.5.5h-1a.5.5 0 01-.5-.5v-1zm.5 3.5a.5.5 0 00-.5.5v1a.5.5 0 00.5.5h1a.5.5 0 00.5-.5v-1a.5.5 0 00-.5-.5h-1z"></path>
-                                </svg>
-                                <span class="flex-1 ml-3 text-left text-white whitespace-nowrap group-hover:text-primary" sidebar-toggle-item>Company</span>
-                                <svg sidebar-toggle-item class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
-                            </button>
-                            <ul id="dropdown-company" class="hidden py-2 space-y-2">
-                                <li>
-                                    <a href="/au/company/addJob" class="flex items-center w-full p-2 text-base font-normal border-2 border-secondary text-white transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 hover:text-primary hover:border-white hover:font-semibold dark:hover:bg-gray-700">
-                                        <span class="flex-1 whitespace-nowrap">Add Job</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="/au/company/jobs" class="flex items-center w-full p-2 text-base font-normal border-2 border-secondary text-white transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 hover:text-primary hover:border-white hover:font-semibold dark:hover:bg-gray-700">
-                                        <span class="flex-1 whitespace-nowrap">View Jobs</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="/au/company/companies" class="flex items-center w-full p-2 text-base font-normal border-2 border-secondary text-white transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 hover:text-primary hover:border-white hover:font-semibold dark:hover:bg-gray-700">
-                                        <span class="flex-1 whitespace-nowrap">View Companys</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                    </ul>
-                </li>
-                <li>
-                    <ul class="mt-4">
-                        <li>
-                            <button type="button" class="flex items-center w-full p-2 text-white text-base font-normal transition duration-75 rounded-full group hover:font-semibold hover:text-primary hover:bg-gray-100 hover:shadow-[0px_0px_10px_2px] hover:shadow-slate-400 [&>svg]:hover:animate-[spin_700ms_ease_1] dark:text-white dark:hover:bg-gray-700" aria-controls="dropdown-report" data-collapse-toggle="dropdown-report">
-                                <svg aria-hidden="true" class="flex-shrink-0 w-6 h-6 text-sidebaricons transition duration-75 group-hover:text-primary dark:group-hover:text-white" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                    <path clip-rule="evenodd" fill-rule="evenodd" d="M3 3.5A1.5 1.5 0 014.5 2h6.879a1.5 1.5 0 011.06.44l4.122 4.12A1.5 1.5 0 0117 7.622V16.5a1.5 1.5 0 01-1.5 1.5h-11A1.5 1.5 0 013 16.5v-13zM13.25 9a.75.75 0 01.75.75v4.5a.75.75 0 01-1.5 0v-4.5a.75.75 0 01.75-.75zm-6.5 4a.75.75 0 01.75.75v.5a.75.75 0 01-1.5 0v-.5a.75.75 0 01.75-.75zm4-1.25a.75.75 0 00-1.5 0v2.5a.75.75 0 001.5 0v-2.5z"></path>
-                                </svg>
-                                <span class="flex-1 ml-3 text-left text-white whitespace-nowrap group-hover:text-primary" sidebar-toggle-item>Reports</span>
-                                <svg sidebar-toggle-item class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
-                            </button>
-                            <ul id="dropdown-report" class="hidden py-2 space-y-2">
-                                <li>
-                                    <a href="#" class="flex items-center w-full p-2 text-base font-normal border-2 border-secondary text-white transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 hover:text-primary hover:border-white hover:font-semibold dark:hover:bg-gray-700">
-                                        <span class="flex-1 whitespace-nowrap">Student List</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="#" class="flex items-center w-full p-2 text-base font-normal border-2 border-secondary text-white transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 hover:text-primary hover:border-white hover:font-semibold dark:hover:bg-gray-700">
-                                        <span class="flex-1 whitespace-nowrap">Company List</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="/au/registerlist" class="flex items-center w-full p-2 text-base font-normal border-2 border-secondary text-white transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 hover:text-primary hover:border-white hover:font-semibold dark:hover:bg-gray-700">
-                                        <span class="flex-1 whitespace-nowrap">Registration List</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                    </ul>
-                </li>
-                <li  class="mt-4">
-                    
-                        
-                        <div data-modal-target="popup-modal" data-modal-toggle="popup-modal" class="group cursor-pointer flex items-center p-2 text-base font-normal text-sidebarfont rounded-full hover:text-primary hover:bg-white hover:font-semibold  hover:shadow-[0px_0px_10px_2px] hover:shadow-slate-400 [&>svg]:hover:animate-[spin_700ms_ease_1] dark:hover:bg-gray-700" type="button">
-                            <svg aria-hidden="true" class="flex-shrink-0 w-6 h-6 text-sidebaricons transition duration-75 group-hover:text-primary dark:group-hover:text-white" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                <path clip-rule="evenodd" fill-rule="evenodd" d="M7.84 1.804A1 1 0 018.82 1h2.36a1 1 0 01.98.804l.331 1.652a6.993 6.993 0 011.929 1.115l1.598-.54a1 1 0 011.186.447l1.18 2.044a1 1 0 01-.205 1.251l-1.267 1.113a7.047 7.047 0 010 2.228l1.267 1.113a1 1 0 01.206 1.25l-1.18 2.045a1 1 0 01-1.187.447l-1.598-.54a6.993 6.993 0 01-1.929 1.115l-.33 1.652a1 1 0 01-.98.804H8.82a1 1 0 01-.98-.804l-.331-1.652a6.993 6.993 0 01-1.929-1.115l-1.598.54a1 1 0 01-1.186-.447l-1.18-2.044a1 1 0 01.205-1.251l1.267-1.114a7.05 7.05 0 010-2.227L1.821 7.773a1 1 0 01-.206-1.25l1.18-2.045a1 1 0 011.187-.447l1.598.54A6.993 6.993 0 017.51 3.456l.33-1.652zM10 13a3 3 0 100-6 3 3 0 000 6z"></path>
-                            </svg>
-                            <span class="flex-1 ml-3 whitespace-nowrap">Reset Portal</span>
-                        </div>
-
-                </li>
-                
-
-                
-
-            </ul>
-            
+          </li>
+        </ul>
+      </li>
+      {% if user.is_superuser %}
+      <li class="mt-4">
+        <div
+          data-modal-target="popup-modal"
+          data-modal-toggle="popup-modal"
+          class="group cursor-pointer flex items-center p-2 text-base font-normal text-sidebarfont rounded-full hover:text-primary hover:bg-white hover:font-semibold hover:shadow-[0px_0px_10px_2px] hover:shadow-slate-400 [&>svg]:hover:animate-[spin_700ms_ease_1] dark:hover:bg-gray-700"
+          type="button"
+        >
+          <svg
+            aria-hidden="true"
+            class="flex-shrink-0 w-6 h-6 text-sidebaricons transition duration-75 group-hover:text-primary dark:group-hover:text-white"
+            fill="currentColor"
+            viewBox="0 0 20 20"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              clip-rule="evenodd"
+              fill-rule="evenodd"
+              d="M7.84 1.804A1 1 0 018.82 1h2.36a1 1 0 01.98.804l.331 1.652a6.993 6.993 0 011.929 1.115l1.598-.54a1 1 0 011.186.447l1.18 2.044a1 1 0 01-.205 1.251l-1.267 1.113a7.047 7.047 0 010 2.228l1.267 1.113a1 1 0 01.206 1.25l-1.18 2.045a1 1 0 01-1.187.447l-1.598-.54a6.993 6.993 0 01-1.929 1.115l-.33 1.652a1 1 0 01-.98.804H8.82a1 1 0 01-.98-.804l-.331-1.652a6.993 6.993 0 01-1.929-1.115l-1.598.54a1 1 0 01-1.186-.447l-1.18-2.044a1 1 0 01.205-1.251l1.267-1.114a7.05 7.05 0 010-2.227L1.821 7.773a1 1 0 01-.206-1.25l1.18-2.045a1 1 0 011.187-.447l1.598.54A6.993 6.993 0 017.51 3.456l.33-1.652zM10 13a3 3 0 100-6 3 3 0 000 6z"
+            ></path>
+          </svg>
+          <span class="flex-1 ml-3 whitespace-nowrap">Reset Portal</span>
         </div>
-    </aside>
-    <div id="popup-modal" tabindex="-1" class="fixed top-0 left-0 right-0 z-50 hidden p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] md:h-full">
-        <div class="relative w-full h-full max-w-md md:h-auto">
-            <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
-                <button type="button" class="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-800 dark:hover:text-white" data-modal-hide="popup-modal">
-                    <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
-                    <span class="sr-only">Close modal</span>
-                </button>
-                <div class="p-6 text-center">
-                    <svg aria-hidden="true" class="mx-auto mb-4 text-gray-400 w-14 h-14 dark:text-gray-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                    <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">Are you sure you want to reset the portal?</h3>
-                  <a href="/au/reset">
-                    <button data-modal-hide="popup-modal" type="button" class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center mr-2">
-                        Yes, I'm sure
-                    </button></a>
-                    <button data-modal-hide="popup-modal" type="button" class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">No, cancel</button>
-                </div>
-            </div>
-        </div>
+      </li>
+      {% endif %}
+    </ul>
+  </div>
+</aside>
+<div
+  id="popup-modal"
+  tabindex="-1"
+  class="fixed top-0 left-0 right-0 z-50 hidden p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] md:h-full"
+>
+  <div class="relative w-full h-full max-w-md md:h-auto">
+    <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+      <button
+        type="button"
+        class="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-800 dark:hover:text-white"
+        data-modal-hide="popup-modal"
+      >
+        <svg
+          aria-hidden="true"
+          class="w-5 h-5"
+          fill="currentColor"
+          viewBox="0 0 20 20"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            fill-rule="evenodd"
+            d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+            clip-rule="evenodd"
+          ></path>
+        </svg>
+        <span class="sr-only">Close modal</span>
+      </button>
+      <div class="p-6 text-center">
+        <svg
+          aria-hidden="true"
+          class="mx-auto mb-4 text-gray-400 w-14 h-14 dark:text-gray-200"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+          ></path>
+        </svg>
+        <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
+          Are you sure you want to reset the portal?
+        </h3>
+        <a href="/au/reset">
+          <button
+            data-modal-hide="popup-modal"
+            type="button"
+            class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center mr-2"
+          >
+            Yes, I'm sure
+          </button></a
+        >
+        <button
+          data-modal-hide="popup-modal"
+          type="button"
+          class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600"
+        >
+          No, cancel
+        </button>
+      </div>
     </div>
-    <div class="pl-1 pt-5 md:pl-[270px] pr-3 w-full ">
-        {% block content %}
-
-        {% endblock content %}
-    </div>
+  </div>
+</div>
+<div class="pl-1 pt-5 md:pl-[270px] pr-3 w-full">
+  {% block content %} {% endblock content %}
+</div>
 
 {% endblock blocks %}

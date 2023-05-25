@@ -45,5 +45,6 @@ path('au/rule/edit/<int:id>',views.editRule,name='editRule'),
 path('au/student/update',views.updateStudent,name='updateStudent'),
 path('au/student/update/usns',views.updateMultipleUsn,name='updateUsns'),
 path('au/student/update/marks',views.updateMultipleMarks,name='updateMarks'),
-
+path('au/addStaff',views.addStaff,name='addStaff'), 
+path('au/deleteStaff/<str:uname>',views.deleteStaff,name='deleteStaff'), 
 ]
