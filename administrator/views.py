@@ -876,6 +876,25 @@ def viewprofile(request,id):
     student=get_object_or_404(Student,user=user)
     return render(request,"administrator/student/viewprofile.html",{'student':student})
 
+@staff_required
+def studentList(request):
+    jobSt=Job_student.objects.select_related('student','student__user')
+    return render(request,"administrator/studentlist.html",context={'job_students':jobSt})
+
+@staff_required
+def viewstudentList(request,id):
+    student=get_object_or_404(Job_student,id=id)
+    if request.method == 'POST':
+        status=request.POST.get('status')
+        if status == 'OF':
+            student.status = 'OF'
+        elif status == 'R':
+            student.status = 'R'
+        else:
+            student.status = 'A'
+        student.save()
+    return redirect("studentList")
+
 @superuser_required
 def resetportal(request):
     users = User.objects.exclude(is_superuser=True)

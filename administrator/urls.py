@@ -47,4 +47,6 @@ path('au/student/update/usns',views.updateMultipleUsn,name='updateUsns'),
 path('au/student/update/marks',views.updateMultipleMarks,name='updateMarks'),
 path('au/addStaff',views.addStaff,name='addStaff'), 
 path('au/deleteStaff/<str:uname>',views.deleteStaff,name='deleteStaff'), 
+path('au/student/studentlist',views.studentList,name='studentList'),
+path('au/student/studentlist/<int:id>',views.viewstudentList,name="viewstudentlist")
 ]
