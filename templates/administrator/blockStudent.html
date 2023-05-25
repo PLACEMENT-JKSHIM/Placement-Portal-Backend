@@ -1,4 +1,6 @@
-{% extends "./_base_admin.html" %} {% load static %} {% block content %}
+{% extends "./_base_admin.html" %} 
+{% load static %} 
+{% block content %}
 
 <div class="flex flex-wrap relative top-0  px-1" id="tabs-id">
     <h1 class="text-3xl mt-5 mb-3 font-bold text-primary">
@@ -59,14 +61,13 @@
                                 <form class="flex items-center " id="profile" method="POST"
                                     action="{% url 'profileEditUnblockAll'  %}">
                                     {% csrf_token %}
-                                    {% include "../buttons/buttonsrg.html" with btn="Unblock Editing for all" green=True
-                                    id="pb" %}
+
+                                    {% include "../buttons/buttonsrg.html" with btn="Unblock Editing for all" green=True id="pb" %}
                                 </form>
                                 <form class="flex items-center " id="profile" method="POST"
                                     action="{% url 'profileEditBlockAll'  %}">
                                     {% csrf_token %}
-                                    {% include "../buttons/buttonsrg.html" with btn="Block Editing for all" green=False
-                                    id="pu" %}
+                                    {% include "../buttons/buttonsrg.html" with btn="Block Editing for all" green=False id="pu" %}
                                 </form>
                             </div>
                             <div id="profile-display" class="flex flex-row flex-wrap justify-around ">
@@ -89,8 +90,7 @@
                                     <form method="post" action="{% url 'profileEditBlock' id=student.user.id %}"
                                         class="text-center">
                                         {% csrf_token %}
-                                        {% include "../buttons/buttonsrg.html" with btn="Block profile Editing "
-                                        green=False id=student.user.id %}
+                                        {% include "../buttons/buttonsrg.html" with btn="Block profile Editing " green=False id=student.user.id %}
                                     </form>
                                     {% else %}
                                     <form method="post" action="{% url 'profileEditBlock' id=student.user.id %}"
@@ -132,14 +132,12 @@
                                 <form class="flex items-center" id="profile" method="POST"
                                     action="{% url 'LoginUnblockAll'  %}">
                                     {% csrf_token %}
-                                    {% include "../buttons/buttonsrg.html" with btn="Unblock Portal Login for all"
-                                    green=True id="plu" %}
+                                    {% include "../buttons/buttonsrg.html" with btn="Unblock Portal Login for all" green=True id="plu" %}
                                 </form>
                                 <form class="flex items-center" id="profile" method="POST"
                                     action="{% url 'LoginBlockAll'  %}">
                                     {% csrf_token %}
-                                    {% include "../buttons/buttonsrg.html" with btn="Block Portal Login for all"
-                                    green=False id="plb" %}
+                                    {% include "../buttons/buttonsrg.html" with btn="Block Portal Login for all" green=False id="plb" %}
                                 </form>
                             </div>
 
@@ -165,15 +163,13 @@
                                     <form method="post" action="{% url 'loginBlockEdit' id=student.user.id %}"
                                         class="text-center">
                                         {% csrf_token %}
-                                        {% include "../buttons/buttonsrg.html" with btn="Block portal login" green=False
-                                        id=student.user.id|stringformat:"i"|add:'lb' %}
+                                        {% include "../buttons/buttonsrg.html" with btn="Block portal login" green=False id=student.user.id|stringformat:"i"|add:'lb' %}
                                     </form>
                                     {% else %}
                                     <form method="post" action="{% url 'loginBlockEdit' id=student.user.id %}"
                                         class="text-center">
                                         {% csrf_token %}
-                                        {% include "../buttons/buttonsrg.html" with btn="Unblock Portal login"
-                                        green=True id=student.user.id|stringformat:"i"|add:'lb' %}
+                                        {% include "../buttons/buttonsrg.html" with btn="Unblock Portal login" green=True id=student.user.id|stringformat:"i"|add:'lb' %}
                                     </form>
                                     {% endif %}
                                 </div>
@@ -205,14 +201,12 @@
                             <form class="flex items-center" id="profile" method="POST"
                                 action="{% url 'applyUnblockAll'  %}">
                                 {% csrf_token %}
-                                {% include "../buttons/buttonsrg.html" with btn="Unblock all from applying to job"
-                                green=True id="aju" %}
+                                {% include "../buttons/buttonsrg.html" with btn="Unblock all from applying to job" green=True id="aju" %}
                             </form>
                             <form class="flex items-center" id="profile" method="POST"
                                 action="{% url 'applyBlockAll'   %}">
                                 {% csrf_token %}
-                                {% include "../buttons/buttonsrg.html" with btn="Block all from applying to job"
-                                green=False id="ajb" %}
+                                {% include "../buttons/buttonsrg.html" with btn="Block all from applying to job" green=False id="ajb" %}
                             </form>
                         </div>
                         <div id="apply-display" class="flex flex-row flex-wrap justify-around ">
@@ -235,15 +229,13 @@
                                 <form method="post" action="{% url 'applyBlockEdit' id=student.user.id %}"
                                     class="text-center">
                                     {% csrf_token %}
-                                    {% include "../buttons/buttonsrg.html" with btn="Block from applying to jobs"
-                                    green=False id=student.user.id|stringformat:"i"|add:'ab' %}
+                                    {% include "../buttons/buttonsrg.html" with btn="Block from applying to jobs" green=False id=student.user.id|stringformat:"i"|add:'ab' %}
                                 </form>
                                 {% else %}
                                 <form method="post" action="{% url 'applyBlockEdit' id=student.user.id %}"
                                     class="text-center">
                                     {% csrf_token %}
-                                    {% include "../buttons/buttonsrg.html" with btn="Unblock from applying to jobs"
-                                    green=True id=student.user.id|stringformat:"i"|add:'ab' %}
+                                    {% include "../buttons/buttonsrg.html" with btn="Unblock from applying to jobs" green=True id=student.user.id|stringformat:"i"|add:'ab' %}
                                 </form>
                                 {% endif %}
                             </div>

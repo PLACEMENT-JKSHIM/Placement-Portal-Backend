@@ -105,3 +105,7 @@ secrets.json
 node_modules
 media/
 static/src/output.css
+
+static/admin/
+static/staticfiles.json
+cacert.pem

@@ -25,6 +25,8 @@ import io
 from django.conf import settings
 from django.http import Http404
 from django.core.exceptions import ValidationError
+from django.contrib.auth.hashers import make_password
+from django.db import transaction
 
 heads=['USN']
 unwanted=['id','user','editable','created_at','updated_at','status','job_student','image','resume','previousjob']
@@ -62,13 +64,23 @@ def index(request):
     }
     return render(request, "administrator/index.html",context)
 
+import threading
+
+def do_background_work(users):
+    # do some work here
+    print(users)
+    return
+    
+
 @superuser_required
 def addStudent(request):
     if request.method=='POST' and request.POST.get('students'):
         data=json.loads(request.POST.get('students'))
         error=False
-        for d in data:
-            print(d)
+        for i,d in enumerate(data):
+            if not d.get('username') or not d.get('password'):
+                messages.error(request, message=f"Row {i} password and username is required")
+                continue
             form=UserForm(d)
             if form.is_valid():
                 user=form.save(commit=False)
@@ -80,7 +92,7 @@ def addStudent(request):
                 for field,errors in form.errors.items():
                     for error in errors:
                         messages.error(request, message=f"{field} {d['username']} : {error}")
-        
+           
         if not error:
             messages.success(request, message="added successfully")
         else:
@@ -152,9 +164,8 @@ def updateMultipleUsn(request):
         if request.POST.get('usns'):
             data=json.loads(request.POST.get('usns'))
             error=False
-            print(data)
             for i,d in enumerate(data,start=1):
-                if d['username'] and d['newusername']:
+                if d.get('username') and d.get('newusername'):
                     user=User.objects.filter(username=d['username'],is_superuser=False).first()
                     olduser=User.objects.filter(username=d['newusername']).first()
                     if user:
