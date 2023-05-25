@@ -1,4 +1,5 @@
 {% extends "../_base_admin.html" %}
+{% load static %}
 {% block meta %}
 <!-- use version 0.19.2 -->
 <script lang="javascript" src="https://cdn.sheetjs.com/xlsx-0.19.2/package/dist/xlsx.full.min.js"></script>
@@ -61,14 +62,28 @@ https://cdn.jsdelivr.net/npm/viewerjs@1.11.2/dist/viewer.min.css
                 <p class="mt-2 text-center font-extrabold text-red-500">REGISTRATION CLOSED</p>
                 {% endif %}
             </div>
-
+            <div class="flex justify-center gap-2 p-2 flex-wrap">
+                <div class="w-full text-center font-semibold">Share</div>
+                    <a id="emailLink" href="mailto:?subject=Career Opportunity:{{job.title}} at {{job.company.c_name}}&amp;body={{job.description}}%0D%0A%0D%0ACGPA: {{job.curr_cgpa}}%0D%0ATalk Date: {{job.talk_date}}%0D%0ATest Date: {{job.test_date}}%0D%0AInterview Date: {{job.interview_date}}%0D%0ACTC PA: {{job.ctc_pa}}%0D%0ACloses On: {{job.registration_date}}%0D%0A%0D%0A" title="Share by Email">
+                        <img alt="Share by email" class="p-1" width="36" height="36" src="{% static "assets/mail.png" %}"/> 
+                    </a>
+                    <a id="whatsappLink" target="_blank" href="https://api.whatsapp.com/send?text=*Career Opportunity: {{job.title}} at {{job.company.c_name}}*%0D%0A%0D%0A{{job.description}}%0D%0A%0D%0ACGPA: {{job.curr_cgpa}}%0D%0ATalk Date: {{job.talk_date}}%0D%0ATest Date: {{job.test_date}}%0D%0AInterview Date: {{job.interview_date}}%0D%0ACTC PA: {{job.ctc_pa}}%0D%0ACloses On: {{job.registration_date}}%0D%0A%0D%0A" title="Send Message via WhatsApp">
+                        <img alt="Share by whatsapp" class="p-1" width="36" height="36" src="{% static "assets/whatsapp.png" %}"/> 
+                    </a>
+            </div>
+            <script>
+                let whatsappLink = document.getElementById('whatsappLink');
+                let emailLink= document.getElementById('emailLink');
+                whatsappLink.href += window.location.href;
+                emailLink.href += window.location.href;
+            </script>
         </div>
         </div>
     </div>
 </div>
 
 <div class="bg-white  rounded-2xl px-8 mb-6">
-    <h2 class="mb-4 text-xl font-bold text-gray-900">Company Description</h2>
+    <h2 class="mb-4 text-xl font-bold text-gray-900">Job Description</h2>
     <p class="text-gray-500">{{ job.description }}</p>
 </div>
 <div class="bg-white  rounded-2xl px-8 mb-6">
