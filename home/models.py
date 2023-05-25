@@ -20,7 +20,7 @@ class Team(models.Model):
     mem_description = models.TextField(null=True, blank=True, default='', verbose_name='Member Description')
 
     def __str__(self):
-        return f"{self.mem_name}-{self.mem_designation}-{self.mem_image}-{self.mem_description}"
+        return f"{self.mem_name}-{self.mem_designation}"
 
 class Rule(models.Model):
     rule = models.TextField(null=False, verbose_name='Rule')
@@ -33,9 +33,9 @@ class Slider(models.Model):
         return f"{self.slider_image}"
 
 class Gallery(models.Model):
-    title = models.CharField(max_length=40)
-    description = models.CharField(max_length=40)
-    image= models.ImageField(upload_to='gallery', default='blank.png')
+    title = models.CharField(max_length=30, verbose_name='Gallery Title', null=False)
+    description = models.CharField(max_length=100, verbose_name='Gallery Description')
+    image= models.ImageField(upload_to='gallery', verbose_name='Gallery Image',null=False)
     def __str__(self):
         return f"{self.title}"
 

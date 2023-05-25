@@ -2,8 +2,8 @@ import http
 from django.forms.models import model_to_dict
 from django.core import serializers
 from django.shortcuts import render,redirect
-from home.models import Slider,Team,Company,Job,Rule
-from .forms import TeamForm, UserForm,SliderForm,JobForm,CompanyForm,NewsForm,RuleForm,UpdateMarksForm
+from home.models import Slider,Team,Company,Job,Rule,Gallery
+from .forms import TeamForm, UserForm,SliderForm,JobForm,CompanyForm,NewsForm,RuleForm,UpdateMarksForm,GalleryForm
 from django.http import HttpResponse,JsonResponse
 import json
 from student.models import Student,PreviousJob,Branch
@@ -246,9 +246,9 @@ def updateMultipleMarks(request):
     return redirect(to='/au/student/update')
 
 @superuser_required
-def addGallery(request):
-    if request.method=='POST' and request.POST.get('gallery'):
-        data=json.loads(request.POST.get('gallery'))
+def addStudent(request):
+    if request.method=='POST' and request.POST.get('students'):
+        data=json.loads(request.POST.get('students'))
         error=False
         for d in data:
             print(d)
@@ -277,14 +277,14 @@ def addGallery(request):
             user.set_password(request.POST['password'])
             user.save()
             Student(user=user).save()
-            messages.success(request, message="Saved successfully")
+            messages.success(request, message="Added successfully")
         else:
             for field,errors in form.errors.items():
                 for error in errors:
                     messages.error(request, message=f"{field} : {error}")
     form=UserForm()
 
-    return render(request, "admininstrator/student/add.html",context={'student':form})
+    return render(request, "administrator/student/add.html",context={'student':form})
 
 
 @superuser_required
@@ -550,6 +550,15 @@ def adminEditor(request):
             for field,errors in form.errors.items():
                 for error in errors:
                     messages.error(request, message=f"{field} : {error}")
+    elif request.method=='POST' and request.FILES.get('image'):
+        form = GalleryForm(request.POST,request.FILES)
+        if form.is_valid():
+            form.save()
+            messages.success(request, message="Added to gallery successfully")
+        else:
+            for field,errors in form.errors.items():
+                for error in errors:
+                    messages.error(request, message=f"{field} : {error}")
 
     elif request.method=='POST':
         form = TeamForm(request.POST,request.FILES)
@@ -560,14 +569,16 @@ def adminEditor(request):
             for field,errors in form.errors.items():
                 for error in errors:
                     messages.error(request, message=f"{field} : {error}")
-
+    
+    galleryForm=GalleryForm()
     sliderForm=SliderForm()
     teamForm=TeamForm()
     ruleForm=RuleForm()
+    gallery=Gallery.objects.all()
     members = Team.objects.all()
     sliders = Slider.objects.all()
     rules=Rule.objects.all()
-    return render(request, "administrator/adminEditor.html",context={'members':members,'sliders':sliders,'rules':rules,'sliderForm':sliderForm,'teamForm':teamForm,'ruleForm':ruleForm})
+    return render(request, "administrator/adminEditor.html",context={'members':members,'sliders':sliders,'rules':rules,'sliderForm':sliderForm,'teamForm':teamForm,'ruleForm':ruleForm,'galleryForm':galleryForm,'gallery':gallery})
 
 @superuser_required
 def blockStudent(request):
@@ -639,8 +650,27 @@ def editTeamMember(request,id):
                 for error in errors:
                     messages.error(request, message=f"{field} : {error}")
 
-    form=TeamForm()
+    form=TeamForm(instance=teamobj)
+    print(form)
     return render(request, "administrator/editTeamMember.html",context={'form':form,'member':teamobj})
+
+@superuser_required
+def editGallery(request,id):
+    gobj=get_object_or_404(Gallery,id=id)
+    if request.method=="POST":
+        form=GalleryForm(request.POST,request.FILES,instance=gobj)
+        if form.is_valid():
+            form.save()
+            title=gobj.title
+            messages.success(request, message="{0} Edited successfully".format(title))
+            return redirect(to='/au/adminEditor')
+        else:
+            for field,errors in form.errors.items():
+                for error in errors:
+                    messages.error(request, message=f"{field} : {error}")
+    form = GalleryForm(instance=gobj)
+    print(form.instance.image)
+    return render(request, "administrator/editGallery.html",context={'form':form,'image':gobj})
 
 @superuser_required
 def deleteSlider(request,id):
@@ -650,6 +680,7 @@ def deleteSlider(request,id):
     messages.success(request, message="Slider image deleted successfully")
     return redirect('/au/adminEditor')
 
+@superuser_required
 def editRule(request,id):
     rule=get_object_or_404(klass=Rule,id=id)
     form=RuleForm(instance=rule)
@@ -665,10 +696,19 @@ def editRule(request,id):
                     messages.error(request, message=f"{field} : {error}")
     return render(request, template_name="administrator/editRule.html",context={'form':form})
 
+@superuser_required
 def deleteRule(request,id):
     rule=get_object_or_404(klass=Rule,id=id)
     rule.delete()
     messages.success(request, message="Deleted successfully")
+    return redirect(to="/au/adminEditor")
+
+@superuser_required
+def deletegimage(request,id):
+    g_img=get_object_or_404(Gallery,id=id)
+    title=g_img.title
+    g_img.delete()
+    messages.success(request, message="{0} deleted successfully".format(title))
     return redirect(to="/au/adminEditor")
 
 @superuser_required
@@ -818,3 +858,4 @@ def resetportal(request):
     notices=Notice.objects.all()
     notices.delete()
     return redirect('admin')
+
