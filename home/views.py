@@ -12,7 +12,7 @@ from django.views.decorators.cache import cache_page
 from django.db.models import Avg
 # Create your views here.
 
-# @cache_page(60 * 60)
+@cache_page(60 * 60)
 def index(request):
     total_placed = Job_student.objects.filter(status='P').values('student').distinct().count()
     total_offered = (Job_student.objects.filter(status='OF'or 'P')|Job_student.objects.filter(status='P')).count()
