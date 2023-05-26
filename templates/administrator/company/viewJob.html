@@ -53,7 +53,7 @@ https://cdn.jsdelivr.net/npm/viewerjs@1.11.2/dist/viewer.min.css
                     <span class="font-normal text-gray-700 dark:text-gray-400"><span class="font-bold">CTC PA : </span>{{ job.ctc_pa }}</span>
                 </li>
                 <li>
-                    <span class="font-normal text-gray-700 dark:text-gray-400"><span class="font-bold">Closes On : </span>{{ job.registration_date }}</span>
+                    <span class="font-normal text-gray-700 dark:text-gray-400"><span class="font-bold">Closes On : </span>{{ job.registration_last_date }}</span>
                 </li>
             </ul>
                 {% if job.reg_open %}
@@ -64,10 +64,10 @@ https://cdn.jsdelivr.net/npm/viewerjs@1.11.2/dist/viewer.min.css
             </div>
             <div class="flex justify-center gap-2 p-2 flex-wrap">
                 <div class="w-full text-center font-semibold">Share</div>
-                    <a id="emailLink" href="mailto:?subject=Career Opportunity:{{job.title}} at {{job.company.c_name}}&amp;body={{job.description}}%0D%0A%0D%0ACGPA: {{job.curr_cgpa}}%0D%0ATalk Date: {{job.talk_date}}%0D%0ATest Date: {{job.test_date}}%0D%0AInterview Date: {{job.interview_date}}%0D%0ACTC PA: {{job.ctc_pa}}%0D%0ACloses On: {{job.registration_date}}%0D%0A%0D%0A" title="Share by Email">
+                    <a id="emailLink" href="mailto:?subject=Career Opportunity:{{job.title}} at {{job.company.c_name}}&amp;body={{job.description}}%0D%0A%0D%0ACGPA: {{job.curr_cgpa}}%0D%0ATalk Date: {{job.talk_date}}%0D%0ATest Date: {{job.test_date}}%0D%0AInterview Date: {{job.interview_date}}%0D%0ACTC PA: {{job.ctc_pa}}%0D%0ACloses On: {{job.registration_last_date}}%0D%0A%0D%0A" title="Share by Email">
                         <img alt="Share by email" class="p-1" width="36" height="36" src="{% static "assets/mail.png" %}"/> 
                     </a>
-                    <a id="whatsappLink" target="_blank" href="https://api.whatsapp.com/send?text=*Career Opportunity: {{job.title}} at {{job.company.c_name}}*%0D%0A%0D%0A{{job.description}}%0D%0A%0D%0ACGPA: {{job.curr_cgpa}}%0D%0ATalk Date: {{job.talk_date}}%0D%0ATest Date: {{job.test_date}}%0D%0AInterview Date: {{job.interview_date}}%0D%0ACTC PA: {{job.ctc_pa}}%0D%0ACloses On: {{job.registration_date}}%0D%0A%0D%0A" title="Send Message via WhatsApp">
+                    <a id="whatsappLink" target="_blank" href="https://api.whatsapp.com/send?text=*Career Opportunity: {{job.title}} at {{job.company.c_name}}*%0D%0A%0D%0A{{job.description}}%0D%0A%0D%0ACGPA: {{job.curr_cgpa}}%0D%0ATalk Date: {{job.talk_date}}%0D%0ATest Date: {{job.test_date}}%0D%0AInterview Date: {{job.interview_date}}%0D%0ACTC PA: {{job.ctc_pa}}%0D%0ACloses On: {{job.registration_last_date}}%0D%0A%0D%0A" title="Send Message via WhatsApp">
                         <img alt="Share by whatsapp" class="p-1" width="36" height="36" src="{% static "assets/whatsapp.png" %}"/> 
                     </a>
             </div>

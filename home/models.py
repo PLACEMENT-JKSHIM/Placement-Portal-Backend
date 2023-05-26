@@ -39,29 +39,34 @@ class Gallery(models.Model):
     def __str__(self):
         return f"{self.title}"
 
+class YearBatch(models.Model):
+    startYear = models.IntegerField(validators=[MaxValueValidator(2100), MinValueValidator(2010)], verbose_name='Academic Year')
+    endYear = models.IntegerField(validators=[MaxValueValidator(2100), MinValueValidator(2010)], verbose_name='Academic Year')
+    def __str__(self):
+        return f"{self.startYear}-{self.endYear}"
+
 class Job(models.Model):
     title = models.CharField(max_length=50, verbose_name='Job Title', null=True)
     description = models.TextField(blank=True, null=True, verbose_name='Job Description')
     company = models.ForeignKey(Company, on_delete=models.CASCADE, verbose_name='Company')
-    academic_year = models.IntegerField(validators=[MaxValueValidator(2100), MinValueValidator(2010)], verbose_name='Academic Year')
     sslc = models.DecimalField(max_digits=4, decimal_places=2, default=0.00, verbose_name='SSLC Percentage', validators=[MaxValueValidator(100), MinValueValidator(0)])
     puc = models.DecimalField(max_digits=4, decimal_places=2, default=0.00, verbose_name='PUC Percentage', validators=[MaxValueValidator(100), MinValueValidator(0)])
     diploma = models.DecimalField(max_digits=4, decimal_places=2, default=0.00, verbose_name='Diploma Percentage', validators=[MaxValueValidator(100), MinValueValidator(0)])
     degree = models.DecimalField(max_digits=4, decimal_places=2, default=0.00, verbose_name='Degree Percentage', validators=[MaxValueValidator(100), MinValueValidator(0)])
     curr_cgpa = models.DecimalField(max_digits=3, decimal_places=2, default=0.00, verbose_name='Current CGPA',validators=[MinValueValidator(0.00), MaxValueValidator(10.00)])
     gap_edu = models.IntegerField(default=0, verbose_name='Gap in Education (in years)')
-    min_dob = models.DateField(validators=[MinValueValidator(date(1990, 1, 1))], verbose_name='Minimum Date of Birth')
-    max_dob = models.DateField(validators=[MaxValueValidator(date(2040, 1, 1))], verbose_name='Maximum Date of Birth')
+    min_dob = models.DateField(blank=True,null=True,validators=[MinValueValidator(date(1990, 1, 1))], verbose_name='Minimum Date of Birth')
+    max_dob = models.DateField(blank=True,null=True,validators=[MaxValueValidator(date(2040, 1, 1))], verbose_name='Maximum Date of Birth')
     ctc_pa = models.DecimalField(max_digits=15, decimal_places=2, default=0.00, verbose_name='CTC per Annum')
     max_activebacklog = models.IntegerField(default=0, verbose_name='Maximum Active Backlogs')
     max_histbacklog = models.IntegerField(default=0, verbose_name='Maximum Previous Backlogs')
-    # other_company=models.IntegerField() 
-    registration_date = models.DateField(verbose_name='Registration Date')
+    registration_last_date = models.DateTimeField(verbose_name='Registration Last Date')
     talk_date = models.DateField(verbose_name='Talk Date')
     interview_date = models.DateField(verbose_name='Interview Date')
     test_date = models.DateField(verbose_name='Test Date')
     notes = models.TextField(blank=True, null=True, verbose_name='Notes')
-    reg_open = models.BooleanField(default=False, verbose_name='Is Registration Open?')
+    reg_open = models.BooleanField(default=True, verbose_name='Is Registration Open?')
+    yearBatch=models.ForeignKey(YearBatch, on_delete=models.CASCADE, verbose_name='Academic Year Batch')
     created = models.DateTimeField(auto_now_add=True, verbose_name='Created Date')
     updated = models.DateTimeField(auto_now=True, verbose_name='Last Updated Date')
 

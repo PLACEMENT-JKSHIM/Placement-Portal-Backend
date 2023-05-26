@@ -1,6 +1,7 @@
 from django.db import models
 from datetime import datetime
 from django.contrib.auth.models import User
+from home.models import YearBatch
 from django.core.validators import MaxValueValidator, MinValueValidator 
 
 class Branch(models.Model):
@@ -89,7 +90,7 @@ class Student(models.Model):
     activeBacklog=models.IntegerField(blank=True,default=0,validators=[MinValueValidator(0)],verbose_name="Number of Active backlogs")
     totalBacklog=models.IntegerField(blank=True,default=0,validators=[MinValueValidator(0)],verbose_name="Number of Total backlogs")
     gap_edu=models.IntegerField(blank=True,default=0,validators=[MinValueValidator(0)],verbose_name="Total gap in education")
-
+    yearBatch=models.ForeignKey(YearBatch, on_delete=models.CASCADE, verbose_name='Academic Year Batch')
     projects=models.TextField(blank=True,verbose_name="Projects decription")
 
     preferredJobLocation=models.CharField(blank=True,max_length=30,verbose_name="Preferred job location")

@@ -11,7 +11,7 @@ from home.models import Job
 from django.contrib.auth import authenticate
 from django.contrib.auth import logout
 from django.http import Http404
-
+from django.utils.timezone import datetime,timezone
 
 def normaluser_required(view_func):
     def wrapped_view(request, *args, **kwargs):
@@ -30,7 +30,6 @@ def updateProfile(request):
     s=Student.objects.filter(user=request.user).first()
     pjs=PreviousJob.objects.filter(user=request.user)
     if request.method=="POST":
-        print(request.FILES)
         form=StudentForm(request.POST,request.FILES,instance=s)
         if form.is_valid():
             st=form.save()
@@ -90,6 +89,7 @@ def editPreviousJob(request,id):
 @normaluser_required
 def registerCompany(request):
     student = Student.objects.get(user=request.user)
+    Job.objects.filter(registration_last_date__lt=datetime.now(timezone.utc)).update(reg_open=False)
     jobs = Job.objects.all()
     jobs_students = Job_student.objects.filter(student=request.user.student)
     total_companies = Company.objects.all().count()
@@ -146,11 +146,16 @@ def is_eligible(job, student):
             return False
         if not student.dateOfBirth or student.dateOfBirth > job.max_dob:
             return False
+        if student.yearBatch != job.yearBatch:
+            return False
         return True
 
 @normaluser_required
 def companyPage(request,id):
     job = get_object_or_404(Job,id=id)
+    if job.reg_open==True and job.registration_last_date<datetime.now(timezone.utc):
+        job.reg_open=False
+        job.save()
     student = request.user.student
     eligible = is_eligible(job,student)
     job_student = Job_student.objects.filter(job=job,student=student).first()

@@ -4,8 +4,15 @@ from django import forms
 from home.models import Slider, Team,Job,Company,Rule,Gallery
 from administrator.models import Notice
 from student.models import Student
-
+from home.models import YearBatch
 class UserForm(ModelForm):
+    yearBatch=forms.ModelChoiceField(queryset=YearBatch.objects.all())
+    def __init__(self,*args,**kwargs):
+        super(UserForm,self).__init__(*args,**kwargs)
+        y=YearBatch.objects.all().order_by("-endYear").first()
+        if y:
+            self.fields['yearBatch'].initial=y.pk
+
     class Meta:
         model=User
         fields=['username','password']
@@ -26,6 +33,10 @@ class TeamForm(ModelForm):
         fields = ['mem_name','mem_designation','mem_image','mem_description']
 
 class JobForm(ModelForm):
+
+    def __init__(self,*args,**kwargs):
+        super(JobForm,self).__init__(*args,**kwargs)
+        self.fields['yearBatch'].initial=YearBatch.objects.all().order_by("-endYear").first().pk
     class Meta:
 
         model = Job
@@ -38,12 +49,11 @@ class JobForm(ModelForm):
 
             'talk_date': forms.DateInput(attrs={'type': 'date'}),
 
-            'registration_date': forms.DateInput(attrs={'type': 'date'}),
+            'registration_last_date': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
 
             'interview_date': forms.DateInput(attrs={'type': 'date'}),
 
             'test_date': forms.DateInput(attrs={'type': 'date'}),
-
         }
 
 class CompanyForm(ModelForm):

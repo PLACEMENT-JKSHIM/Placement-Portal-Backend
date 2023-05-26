@@ -4,7 +4,7 @@
 <div class="text-center text-3xl uppercase font-extrabold text-primary my-4 hover:text-gray-900">
     <h1>Company Stats</h1>
 </div>
-<div class="md:m-6 md:mx-3 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 hover:shadow-md">
+<div class="md:m-6 md:mx-3 bg-white border border-gray-200 rounded-lg shadow hover:shadow-md">
     <div id="fullWidthTabContent" class="border-t border-gray-200 dark:border-gray-600">
         <div class="p-2 bg-white rounded-lg md:p-4 dark:bg-gray-800" id="stats" role="tabpanel" aria-labelledby="stats-tab">
             <dl class="grid max-w-screen-xl grid-cols-2 gap-8 p-2 mx-auto text-primary sm:grid-cols-3 xl:grid-cols-4 dark:text-white sm:p-8">
@@ -32,20 +32,25 @@
 <div class="flex justify-center">
 
     <div
-        class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-6 justify-items-end gap-2 md:gap-4">
+        class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 justify-items-end gap-2 md:gap-4">
         {% for job in jobs %}
         <a class="relative flex max-w-sm items-start justify-between rounded-xl border  border-gray-100 p-4 shadow-md sm:p-6 lg:p-8"
             href="/student/companyPage/{{ job.id }}">
             <div class="pt-4 text-gray-500 relative">
                 <div class="flex items-center">
-                    <!-- <img class="w-8 h-8 inline-block" src="{{ jobs.image.url }}" alt=""> -->
-                    <img class="w-8 h-8 inline-block" src="{% static '/assets/company.png' %}" alt="">
+    
+                    {% if job.company.image %}
+                    <img class="company-image company-image-small relative h-16 w-16" src="{{ job.company.image.url }}" alt="{{ job.company.c_name }}">
+                {% else %}
+                    <img class="company-image company-image-small  relative h-16 w-16" alt="H" data-name="{{ job.company.c_name|slice:'1'|upper }}">
+                    
+                {% endif %}
 
-                    <div class="mt-4 block text-lg font-bold text-gray-900 pl-3 sm:text-xl">
+                    <div class="block text-lg font-bold text-gray-900 pl-3 sm:text-xl">
                         {{ job.company }}
                     </div>
                 </div>
-                <div class="mt-4 block text-md font-bold text-gray-900 pl-3 sm:text-xl">
+                <div class="block text-md font-bold text-gray-900 pl-3 sm:text-xl">
                     {{ job.title }}
                 </div>
                 <p class="mt-4 pl-3 text-sm sm:block">
@@ -55,7 +60,7 @@
                 <p><span class="font-bold">Test Date : </span>{{ job.test_date }}</p>
                 <p><span class="font-bold">Interview Date : </span>{{ job.interview_date }}</p>
                 </p>
-                <p class="pt-3 text-blue-300">Register before: {{ job.registration_date }}</p>
+                <p class="pt-3 text-blue-300">Register before: {{ job.registration_last_date }}</p>
             </div>
             {% for jobs_student in jobs_students %}
             {% if job.id == jobs_student.job.id %}

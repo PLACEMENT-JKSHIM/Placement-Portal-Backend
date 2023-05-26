@@ -7,7 +7,7 @@ from .forms import TeamForm, UserForm,SliderForm,JobForm,CompanyForm,NewsForm,Ru
 from django.http import HttpResponse,JsonResponse
 import json
 from student.models import Student,PreviousJob,Branch
-from home.models import Job
+from home.models import Job,YearBatch
 from administrator.models import Notice,Job_student
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
@@ -27,7 +27,7 @@ from django.http import Http404
 from django.core.exceptions import ValidationError
 from django.contrib.auth.hashers import make_password
 from django.db import transaction
-
+from django.utils.timezone import datetime,timezone
 heads=['USN']
 unwanted=['id','user','editable','created_at','updated_at','status','job_student','image','resume','previousjob']
 for s in Student._meta.get_fields():
@@ -85,18 +85,28 @@ def do_background_work(users):
 @superuser_required
 def addStudent(request):
     if request.method=='POST' and request.POST.get('students'):
+        if not request.POST.get('yearBatch'):
+            messages.error(request, message=f"Year Batch is required")
+            return redirect(to='addStudent')
+
+        yearBatch=YearBatch.objects.filter(pk=request.POST['yearBatch']).first()
+        if not yearBatch:
+            messages.error(request, message=f"Year Batch is required")
+            return redirect(to='addStudent')
+            
         data=json.loads(request.POST.get('students'))
         error=False
         for i,d in enumerate(data):
             if not d.get('username') or not d.get('password'):
                 messages.error(request, message=f"Row {i} password and username is required")
                 continue
+            d['yearBatch']=yearBatch
             form=UserForm(d)
             if form.is_valid():
                 user=form.save(commit=False)
                 user.set_password(str(d['password']))
                 user.save()
-                Student(user=user).save()
+                Student(user=user,yearBatch=yearBatch).save()
             else:
                 error=True
                 for field,errors in form.errors.items():
@@ -115,7 +125,7 @@ def addStudent(request):
             user=form.save(commit=False)
             user.set_password(request.POST['password'])
             user.save()
-            Student(user=user).save()
+            Student(user=user,yearBatch=YearBatch.objects.filter(pk=request.POST['yearBatch']).first()).save()
             messages.success(request, message="Added successfully")
         else:
             for field,errors in form.errors.items():
@@ -214,7 +224,6 @@ def updateMultipleMarks(request):
                     marks.append(m)
 
             students=Student.objects.filter(user__username__in=usns).select_related('user')
-            print(students)
             for s in students:
                 for m in marks:
                     if s.user.username==m['username']:
@@ -256,48 +265,6 @@ def updateMultipleMarks(request):
     return redirect(to='/au/student/update')
 
 @superuser_required
-def addStudent(request):
-    if request.method=='POST' and request.POST.get('students'):
-        data=json.loads(request.POST.get('students'))
-        error=False
-        for d in data:
-            print(d)
-            form=UserForm(d)
-            if form.is_valid():
-                user=form.save(commit=False)
-                user.set_password(str(d['password']))
-                user.save()
-                Student(user=user).save()
-            else:
-                error=True
-                for field,errors in form.errors.items():
-                    for error in errors:
-                        messages.error(request, message=f"{field} {d['username']} : {error}")
-        
-        if not error:
-            messages.success(request, message="added successfully")
-        else:
-            messages.success(request, message="added others successfully")
-
-
-    elif request.method=='POST':
-        form=UserForm(request.POST)
-        if form.is_valid():
-            user=form.save(commit=False)
-            user.set_password(request.POST['password'])
-            user.save()
-            Student(user=user).save()
-            messages.success(request, message="Added successfully")
-        else:
-            for field,errors in form.errors.items():
-                for error in errors:
-                    messages.error(request, message=f"{field} : {error}")
-    form=UserForm()
-
-    return render(request, "administrator/student/add.html",context={'student':form})
-
-
-@superuser_required
 def blockStudent(request):
     students = Student.objects.all().order_by('-updated_at')[:5]
     return render(request,"administrator/blockStudent.html",{'students':students})
@@ -311,7 +278,6 @@ def editBlock(request):
         for user in users:
             if student := Student.objects.filter(user=user).first():
                 # convert Student object to a dictionary
-                print(student.status)
                 user_dict = {
                     'id': student.user.id,
                     'user': student.user.username
@@ -326,7 +292,6 @@ def editBlock(request):
                 'status':student.status
                     # add any other fields you want to include here
                 }
-                # print(student_dict)
                 students.append(student_dict)
         context = {'students': students}
         return JsonResponse(context, safe=False)
@@ -336,7 +301,6 @@ def editBlock(request):
 def profileEditBlock(request,id):
     user=get_object_or_404(User,id=id)
     student=get_object_or_404(Student,user=user)
-    # print(student)
     student.editable = student.editable == False
     student.save()
     return redirect("blockStudent")
@@ -415,7 +379,6 @@ def companies(request):
     companies=Company.objects.all()
     if request.method == 'POST':
         form = CompanyForm(request.POST,request.FILES)
-        # print(form)
         if form.is_valid():
             companynew = form.save()
             messages.success(request,message=" {0} added Successfully!".format(companynew))
@@ -430,6 +393,7 @@ def companies(request):
 
 @staff_required
 def jobs(request):
+    Job.objects.filter(registration_last_date__lt=datetime.now(timezone.utc)).update(reg_open=False)
     jobs=Job.objects.all()
     context={
         'jobs':jobs
@@ -439,7 +403,6 @@ def jobs(request):
 
 @superuser_required
 def deletecompany(request,id):
-    # print(request.user.is_superuser)
     c=get_object_or_404(Company,id=id)
     cname=c.c_name
     c.delete()
@@ -686,7 +649,6 @@ def editTeamMember(request,id):
                     messages.error(request, message=f"{field} : {error}")
 
     form=TeamForm(instance=teamobj)
-    print(form)
     return render(request, "administrator/editTeamMember.html",context={'form':form,'member':teamobj})
 
 @superuser_required
@@ -704,12 +666,10 @@ def editGallery(request,id):
                 for error in errors:
                     messages.error(request, message=f"{field} : {error}")
     form = GalleryForm(instance=gobj)
-    print(form.instance.image)
     return render(request, "administrator/editGallery.html",context={'form':form,'image':gobj})
 
 @superuser_required
 def deleteSlider(request,id):
-    print(id)
     slidobj = get_object_or_404(Slider,id=id)
     slidobj.delete()
     messages.success(request, message="Slider image deleted successfully")
@@ -748,21 +708,32 @@ def deletegimage(request,id):
 
 @staff_required
 def registerHome(request):
-    jobs=Job.objects.all()
+    years=YearBatch.objects.all()
     selected={'id':-1}
         
     students = zip([],[])
+    if request.method=="POST" and request.POST.get("year"):
+        selectedYear=int(request.POST.get("year"))
+        selectedYear=get_object_or_404(YearBatch,pk=selectedYear)
+    else:
+        selectedYear=YearBatch.objects.all().order_by('-endYear').first()
 
-    return render(request,"administrator/registerList.html",context={'heads':heads,'jobs':jobs,'students':students,'selected':selected,})
+    jobs=Job.objects.filter(yearBatch=selectedYear)
+    return render(request,"administrator/registerList.html",context={'heads':heads,'jobs':jobs,'students':students,'selected':selected,'years':years,'selectedYear':selectedYear,})
 
 @staff_required
 def registerList(request,id):
     students=[]
     pjs=[]
     selected={'id':id}
-    jobs=Job.objects.all()
+    years=YearBatch.objects.all()
+    if request.GET.get("year"):
+        selectedYear=YearBatch.objects.filter(pk=int(request.GET.get("year"))).first()
+    if not selectedYear:
+        selectedYear=YearBatch.objects.all().order_by('-endYear').first()
+
     if id==0:
-        jobSt=Job_student.objects.all().select_related('student','student__user')
+        jobSt=Job_student.objects.filter(job__yearBatch=selectedYear).select_related('student','student__user')
         selected['job']='ALL'
     else:
         job=get_object_or_404(Job,id=id)
@@ -773,8 +744,8 @@ def registerList(request,id):
         pjs.append(PreviousJob.objects.filter(user=j.student.user))
         
     students = zip(students, pjs)
-
-    return render(request,"administrator/registerList.html",context={'heads':heads,'jobs':jobs,'students':students,'selected':selected,})
+    jobs=Job.objects.filter(yearBatch=selectedYear)
+    return render(request,"administrator/registerList.html",context={'heads':heads,'jobs':jobs,'students':students,'selected':selected,'years':years,'selectedYear':selectedYear,})
     
 @staff_required
 def downLoadResumes(request,id):
@@ -824,6 +795,9 @@ def downLoadImages(request,id):
 @staff_required
 def viewJob(request,id):
     job=get_object_or_404(Job,id=id)
+    if job.reg_open==True and job.registration_last_date<datetime.now(timezone.utc):
+        job.reg_open=False
+        job.save()
     context={
         'job':job
     }

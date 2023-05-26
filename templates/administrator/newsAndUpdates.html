@@ -23,13 +23,13 @@ administrator
             data-drawer-show="{{latest.title}}"
             data-drawer-placement="bottom"
             aria-controls="{{latest.title}}"
-            class="hover:cursor-pointer w-full block px-4 pt-4 mb-4 bg-white rounded-lg shadow hover:bg-gray-100 hover:ring-2 shadow-primary/40"
+            class="hover:cursor-pointer w-full block px-4 pt-4 mb-4 bg-white rounded-lg shadow hover:bg-gray-100 hover:ring-2 shadow-primary/40 {% if latest.hidden %}opacity-80{% endif %}"
             >
-            <!-- REASON FOR REMOVING, MAKING OPACITY LESS LOOKS ODD -->
-            <!-- class="hover:cursor-pointer w-full block px-4 pt-4 mb-4 bg-white rounded-lg shadow hover:bg-gray-100 hover:ring-2 shadow-primary/40 {% if latest.hidden %}opacity-60{% endif %}" -->
-                <h5 class="mb-2 capitalize w-75 text-2xl font-bold tracking-tight text-gray-900 dark:text-white text-ellipsis">
-                    {{latest.title}} {% if latest.hidden %}<span
-                    class="text-white text-[12px] bg-secondary font-normal rounded-full uppercase py-1 px-2"
+                <h5 class="flex items-center gap-2 mb-2 capitalize w-75 text-2xl font-bold tracking-tight text-gray-900 dark:text-white text-ellipsis">
+                    <span>
+                        {{latest.title}} 
+                    </span>{% if latest.hidden %}<span
+                    class="text-white text-[12px] leading-[1.2] bg-secondary font-normal rounded-full uppercase py-1 px-2 h-6"
                     >HIDDEN</span
                     >{% endif %}
                 </h5>

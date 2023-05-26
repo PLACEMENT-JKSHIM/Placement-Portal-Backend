@@ -17,7 +17,7 @@ https://cdn.jsdelivr.net/npm/viewerjs@1.11.2/dist/viewer.min.css
   
   {% for job in jobs %}  
 <a
-  class="relative flex max-w-sm items-start justify-between rounded-xl border  border-gray-100 p-4  m-2 shadow-md sm:p-6 lg:p-8"
+  class="relative bg-white flex max-w-sm items-start justify-between rounded-xl border  border-gray-100 p-4  m-2 shadow-md sm:p-6 lg:p-8"
   href="/au/company/viewJob/{{job.id}}"
 >
 <div class="pt-4 text-gray-500 relative">
@@ -37,7 +37,7 @@ https://cdn.jsdelivr.net/npm/viewerjs@1.11.2/dist/viewer.min.css
       <p><span class="font-bold">Interview Date : </span>{{job.interview_date}}</p>
 
     </p>
-    <p class="pt-3 text-blue-300">Register before: {{job.registration_date}}</p>
+    <p class="pt-3 text-blue-300">Register before: {{job.registration_last_date}}</p>
 
   </div>
 

@@ -60,7 +60,7 @@ overflow-hidden transition-all bg-white text-secondary rounded-full group top-0.
 <div class="p-3 flex flex-row justify-around items-center flex-wrap ">  
     <!--Card 1-->
     {% for company in companies %}
-    <div class="w-64 h-80 my-3 rounded overflow-hidden  shadow-lg">
+    <div class="w-64 h-80 my-3 rounded overflow-hidden bg-white  shadow-lg">
       <div class="  ">
         {% if company.image %}
         <img class="company-image relative h-40" src="{{ company.image.url }}" alt="{{ company.c_name }}">

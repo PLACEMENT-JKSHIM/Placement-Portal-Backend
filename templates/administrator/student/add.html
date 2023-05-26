@@ -13,14 +13,19 @@
             <form action="" method="post">
                 {% csrf_token %}
                 <div class="px-4 pt-3">
-                    <label class="my-3 font-semibold" for="{{student.username.id_for_label}}">Student USN
+                    <label class="font-semibold" for="{{student.username.id_for_label}}">Student USN
                         Number</label><br>
-                    <input class="my-3 w-full rounded-lg border-gray-300" type="{{student.username.field.widget.input_type}}"
+                    <input class="my-3 w-full rounded-lg border-gray-300" type="{{student.username.field.widget.input_type}}" required
                         name="{{student.username.name}}" placeholder="Enter USN"><br>
-                    <label class="my-3 font-semibold" for="{{student.password.id_for_label}}">Password (minimum 8
+                    <label class="font-semibold" for="{{student.password.id_for_label}}">Password (minimum 8
                         Char)</label><br>
-                    <input class="my-3 w-full rounded-lg border-gray-300" type="password"
+                    <input class="my-3 w-full rounded-lg border-gray-300" type="password" required
                         name="{{student.password.name}}" placeholder="Password"><br>
+                    <label class="font-semibold" for="{{student.yearBatch.id_for_label}}">Academic Year Batch</label><br>
+                    <div class="my-3">
+                        {{student.yearBatch}}
+                    </div>
+                    
                 </div>
                 <div class="text-center mt-5 p-1 pb-2 bg-gray-100 font-semibold">
                     {% include "../../buttons/buttons.html" with btn="Add Student" %}
@@ -38,9 +43,13 @@
                 <form method="POST">
                     {% csrf_token %}
                     <div class="p-3">
+                    <label class="font-semibold" for="{{student.yearBatch.id_for_label}}">Academic Year Batch</label><br>
+                    <div class="my-3">
+                        {{student.yearBatch}}
+                    </div>
                     <label class="my-3 font-semibold" for="S_password">File Input</label><br>
                     <input class="hidden" name="students" id="multiple">
-                    <input class="my-3 w-full border-secondary/40 border-2  rounded-lg" id="uploadFile" type="file"
+                    <input class="my-3 w-full border-secondary/40 border-2  rounded-lg" id="uploadFile" type="file" required
                         placeholder="Choose File" accept=".xlsx,.xls,.csv">
                     </div>
                     <div class="text-center pb-2 p-1 bg-gray-100 font-semibold">

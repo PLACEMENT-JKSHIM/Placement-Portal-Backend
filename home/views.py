@@ -26,7 +26,6 @@ def index(request):
     else:
         average_package = Job_student.objects.filter(status='P').aggregate(Avg('job__ctc_pa')).get('job__ctc_pa__avg')
     total_companies = Company.objects.all().count()
-    print(total_placed,total_offered,highest_package,average_package,total_companies)
     sliders = Slider.objects.all()
     teams = Team.objects.all()
     gallery = Gallery.objects.all()
@@ -44,7 +43,6 @@ def login(request):
         usn=request.POST['username']
         password=request.POST['password']
         user=authenticate(username=usn,password=password)
-        print(usn,password)
         if user is not None:
             auth.login(request, user)
             if request.user.is_superuser or request.user.is_staff:

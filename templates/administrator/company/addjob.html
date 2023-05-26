@@ -15,7 +15,7 @@
 
       <form method="POST">
         {% csrf_token %}
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-12 gap-2 text-sm">
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-12 gap-3 text-sm">
           <div class="sm:col-span-1 md:col-span-6">
             {% include "../../custom_fields/_input.html" with field=form.title %}
           </div>
@@ -26,12 +26,8 @@
             {% include "../../custom_fields/_textarea.html" with field=form.description %}
           </div>
           <div class="sm:col-span-1 md:col-span-6">
-            {% include "../../custom_fields/_input.html" with field=form.academic_year %}
             {% include "../../custom_fields/_input.html" with field=form.sslc %}
           </div>
-          {% comment %} <div class="col-span-6">
-          {% include "../../custom_fields/_input.html" with field=form.sslc %}
-          </div> {% endcomment %}
           <div class="sm:col-span-1 md:col-span-6">
             {% include "../../custom_fields/_input.html" with field=form.puc %}
           </div>
@@ -66,7 +62,7 @@
                         {% include "../../custom_fields/_input.html" with field=form.other_company %}
                     </div> {% endcomment %}
                     <div class="sm:col-span-1 md:col-span-6">
-                        {% include "../../custom_fields/_input.html" with field=form.registration_date %}
+                        {% include "../../custom_fields/_input.html" with field=form.registration_last_date %}
                     </div>
                     <div class="sm:col-span-1 md:col-span-6">
                         {% include "../../custom_fields/_input.html" with field=form.talk_date %}
@@ -83,12 +79,16 @@
                     <div class="sm:col-span-1 md:col-span-6">
                         {% include "../../custom_fields/_toggle.html" with field=form.reg_open %}
                     </div>
-                   
-
-                      <div class="relative w-40 m-auto mt-4">
+                    <div class="sm:col-span-1 md:col-span-6">
+                        <label class="block mb-2 font-medium text-gray-900">
+                            {{form.yearBatch.label}} :
+                        </label>
+                        {{form.yearBatch}}
+                    </div>
+                    <div class="relative sm:col-span-1 md:col-span-12 w-40 m-auto mt-4">
                         {% include "../../buttons/buttons.html" with main=True btn="Add Job" secondary=False %}
                     </div>
-            </form>
+                </form>
         </div>
         
 

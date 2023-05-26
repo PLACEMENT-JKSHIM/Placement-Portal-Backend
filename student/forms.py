@@ -28,7 +28,7 @@ class StudentForm(ModelForm):
 
     class Meta:
         model=Student
-        exclude=('user','status','editable')
+        exclude=('user','status','editable','yearBatch')
 
         widgets= {
             'dateOfBirth': forms.DateInput(attrs={'type': 'date'}),

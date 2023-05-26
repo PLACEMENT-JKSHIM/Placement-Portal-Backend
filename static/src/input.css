@@ -64,6 +64,9 @@
   color: #fff;
   font-size: 5rem;
 }
+.company-image-small::before{
+    font-size: 2rem;
+}
 
 
 

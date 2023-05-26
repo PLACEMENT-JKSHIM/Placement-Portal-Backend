@@ -5,6 +5,12 @@
 {% block content %}
         <div class="p-3 text-2xl pb-7">Registration List {% if selected != -1 %}selected.job{% endif %}</div>
         <div class="flex p-2 mb-3 md:justify-between gap-2 flex-wrap justify-center">
+            <select name="years" id="years">
+                <option disabled selected value> -- select an Academic year -- </option>
+                {% for year in years %}
+                    <option value="{{year.pk}}" {% if selectedYear.pk == year.pk %}selected{% endif %}>{{year}}</option>
+                {% endfor %}
+            </select>
             <select name="jobs" id="jobs">
                 <option disabled selected value> -- select an job-company -- </option>
                 <option value="0" {% if selected.id == 0 %}selected{% endif %}>All</option>
@@ -198,10 +204,11 @@
 </div>
 <form method="post">
     {% csrf_token %}
-    {% comment %} <input type="hidden" name="job" id="job" value="all"> {% endcomment %}
+    <input type="hidden" name="year" value="">
 </form>
 <script>
     const jobs = document.getElementById('jobs');
+    // const years = document.getElementById('years');
     const colIndexesToDelete =new Map()
 
     const colSelect=document.getElementById('colSelect')
@@ -217,7 +224,12 @@
     })
 
     jobs.addEventListener('change', (e) => {
-        document.forms[0].action='/au/registerlist/'+e.target.value
+        document.forms[0].action='/au/registerlist/'+e.target.value+'?year='+{{selectedYear.pk}};
+        document.forms[0].submit();
+    });
+    years.addEventListener('change', (e) => {
+        document.forms[0].action='/au/registerlist'
+        document.forms[0].querySelectorAll('input')[1].value=e.target.value
         document.forms[0].submit();
     });
 
