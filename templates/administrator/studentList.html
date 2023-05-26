@@ -1,0 +1,53 @@
+{% extends "../administrator/_base_admin.html" %}
+{% block content %}
+<div class="p-3 text-2xl pb-7">Applied Student List</div>
+<div class="flex flex-row flex-wrap justify-around items-center gap-4">
+    {% for student in job_students %}
+    <div class="block max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700 items-center">
+        <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{{student.student.user}}</h5>
+        <p class="font-normal text-gray-700 dark:text-gray-400">Name: {{student.student.username}}</p>
+        <p class="font-normal text-gray-700 dark:text-gray-400">Company Name: {{student.job.company.c_name}}</p>
+        <p class="font-normal text-gray-700 dark:text-gray-400">CTC: {{student.job.ctc_pa}} LPA</p>
+        {% if student.status == "A" %}
+        <p class="font-normal text-gray-700 dark:text-gray-400">APPLIED</p>
+        {% elif student.status == "OF" %}
+        <p class="font-normal text-gray-700 dark:text-gray-400">OFFERED</p>
+        {% elif student.status == "R" %}
+        <p class="font-normal text-gray-700 dark:text-gray-400">REJECTED</p>
+        {% elif student.status == "P" %}
+        <p class="font-normal text-gray-700 dark:text-gray-400">PLACED</p>
+        {% endif %}
+        {% if student.status == 'A' %}
+        <form method="post" action="{% url 'viewstudentlist' id=student.id %}"
+        class="text-center">
+            {% csrf_token %}
+            <input type="hidden" name="status" value="OF">
+            {% include "../buttons/buttons.html" with btn="SELECT" id=student.id %}
+        </form>
+        <form method="post" action="{% url 'viewstudentlist' id=student.id %}"
+        class="text-center">
+            {% csrf_token %}
+            <input type="hidden" name="status" value="R">
+            {% include "../buttons/buttons.html" with btn="REJECT" id=student.id %}
+        </form>
+        {% elif student.status == 'OF' %}
+        <form method="post" action="{% url 'viewstudentlist' id=student.id %}"
+        class="text-center">
+            {% csrf_token %}
+            <input type="hidden" name="status" value="R">
+            {% include "../buttons/buttons.html" with btn="REJECT" id=student.id %}
+        </form>
+        {% elif student.status == 'R' %}
+        <form method="post" action="{% url 'viewstudentlist' id=student.id %}"
+        class="text-center">
+            {% csrf_token %}
+            <input type="hidden" name="status" value="OF">
+            {% include "../buttons/buttons.html" with btn="SELECT" id=student.id %}
+        </form>
+        {% endif %}
+    </div>
+    {% endfor %}
+</div>
+
+
+{% endblock content %}
