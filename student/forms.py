@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 always_enabled_list=['image','resume','pastExperience','projects','preferredJobLocation']
 required_list=['name','nameAadhar','image','phoneNo','email','aadhar','pancard','dateOfBirth',
         'homeTown','homeState','address','preferredJobLocation','tenPercentage','tenBoard','tenPassYear','tenSchool','tenState','tenCountry'
-        ,'degreePercentage','degreeCourse','degreeCollege','degreePassYear','degreeState','degreeCountry','degreeCollege']
+        ,'degreePercentage','degreeCourse','degreeCollege','degreePassYear','degreeState','degreeCountry','degreeCollege','branch','degreeUniversity']
 
 class StudentForm(ModelForm):
     def __init__(self,*args,**kwargs):

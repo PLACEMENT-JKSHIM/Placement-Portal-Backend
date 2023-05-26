@@ -93,7 +93,7 @@ def registerCompany(request):
     jobs = Job.objects.all()
     jobs_students = Job_student.objects.filter(student=request.user.student)
     total_companies = Company.objects.all().count()
-    applied_companies = Job_student.objects.filter(status='A', student=student).count()
+    applied_companies = jobs_students.count()
     open_companies = Job.objects.filter(reg_open = True).count()
     closed_companies = Job.objects.filter(reg_open = False).count()
     return render(request, "student/registerCompany.html",{'jobs': jobs, 'jobs_students': jobs_students,'total_companies':total_companies,'applied_companies':applied_companies,'open_companies':open_companies,'closed_companies':closed_companies})
@@ -142,9 +142,9 @@ def is_eligible(job, student):
             return False
         if student.gap_edu > job.gap_edu:
             return False
-        if not student.dateOfBirth or student.dateOfBirth < job.min_dob:
+        if job.min_dob and (not student.dateOfBirth or student.dateOfBirth < job.min_dob):
             return False
-        if not student.dateOfBirth or student.dateOfBirth > job.max_dob:
+        if job.max_dob and (not student.dateOfBirth or student.dateOfBirth > job.max_dob):
             return False
         if student.yearBatch != job.yearBatch:
             return False

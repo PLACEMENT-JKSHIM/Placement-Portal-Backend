@@ -1,6 +1,7 @@
 {% extends "./_base_admin.html" %}
+{% load static %}   
 {% block meta %}
-    <script lang="javascript" src="https://cdn.sheetjs.com/xlsx-0.19.2/package/dist/xlsx.full.min.js"></script>
+    <script lang="javascript" src="{% static "src/js/xlsx.full.min.js" %}"></script>
 {% endblock meta %}
 {% block content %}
         <div class="p-3 text-2xl pb-7">Registration List {% if selected != -1 %}selected.job{% endif %}</div>

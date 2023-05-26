@@ -5,10 +5,14 @@ from home.models import YearBatch
 from django.core.validators import MaxValueValidator, MinValueValidator 
 
 class Branch(models.Model):
-    branchname = models.CharField(max_length=100)
+    branchname1 = models.CharField(max_length=100)
+    branchname2 =models.CharField(blank=True,null=True,max_length=100)
 
     def __str__(self):
-        return self.branchname
+        if self.branchname2:
+            return f"{self.branchname1}-{self.branchname2}"
+        else:
+            return self.branchname1
 
 class Student(models.Model):
 
@@ -24,11 +28,6 @@ class Student(models.Model):
     class PreGraduate(models.TextChoices):
         PU='P'
         DIPLOMA='D'
-
-    class Specialisation(models.TextChoices):
-        Finance='F'
-        HR='HR'
-
 
     user=models.OneToOneField(User,on_delete=models.CASCADE,primary_key=True)
     status=models.CharField(blank=True,max_length=2,choices=Blocked.choices,default=Blocked.NOT_BLOCKED)
