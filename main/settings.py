@@ -36,7 +36,10 @@ else:
     DEBUG = True
 
 ALLOWED_HOSTS = ['127.0.0.1','localhost',env.get_value('ALLOWED_HOST',default='')]
-CSRF_TRUSTED_ORIGINS=['https://'+env.get_value('ALLOWED_HOST',default='')]
+if env.get_value('ALLOWED_HOST',default='')[0:5]=="local":
+    CSRF_TRUSTED_ORIGINS=['http://'+env.get_value('ALLOWED_HOST',default='')]
+else:
+    CSRF_TRUSTED_ORIGINS=['https://'+env.get_value('ALLOWED_HOST',default='')]
 
 
 # Application definition
