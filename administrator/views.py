@@ -853,7 +853,7 @@ def viewprofile(request,id):
 @staff_required
 def studentList(request):
     jobSt=Job_student.objects.select_related('student','student__user')
-    return render(request,"administrator/studentlist.html",context={'job_students':jobSt})
+    return render(request,"administrator/studentList.html",context={'job_students':jobSt})
 
 @staff_required
 def viewstudentList(request,id):
