@@ -1,4 +1,4 @@
-{% extends "./_base_admin.html" %}
+{% extends "../_base_admin.html" %}
 {% load static %}   
 {% block meta %}
     <script lang="javascript" src="{% static "src/js/xlsx.full.min.js" %}"></script>
@@ -13,7 +13,7 @@
                 {% endfor %}
             </select>
             <div class="flex flex-wrap justify-end gap-3 md:justify-center">
-                {% include "../buttons/buttons.html" with id="printSheet" btn="Print Sheet" %}
+                {% include "../../buttons/buttons.html" with id="printSheet" btn="Print Sheet" %}
             </div>
         </div>
 
@@ -30,7 +30,7 @@
                 {% endfor %}
             </tr>
         </thead>
-        <tbody id="rowSelect">
+        <tbody>
             {% for job in jobs %}
             <tr class="bg-white border-b text-gray-500 text-gray-900 font-semibold hover:bg-gray-200">
                         <td class="px-6 py-1 whitespace-nowrap">
@@ -65,10 +65,8 @@
 <script>
     // const years = document.getElementById('years');
     const colIndexesToDelete =new Map()
-    const rowIndexesToDelete = new Map()
 
     const colSelect=document.getElementById('colSelect')
-    const rowSelect=document.getElementById('rowSelect')
 
     colSelect.querySelectorAll('input').forEach((input,i)=>{
         input.addEventListener('change', (e) => {
@@ -79,22 +77,8 @@
 
         });
     })
-    rowSelect.querySelectorAll('input').forEach((input,i)=>{
-        input.addEventListener('change', (e) => {
-            if(e.target.checked){
-                rowIndexesToDelete.delete(i)
-                input.parentElement.parentElement.classList.add(["text-gray-900"])
-
-            }
-            else{
-                rowIndexesToDelete.set(i,true)
-                input.parentElement.parentElement.classList.remove(["text-gray-900"])
-            }
-
-        });
-    })
     years.addEventListener('change', (e) => {
-        document.forms[0].action='/au/companylist'
+        document.forms[0].action='/au/report/company'
         document.forms[0].querySelectorAll('input')[1].value=e.target.value
         document.forms[0].submit();
     });
@@ -108,9 +92,6 @@
         const xl=XLSX.utils.table_to_sheet(document.querySelector('table'), {sheet:"Sheet JS"});
         const data = XLSX.utils.sheet_to_json(xl,{header:1});
         let newData = data.map(row => row.filter((_, i) => !colIndexesToDelete.has(i)));
-        newData = newData.filter((row,j) => {
-            return !rowIndexesToDelete.has(j-1)
-        });
         const workbook = XLSX.utils.book_new();
         const sheet = XLSX.utils.aoa_to_sheet(newData);
 

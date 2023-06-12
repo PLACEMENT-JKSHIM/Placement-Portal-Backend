@@ -1,10 +1,10 @@
-{% extends "./_base_admin.html" %}
+{% extends "../_base_admin.html" %}
 {% load static %}   
 {% block meta %}
     <script lang="javascript" src="{% static "src/js/xlsx.full.min.js" %}"></script>
 {% endblock meta %}
 {% block content %}
-        <div class="p-3 text-2xl pb-7">Registration List {% if selected != -1 %}selected.job{% endif %}</div>
+        <div class="p-3 text-2xl pb-7">Registration List {% if selected != -1 %}{{selected.job}}{% endif %}</div>
         <div class="flex p-2 mb-3 md:justify-between gap-2 flex-wrap justify-center">
             <select name="years" id="years">
                 <option disabled selected value> -- select an Academic year -- </option>
@@ -20,9 +20,9 @@
                 {% endfor %}
             </select>
             <div class="flex flex-wrap justify-end gap-3 md:justify-center">
-                {% include "../buttons/buttons.html" with id="printSheet" btn="Print Sheet" %}
-                {% include "../buttons/buttons.html" with id="printResume" btn="Print Resumes" secondary=True %}
-                {% include "../buttons/buttons.html" with id="printImage" btn="Print Images" %}
+                {% include "../../buttons/buttons.html" with id="printSheet" btn="Print Sheet" %}
+                {% include "../../buttons/buttons.html" with id="printResume" btn="Print Resumes" secondary=True %}
+                {% include "../../buttons/buttons.html" with id="printImage" btn="Print Images" %}
             </div>
         </div>
 
@@ -225,11 +225,11 @@
     })
 
     jobs.addEventListener('change', (e) => {
-        document.forms[0].action='/au/registerlist/'+e.target.value+'?year='+{{selectedYear.pk}};
+        document.forms[0].action='/au/report/register/'+e.target.value+'?year='+{{selectedYear.pk}};
         document.forms[0].submit();
     });
     years.addEventListener('change', (e) => {
-        document.forms[0].action='/au/registerlist'
+        document.forms[0].action='/au/report/register'
         document.forms[0].querySelectorAll('input')[1].value=e.target.value
         document.forms[0].submit();
     });
@@ -243,13 +243,13 @@
     const btnResume=document.getElementById('printResume')
     btnResume.addEventListener('click',()=>{
         {% if selected != -1  %}
-            window.location.href='/au/registerlist/resumes/{{selected.id}}'
+            window.location.href='/au/report/register/resumes/{{selected.id}}'
         {% endif %}
     })
     const btnImage=document.getElementById('printImage')
     btnImage.addEventListener('click',()=>{
         {% if selected != -1  %}
-            window.location.href='/au/registerlist/images/{{selected.id}}'
+            window.location.href='/au/report/register/images/{{selected.id}}'
         {% endif %}
     })
 

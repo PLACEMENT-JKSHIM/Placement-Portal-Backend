@@ -720,7 +720,7 @@ def registerHome(request):
         selectedYear=YearBatch.objects.all().order_by('-endYear').first()
 
     jobs=Job.objects.filter(yearBatch=selectedYear)
-    return render(request,"administrator/registerList.html",context={'heads':heads,'jobs':jobs,'students':students,'selected':selected,'years':years,'selectedYear':selectedYear,})
+    return render(request,"administrator/report/registerList.html",context={'heads':heads,'jobs':jobs,'students':students,'selected':selected,'years':years,'selectedYear':selectedYear,})
 
 @staff_required
 def registerList(request,id):
@@ -746,7 +746,7 @@ def registerList(request,id):
         
     students = zip(students, pjs)
     jobs=Job.objects.filter(yearBatch=selectedYear)
-    return render(request,"administrator/registerList.html",context={'heads':heads,'jobs':jobs,'students':students,'selected':selected,'years':years,'selectedYear':selectedYear,})
+    return render(request,"administrator/report/registerList.html",context={'heads':heads,'jobs':jobs,'students':students,'selected':selected,'years':years,'selectedYear':selectedYear,})
     
 @staff_required
 def downLoadResumes(request,id):
@@ -852,12 +852,12 @@ def viewprofile(request,id):
     return render(request,"administrator/student/viewprofile.html",{'student':student})
 
 @staff_required
-def studentList(request):
+def manageJobs(request):
     jobSt=Job_student.objects.select_related('student','student__user')
-    return render(request,"administrator/studentList.html",context={'job_students':jobSt})
+    return render(request,"administrator/manageJobs.html",context={'job_students':jobSt})
 
 @staff_required
-def viewstudentList(request,id):
+def viewmanageJobs(request,id):
     student=get_object_or_404(Job_student,id=id)
     if request.method == 'POST':
         status=request.POST.get('status')
@@ -868,7 +868,7 @@ def viewstudentList(request,id):
         else:
             student.status = 'A'
         student.save()
-    return redirect("studentList")
+    return redirect("manageJobs")
 
 @superuser_required
 def resetportal(request):
@@ -901,5 +901,22 @@ def companyList(request):
 
     jobs=Job.objects.filter(yearBatch=selectedYear).annotate(applied=Count("job_student"),offered=Count("job_student",filter=Q(job_student__status=Job_student.Status.OFFERED)),placed=Count("job_student",filter=Q(job_student__status=Job_student.Status.PLACED)))
 
-    return render(request,"administrator/companyList.html",context={'years':years,'selectedYear':selectedYear,'jobs':jobs,'heads':heads})
+    return render(request,"administrator/report/companyList.html",context={'years':years,'selectedYear':selectedYear,'jobs':jobs,'heads':heads})
     
+
+@staff_required
+def student_report_list(request):
+    heads=["Company","Job Title","CTC","Number of applications","Number of job offers","Number of placed Students"]
+    years=YearBatch.objects.all()
+
+    selectedYear=False
+    if request.method=='POST' and request.POST.get("year"):
+        selectedYear=YearBatch.objects.filter(pk=int(request.POST.get("year"))).first()
+
+    
+    if not selectedYear:
+        selectedYear=YearBatch.objects.all().order_by('-endYear').first()
+
+    jobs=Job.objects.filter(yearBatch=selectedYear).annotate(applied=Count("job_student"),offered=Count("job_student",filter=Q(job_student__status=Job_student.Status.OFFERED)),placed=Count("job_student",filter=Q(job_student__status=Job_student.Status.PLACED)))
+
+    return render(request,"administrator/companyList.html",context={'years':years,'selectedYear':selectedYear,'jobs':jobs,'heads':heads})
