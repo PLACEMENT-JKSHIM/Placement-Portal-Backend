@@ -90,12 +90,12 @@ def editPreviousJob(request,id):
 def registerCompany(request):
     student = Student.objects.get(user=request.user)
     Job.objects.filter(registration_last_date__lt=datetime.now(timezone.utc)).update(reg_open=False)
-    jobs = Job.objects.all()
+    jobs = Job.objects.filter(yearBatch=student.yearBatch)
     jobs_students = Job_student.objects.filter(student=request.user.student)
-    total_companies = Company.objects.all().count()
+    total_companies =jobs.count()
     applied_companies = jobs_students.count()
-    open_companies = Job.objects.filter(reg_open = True).count()
-    closed_companies = Job.objects.filter(reg_open = False).count()
+    open_companies = jobs.filter(reg_open = True).count()
+    closed_companies = jobs.filter(reg_open = False).count()
     return render(request, "student/registerCompany.html",{'jobs': jobs, 'jobs_students': jobs_students,'total_companies':total_companies,'applied_companies':applied_companies,'open_companies':open_companies,'closed_companies':closed_companies})
 
 @normaluser_required
@@ -147,6 +147,8 @@ def is_eligible(job, student):
         if job.max_dob and (not student.dateOfBirth or student.dateOfBirth > job.max_dob):
             return False
         if student.yearBatch != job.yearBatch:
+            return False
+        if not student.branch:
             return False
         return True
 

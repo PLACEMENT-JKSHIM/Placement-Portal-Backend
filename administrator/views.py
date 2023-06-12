@@ -28,6 +28,7 @@ from django.core.exceptions import ValidationError
 from django.contrib.auth.hashers import make_password
 from django.db import transaction
 from django.utils.timezone import datetime,timezone
+from django.db.models import Count,Q
 heads=['USN']
 unwanted=['id','user','editable','created_at','updated_at','status','job_student','image','resume','previousjob']
 for s in Student._meta.get_fields():
@@ -885,3 +886,20 @@ def resetportal(request):
     notices.delete()
     return redirect('admin')
 
+@staff_required
+def companyList(request):
+    heads=["Company","Job Title","CTC","Number of applications","Number of job offers","Number of placed Students"]
+    years=YearBatch.objects.all()
+
+    selectedYear=False
+    if request.method=='POST' and request.POST.get("year"):
+        selectedYear=YearBatch.objects.filter(pk=int(request.POST.get("year"))).first()
+
+    
+    if not selectedYear:
+        selectedYear=YearBatch.objects.all().order_by('-endYear').first()
+
+    jobs=Job.objects.filter(yearBatch=selectedYear).annotate(applied=Count("job_student"),offered=Count("job_student",filter=Q(job_student__status=Job_student.Status.OFFERED)),placed=Count("job_student",filter=Q(job_student__status=Job_student.Status.PLACED)))
+
+    return render(request,"administrator/companyList.html",context={'years':years,'selectedYear':selectedYear,'jobs':jobs,'heads':heads})
+    

@@ -36,7 +36,9 @@ class JobForm(ModelForm):
 
     def __init__(self,*args,**kwargs):
         super(JobForm,self).__init__(*args,**kwargs)
-        self.fields['yearBatch'].initial=YearBatch.objects.all().order_by("-endYear").first().pk
+        y=YearBatch.objects.all().order_by("-endYear").first()
+        if y:
+            self.fields['yearBatch'].initial=y.pk
     class Meta:
 
         model = Job
