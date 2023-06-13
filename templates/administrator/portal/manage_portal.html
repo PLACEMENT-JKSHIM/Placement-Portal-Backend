@@ -21,7 +21,7 @@
             <li class="-mb-px  last:mr-0 flex-auto text-center">
                 <a class="text-xs font-medium uppercase px-5 py-3 shadow  block leading-normal border border-t-2 text-gray-600 bg-gray-200"
                     onclick="changeAtiveTab(event,'tab-staff')">
-                    <i class="fas fa-briefcase text-base mr-1"></i> Staff Login
+                    <i class="fas fa-briefcase text-base mr-1"></i> Manage Staffs
                 </a>
             </li>
 
@@ -261,54 +261,54 @@
             </script>  
                   </div>
                   </div>
-                    <div class="hidden" id="tab-staff"><div class="p-2 text-2xl pb-7 text-center">Add/Delete Staff</div>
-                    <div class="rounded-lg border-slate-300 text-left overflow-auto border-2">
-                        <div class="bg-primary h-10 text-white px-4 pt-2 uppercase font-semibold text-center">Add staff</div>
-                        <form action="" method="POST" class="bg-white">
-                            {% csrf_token %}
-                            <div class="px-4 pt-3">
-                                <label class="my-3 font-semibold" for="username">Set staff username</label><br>
-                                <input class="my-3 w-full rounded-lg border-gray-300" type="text"
-                                    name="username" placeholder="Enter staff username" required><br>
-                                <label class="my-3 font-semibold" for="password">Set a password</label><br>
-                                <input class="my-3 w-full rounded-lg border-gray-300" type="password"
-                                    name="password" placeholder="Password"><br>
-                            </div>
-                            <label class="font-semibold px-3" for="{{student.yearBatch.id_for_label}}">Academic Year Batch</label><br>
-                            <div class="my-3 mx-3">
-                                {{staffform.yearBatch}}
-                            </div>
-                            <div class="text-center mt-5 p-1 pb-2 bg-gray-100 font-semibold">
-                                {% include "../../buttons/buttons.html" with btn="Add Staff" %}
-                            </div>
-                        </form>
-                    </div>
-                    <div class="mt-4 rounded-lg border-slate-300 text-left overflow-auto border-2 bg-white">
-                        <div class="bg-secondary h-10 text-center text-white uppercase px-4 pt-2 font-semibold">Staff List</div>
-                        <div class="p-2 py-4 text-center rounded-b-md text-gray-500 bg-gray-200 border-t border-gray-300">
-                            No staffs added
-                        </div>
-                        {% if staffs %}
-                        <div class="m-2 grid lg:grid-cols-6 md:grid-cols-3 sm:grid-cols-2 gap-2">
-            
-                            {% for staff in staffs %}
-                                <div class="flex flex-col gap-2 w-full px-6 py-2 bg-slate-200">
-                                    <div class="px-1 bg-white text-center truncate ">
-                                        {{staff.username}}
-                                    </div>
-                                    <div class="flex  justify-center">
-                                        <button id="deleteStaff" data-modal-target="delete-Staffmodal" data-modal-toggle="delete-Staffmodal" data-element={{staff.username}} type="button" class="text-white  bg-red-600 hover:bg-red-500  focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-full text-sm p-2 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                                            <svg aria-hidden="true" class="flex-shrink-0 w-4 h-4 text-white transition duration-75 dark:group-hover:text-white" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                                <path clip-rule="evenodd" fill-rule="evenodd" d="M8.75 1A2.75 2.75 0 006 3.75v.443c-.795.077-1.584.176-2.365.298a.75.75 0 10.23 1.482l.149-.022.841 10.518A2.75 2.75 0 007.596 19h4.807a2.75 2.75 0 002.742-2.53l.841-10.52.149.023a.75.75 0 00.23-1.482A41.03 41.03 0 0014 4.193V3.75A2.75 2.75 0 0011.25 1h-2.5zM10 4c.84 0 1.673.025 2.5.075V3.75c0-.69-.56-1.25-1.25-1.25h-2.5c-.69 0-1.25.56-1.25 1.25v.325C8.327 4.025 9.16 4 10 4zM8.58 7.72a.75.75 0 00-1.5.06l.3 7.5a.75.75 0 101.5-.06l-.3-7.5zm4.34.06a.75.75 0 10-1.5-.06l-.3 7.5a.75.75 0 101.5.06l.3-7.5z"></path>
-                                            </svg>
-                                        </button>
-                                    </div>
-                                </div>
-                            {% endfor %}
-                        </div>
-                        {% endif %}
-                    </div>
-                    <div id="delete-Staffmodal" tabindex="-1" class="fixed top-0 left-0 right-0 z-50 hidden p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] md:h-full">
+                    <div class="hidden" id="tab-staff">
+                     
+                     
+                     <div class="p-2 text-2xl pb-7 text-center">Add/Delete Staff</div>
+                     <div class="rounded-lg border-slate-300 text-left overflow-auto border-2">
+                         <div class="bg-primary h-10 text-white px-4 pt-2 uppercase font-semibold text-center">Add staff</div>
+                         <form action="" method="post" class="bg-white">
+                             {% csrf_token %}
+                             <div class="px-4 pt-3">
+                                 <label class="my-3 font-semibold" for="username">Set staff username</label><br>
+                                 <input class="my-3 w-full rounded-lg border-gray-300" type="text"
+                                     name="username" placeholder="Enter staff username" required><br>
+                                 <label class="my-3 font-semibold" for="password">Set a password</label><br>
+                                 <input class="my-3 w-full rounded-lg border-gray-300" type="password"
+                                     name="password" placeholder="Password"><br>
+                             </div>
+                             <div class="text-center mt-5 p-1 pb-2 bg-gray-100 font-semibold">
+                                 {% include "../../buttons/buttons.html" with btn="Add Staff" %}
+                             </div>
+                         </form>
+                     </div>
+                     <div class="mt-4 rounded-lg border-slate-300 text-left overflow-auto border-2 bg-white">
+                         <div class="bg-secondary h-10 text-center text-white uppercase px-4 pt-2 font-semibold">Staff List</div>
+                         {% if not staffs %}
+                             <div class="p-2 py-4 text-center rounded-b-md text-gray-500 bg-gray-200 border-t border-gray-300">
+                                 No staffs added
+                             </div>
+                         {% endif %}
+                         {% if staffs %}
+                         <div class="m-2 grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 gap-2">
+             
+                             {% for staff in staffs %}
+                                 <div class="flex flex-wrap gap-2 w-full px-3 py-2 bg-slate-200 rounded-full">
+                                     <div class="px-1 flex-1 leading-[0] bg-white text-center truncate rounded-full ">
+                                        <span class="leading-[1.8]">{{staff.username}}</span> 
+                                     </div>
+                                     <button id="deleteStaff" data-modal-target="delete-Staffmodal" data-modal-toggle="delete-Staffmodal" data-element={{staff.username}} type="button" class="text-white  bg-red-600 hover:bg-red-500  focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-full text-sm p-2 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                                         <svg aria-hidden="true" class="flex-shrink-0 w-4 h-4 text-white transition duration-75 dark:group-hover:text-white" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                             <path clip-rule="evenodd" fill-rule="evenodd" d="M8.75 1A2.75 2.75 0 006 3.75v.443c-.795.077-1.584.176-2.365.298a.75.75 0 10.23 1.482l.149-.022.841 10.518A2.75 2.75 0 007.596 19h4.807a2.75 2.75 0 002.742-2.53l.841-10.52.149.023a.75.75 0 00.23-1.482A41.03 41.03 0 0014 4.193V3.75A2.75 2.75 0 0011.25 1h-2.5zM10 4c.84 0 1.673.025 2.5.075V3.75c0-.69-.56-1.25-1.25-1.25h-2.5c-.69 0-1.25.56-1.25 1.25v.325C8.327 4.025 9.16 4 10 4zM8.58 7.72a.75.75 0 00-1.5.06l.3 7.5a.75.75 0 101.5-.06l-.3-7.5zm4.34.06a.75.75 0 10-1.5-.06l-.3 7.5a.75.75 0 101.5.06l.3-7.5z"></path>
+                                         </svg>
+                                     </button>
+                                 </div>
+                             {% endfor %}
+                         </div>
+                         {% endif %}
+                     </div>
+                
+                 <div id="delete-Staffmodal" tabindex="-1" class="fixed top-0 left-0 right-0 z-50 hidden p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] md:h-full">
                      <div class="relative w-full h-full max-w-md md:h-auto">
                          <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
                             <button type="button" class="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-800 dark:hover:text-white" data-modal-hide="delete-Staffmodal">
@@ -335,7 +335,8 @@
                          })
                      )
                  </script>
-                  
+             
+            </div>
                   </div>
                 <div class="hidden" id="tab-stats">
                   Lorem ipsum dolor sit amet consectetur adipisicing elit. Eligendi ad odit, adipisci dolore doloribus sapiente accusantium veniam molestias nihil sequi dolor ullam sit eveniet voluptatem veritatis nostrum amet neque distinctio vitae impedit soluta ex magnam? Qui, nulla officia dolores non, sunt debitis perferendis aliquid et facere eaque accusamus neque maiores assumenda fugiat fuga. Expedita laboriosam tenetur corporis aut exercitationem, ad blanditiis non ullam? Commodi fuga asperiores, ab ipsum porro aliquid deserunt nulla quae dolorem! Aut atque nobis tenetur! Unde ducimus nobis in corrupti repellat doloremque architecto voluptatibus deserunt doloribus quod, incidunt eius iste esse cumque illo cupiditate dolor dolore alias?

@@ -890,7 +890,7 @@ def manageportal(request):
                 for error in errors:
                     messages.error(request, message=f"{field} : {error}")
     elif request.method=='POST' and request.POST.get('username'):
-        form=UserForm(request.POST)
+        form=StaffForm(request.POST)
         if form.is_valid():
             user=form.save(commit=False)
             user.set_password(request.POST['password'])
