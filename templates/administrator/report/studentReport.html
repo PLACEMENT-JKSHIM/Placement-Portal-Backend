@@ -31,35 +31,29 @@
             </tr>
         </thead>
         <tbody>
-            {% for job in jobs %}
-            <tr class="bg-white border-b text-gray-500 text-gray-900 font-semibold hover:bg-gray-200">
+            {% for student in students %}
+            <tr class="bg-white border-b text-gray-900 font-semibold hover:bg-gray-200">
                         <td class="px-6 py-1 whitespace-nowrap">
-                            <input type="checkbox" value="{{forloop.counter}}"
-                            class="text-secondary" checked>
-                            {{job.company|default:"-"}}
+                            {{student.student.user|default:"-"}}
+                        </td>   
+                        <td class="px-6 py-1 whitespace-nowrap">
+                            {{student.student.nameAadhar|default:"-"}}
                         </td>   
                         <td class="px-6 py-1 whitespace-nowrap peer-checked/k:text-gray-600">
-                            {{job.title|default:"-"}}
+                            {{student.job.ctc_pa|default:"0"}}
                         </td>   
                         <td class="px-6 py-1 whitespace-nowrap peer-checked/k:text-gray-600">
-                            {{job.ctc_pa|default:"0"}}
-                        </td>   
+                            {{student.job.company|default:"-"}}
+                        </td> 
                         <td class="px-6 py-1 whitespace-nowrap peer-checked/k:text-gray-600">
-                            {{job.applied|default:"-"}}
-                        </td>   
-                        <td class="px-6 py-1 whitespace-nowrap peer-checked/k:text-gray-600">
-                            {{job.offered|default:"-"}}
-                        </td>
-                        <td class="px-6 py-1 whitespace-nowrap peer-checked/k:text-gray-600">
-                            {{job.placed|default:"0"}}
+                            {{student.job.title|default:"-"}}
                         </td>   
               </tr>      
             {% endfor %}
         </tbody>
     </table>
 </div>
-<form method="post">
-    {% csrf_token %}
+<form method="get">
     <input type="hidden" name="year" value="">
 </form>
 <script>
@@ -78,8 +72,8 @@
         });
     })
     years.addEventListener('change', (e) => {
-        document.forms[0].action='/au/report/company'
-        document.forms[0].querySelectorAll('input')[1].value=e.target.value
+        document.forms[0].action='/au/report/list'
+        document.forms[0].querySelectorAll('input')[0].value=e.target.value
         document.forms[0].submit();
     });
 

@@ -49,5 +49,6 @@ path('au/report/register',views.registerHome,name='registerHome'),
 path('au/report/register/resumes/<int:id>',views.downLoadResumes,name='downLoadResumes'),
 path('au/report/register/images/<int:id>',views.downLoadImages,name='downLoadImages'),
 path('au/report/register/<int:id>',views.registerList,name='registerList'),
-path('au/report/company',views.companyList,name="companylist")
+path('au/report/company',views.companyList,name="companylist"),
+path('au/report/list',views.student_report_list,name="studentReportList")
 ]

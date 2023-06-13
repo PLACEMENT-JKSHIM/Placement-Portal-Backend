@@ -13,6 +13,7 @@ class UserForm(ModelForm):
         if y:
             self.fields['yearBatch'].initial=y.pk
 
+class StaffForm(ModelForm):
     class Meta:
         model=User
         fields=['username','password']

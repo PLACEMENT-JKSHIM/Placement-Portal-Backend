@@ -3,7 +3,7 @@ from django.forms.models import model_to_dict
 from django.core import serializers
 from django.shortcuts import render,redirect
 from home.models import Slider,Team,Company,Job,Rule,Gallery
-from .forms import TeamForm, UserForm,SliderForm,JobForm,CompanyForm,NewsForm,RuleForm,UpdateMarksForm,GalleryForm
+from .forms import TeamForm, UserForm,StaffForm,SliderForm,JobForm,CompanyForm,NewsForm,RuleForm,UpdateMarksForm,GalleryForm
 from django.http import HttpResponse,JsonResponse
 import json
 from student.models import Student,PreviousJob,Branch
@@ -507,7 +507,7 @@ def deleteNews(request,id):
 @superuser_required
 def addStaff(request):
     if request.method=='POST' and request.POST.get('username'):
-        form=UserForm(request.POST)
+        form=StaffForm(request.POST)
         if form.is_valid():
             user=form.save(commit=False)
             user.set_password(request.POST['password'])
@@ -518,7 +518,7 @@ def addStaff(request):
             for field,errors in form.errors.items():
                 for error in errors:
                     messages.error(request, message=f"{field} : {error}")
-    form=UserForm()
+    form=StaffForm()
     staffs=User.objects.filter(is_staff=True,is_superuser=False)
     return render(request,'administrator/addStaff.html',context={'staffs':staffs,'form':form})
 
@@ -892,8 +892,8 @@ def companyList(request):
     years=YearBatch.objects.all()
 
     selectedYear=False
-    if request.method=='POST' and request.POST.get("year"):
-        selectedYear=YearBatch.objects.filter(pk=int(request.POST.get("year"))).first()
+    if request.GET.get("year"):
+        selectedYear=YearBatch.objects.filter(pk=int(request.GET.get("year"))).first()
 
     
     if not selectedYear:
@@ -906,17 +906,16 @@ def companyList(request):
 
 @staff_required
 def student_report_list(request):
-    heads=["Company","Job Title","CTC","Number of applications","Number of job offers","Number of placed Students"]
+    heads=["USN","Name","CTC","Company","Job Role"]
     years=YearBatch.objects.all()
 
     selectedYear=False
-    if request.method=='POST' and request.POST.get("year"):
-        selectedYear=YearBatch.objects.filter(pk=int(request.POST.get("year"))).first()
+    if request.GET.get("year"):
+        selectedYear=YearBatch.objects.filter(pk=int(request.GET.get("year"))).first()
 
     
     if not selectedYear:
         selectedYear=YearBatch.objects.all().order_by('-endYear').first()
 
-    jobs=Job.objects.filter(yearBatch=selectedYear).annotate(applied=Count("job_student"),offered=Count("job_student",filter=Q(job_student__status=Job_student.Status.OFFERED)),placed=Count("job_student",filter=Q(job_student__status=Job_student.Status.PLACED)))
-
-    return render(request,"administrator/companyList.html",context={'years':years,'selectedYear':selectedYear,'jobs':jobs,'heads':heads})
+    students=Job_student.objects.filter(student__yearBatch=selectedYear,status=Job_student.Status.PLACED).select_related('student','job','student__user')
+    return render(request,"administrator/report/studentReport.html",context={'years':years,'selectedYear':selectedYear,'students':students,'heads':heads})
