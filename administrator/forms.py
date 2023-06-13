@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from django import forms
 from home.models import Slider, Team,Job,Company,Rule,Gallery
 from administrator.models import Notice
-from student.models import Student
+from student.models import Student,Branch
 from home.models import YearBatch
 class UserForm(ModelForm):
     yearBatch=forms.ModelChoiceField(queryset=YearBatch.objects.all())
@@ -109,3 +109,13 @@ class UpdateMarksForm(ModelForm):
         if commit:
             instance.save()
         return instance
+
+class YearBatchForm(ModelForm):
+    class Meta:
+        model=YearBatch
+        fields='__all__'
+
+class BranchForm(ModelForm):
+    class Meta:
+        model=Branch
+        fields='__all__'

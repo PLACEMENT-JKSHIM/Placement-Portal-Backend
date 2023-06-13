@@ -45,8 +45,10 @@ path('au/rule/edit/<int:id>',views.editRule,name='editRule'),
 path('au/student/update',views.updateStudent,name='updateStudent'),
 path('au/student/update/usns',views.updateMultipleUsn,name='updateUsns'),
 path('au/student/update/marks',views.updateMultipleMarks,name='updateMarks'),
-path('au/addStaff',views.addStaff,name='addStaff'), 
 path('au/deleteStaff/<str:uname>',views.deleteStaff,name='deleteStaff'), 
 path('au/student/studentlist',views.studentList,name='studentList'),
-path('au/student/studentlist/<int:id>',views.viewstudentList,name="viewstudentlist")
+path('au/student/studentlist/<int:id>',views.viewstudentList,name="viewstudentlist"),
+path('au/manageportal',views.manageportal,name='manageportal'),
+path('au/manageportal/deleteyearbatch/<int:id>',views.deleteYearBatch,name='deleteyearBatch'),
+path('au/manageportal/deletebranch/<int:id>',views.deleteBranch,name='deletebranch'),
 ]
