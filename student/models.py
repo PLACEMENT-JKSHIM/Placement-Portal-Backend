@@ -38,7 +38,7 @@ class Student(models.Model):
     gender=models.CharField(max_length=1,choices=Gender.choices,default=Gender.MALE,verbose_name="Gender")
     image=models.ImageField(blank=True,null=True,upload_to='student')
     resume=models.FileField(blank=True,null=True,upload_to='resume')
-    branch=models.ForeignKey(Branch,blank=True,null=True, on_delete=models.CASCADE,verbose_name="Branch")
+    branch=models.ForeignKey(Branch,blank=True,null=True, on_delete=models.SET_NULL,verbose_name="Branch")
     phoneNo=models.IntegerField(blank=True,null=True,verbose_name="Phone number",validators=[MinValueValidator(1000000000),MaxValueValidator(99999999999)])
     alternatePhoneNo=models.IntegerField(blank=True,null=True,verbose_name="Alternate Phone number",validators=[MinValueValidator(1000000000),MaxValueValidator(99999999999)])
     email=models.EmailField(blank=True,max_length=50,verbose_name="Personal Email ID")

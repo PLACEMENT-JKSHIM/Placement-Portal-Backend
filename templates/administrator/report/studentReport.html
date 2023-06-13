@@ -1,0 +1,113 @@
+{% extends "../_base_admin.html" %}
+{% load static %}   
+{% block meta %}
+    <script lang="javascript" src="{% static "src/js/xlsx.full.min.js" %}"></script>
+{% endblock meta %}
+{% block content %}
+        <div class="p-3 text-2xl pb-7">Companies List</div>
+        <div class="flex p-2 mb-3 md:justify-evenly gap-2 flex-wrap justify-center">
+            <select name="years" id="years">
+                <option disabled selected value> -- select an Academic year -- </option>
+                {% for year in years %}
+                    <option value="{{year.pk}}" {% if selectedYear.pk == year.pk %}selected{% endif %}>{{year}}</option>
+                {% endfor %}
+            </select>
+            <div class="flex flex-wrap justify-end gap-3 md:justify-center">
+                {% include "../../buttons/buttons.html" with id="printSheet" btn="Print Sheet" %}
+            </div>
+        </div>
+
+<div class="relative overflow-auto  shadow-md sm:rounded-lg">
+    <table class="w-full h-screen-50 text-sm text-left text-gray-500 dark:text-gray-400 ">
+        <thead class="text-xs text-white whitespace-nowrap bg-primary dark:text-gray-400">
+            <tr id="colSelect">
+                {% for head in heads %}
+                <th scope="col" class="px-6 py-3">
+                    <input type="checkbox" value="{{forloop.counter}}"
+                    class="peer/k text-secondary" checked>
+                    <p class="text-gray-400 peer-checked/k:text-white inline-block mx-2">{{head}}</p>
+                </th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for student in students %}
+            <tr class="bg-white border-b text-gray-900 font-semibold hover:bg-gray-200">
+                        <td class="px-6 py-1 whitespace-nowrap">
+                            {{student.student.user|default:"-"}}
+                        </td>   
+                        <td class="px-6 py-1 whitespace-nowrap">
+                            {{student.student.nameAadhar|default:"-"}}
+                        </td>   
+                        <td class="px-6 py-1 whitespace-nowrap peer-checked/k:text-gray-600">
+                            {{student.job.ctc_pa|default:"0"}}
+                        </td>   
+                        <td class="px-6 py-1 whitespace-nowrap peer-checked/k:text-gray-600">
+                            {{student.job.company|default:"-"}}
+                        </td> 
+                        <td class="px-6 py-1 whitespace-nowrap peer-checked/k:text-gray-600">
+                            {{student.job.title|default:"-"}}
+                        </td>   
+              </tr>      
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+<form method="get">
+    <input type="hidden" name="year" value="">
+</form>
+<script>
+    // const years = document.getElementById('years');
+    const colIndexesToDelete =new Map()
+
+    const colSelect=document.getElementById('colSelect')
+
+    colSelect.querySelectorAll('input').forEach((input,i)=>{
+        input.addEventListener('change', (e) => {
+            if(e.target.checked)
+                colIndexesToDelete.delete(i)
+            else
+                colIndexesToDelete.set(i,true)
+
+        });
+    })
+    years.addEventListener('change', (e) => {
+        document.forms[0].action='/au/report/list'
+        document.forms[0].querySelectorAll('input')[0].value=e.target.value
+        document.forms[0].submit();
+    });
+
+    const btnPrint=document.getElementById('printSheet')
+    btnPrint.addEventListener('click',()=>{
+            printSheet()
+    })
+
+    function printSheet(){  
+        const xl=XLSX.utils.table_to_sheet(document.querySelector('table'), {sheet:"Sheet JS"});
+        const data = XLSX.utils.sheet_to_json(xl,{header:1});
+        let newData = data.map(row => row.filter((_, i) => !colIndexesToDelete.has(i)));
+        const workbook = XLSX.utils.book_new();
+        const sheet = XLSX.utils.aoa_to_sheet(newData);
+
+        let k=[]
+        
+        for(let i=0;i<50;i++)
+            k.push({width:50})
+        sheet['!cols'] =k
+
+        var range = XLSX.utils.decode_range(sheet['!ref']);
+        for (var row = range.s.r; row <= range.e.r; row++) {
+        for (var col = range.s.c; col <= range.e.c; col++) {
+            var cellAddress = XLSX.utils.encode_cell({ r: row, c: col });
+            var cell = sheet[cellAddress];
+            if (cell && cell.t === "s") {
+            cell.s = { alignment: { wrapText: true } };
+            }
+        }
+        }
+
+        XLSX.utils.book_append_sheet(workbook, sheet, 'Sheet 1');
+        XLSX.writeFile(workbook, 'companies.xlsx',{cellStyle:true});
+    }
+</script>
+{% endblock content %}

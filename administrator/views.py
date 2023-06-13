@@ -3,7 +3,7 @@ from django.forms.models import model_to_dict
 from django.core import serializers
 from django.shortcuts import render,redirect
 from home.models import Slider,Team,Company,Job,Rule,Gallery
-from .forms import TeamForm, UserForm,SliderForm,JobForm,CompanyForm,NewsForm,RuleForm,UpdateMarksForm,GalleryForm,YearBatchForm,BranchForm
+from .forms import TeamForm, UserForm,StaffForm,SliderForm,JobForm,CompanyForm,NewsForm,RuleForm,UpdateMarksForm,GalleryForm,YearBatchForm,BranchForm
 from django.http import HttpResponse,JsonResponse
 import json
 from student.models import Student,PreviousJob,Branch
@@ -28,6 +28,7 @@ from django.core.exceptions import ValidationError
 from django.contrib.auth.hashers import make_password
 from django.db import transaction
 from django.utils.timezone import datetime,timezone
+from django.db.models import Count,Q
 heads=['USN']
 unwanted=['id','user','editable','created_at','updated_at','status','job_student','image','resume','previousjob']
 for s in Student._meta.get_fields():
@@ -702,7 +703,7 @@ def registerHome(request):
         selectedYear=YearBatch.objects.all().order_by('-endYear').first()
 
     jobs=Job.objects.filter(yearBatch=selectedYear)
-    return render(request,"administrator/registerList.html",context={'heads':heads,'jobs':jobs,'students':students,'selected':selected,'years':years,'selectedYear':selectedYear,})
+    return render(request,"administrator/report/registerList.html",context={'heads':heads,'jobs':jobs,'students':students,'selected':selected,'years':years,'selectedYear':selectedYear,})
 
 @staff_required
 def registerList(request,id):
@@ -728,7 +729,7 @@ def registerList(request,id):
         
     students = zip(students, pjs)
     jobs=Job.objects.filter(yearBatch=selectedYear)
-    return render(request,"administrator/registerList.html",context={'heads':heads,'jobs':jobs,'students':students,'selected':selected,'years':years,'selectedYear':selectedYear,})
+    return render(request,"administrator/report/registerList.html",context={'heads':heads,'jobs':jobs,'students':students,'selected':selected,'years':years,'selectedYear':selectedYear,})
     
 @staff_required
 def downLoadResumes(request,id):
@@ -834,12 +835,12 @@ def viewprofile(request,id):
     return render(request,"administrator/student/viewprofile.html",{'student':student})
 
 @staff_required
-def studentList(request):
+def manageJobs(request):
     jobSt=Job_student.objects.select_related('student','student__user')
-    return render(request,"administrator/studentList.html",context={'job_students':jobSt})
+    return render(request,"administrator/manageJobs.html",context={'job_students':jobSt})
 
 @staff_required
-def viewstudentList(request,id):
+def viewmanageJobs(request,id):
     student=get_object_or_404(Job_student,id=id)
     if request.method == 'POST':
         status=request.POST.get('status')
@@ -850,7 +851,7 @@ def viewstudentList(request,id):
         else:
             student.status = 'A'
         student.save()
-    return redirect("studentList")
+    return redirect("manageJobs")
 
 @superuser_required
 def resetportal(request):
@@ -890,7 +891,6 @@ def manageportal(request):
                     messages.error(request, message=f"{field} : {error}")
     elif request.method=='POST' and request.POST.get('username'):
         form=UserForm(request.POST)
-        print(form)
         if form.is_valid():
             user=form.save(commit=False)
             user.set_password(request.POST['password'])
@@ -905,7 +905,7 @@ def manageportal(request):
     years=YearBatch.objects.all()
     branches=Branch.objects.all()
     staffs=User.objects.filter(is_staff=True,is_superuser=False)
-    staffform=UserForm()
+    staffform=StaffForm()
     return render(request,"administrator/portal/manage_portal.html",{'years':years,'branches':branches,'staffs':staffs,'staffform':staffform})
 
 @superuser_required
@@ -921,3 +921,36 @@ def deleteBranch(request,id):
     messages.success(request,message='{0}-{1} deleted successfully.'.format(branch.branchname1,branch.branchname2))
     branch.delete()
     return redirect('manageportal')
+@staff_required
+def companyList(request):
+    heads=["Company","Job Title","CTC","Number of applications","Number of job offers","Number of placed Students"]
+    years=YearBatch.objects.all()
+
+    selectedYear=False
+    if request.GET.get("year"):
+        selectedYear=YearBatch.objects.filter(pk=int(request.GET.get("year"))).first()
+
+    
+    if not selectedYear:
+        selectedYear=YearBatch.objects.all().order_by('-endYear').first()
+
+    jobs=Job.objects.filter(yearBatch=selectedYear).annotate(applied=Count("job_student"),offered=Count("job_student",filter=Q(job_student__status=Job_student.Status.OFFERED)),placed=Count("job_student",filter=Q(job_student__status=Job_student.Status.PLACED)))
+
+    return render(request,"administrator/report/companyList.html",context={'years':years,'selectedYear':selectedYear,'jobs':jobs,'heads':heads})
+    
+
+@staff_required
+def student_report_list(request):
+    heads=["USN","Name","CTC","Company","Job Role"]
+    years=YearBatch.objects.all()
+
+    selectedYear=False
+    if request.GET.get("year"):
+        selectedYear=YearBatch.objects.filter(pk=int(request.GET.get("year"))).first()
+
+    
+    if not selectedYear:
+        selectedYear=YearBatch.objects.all().order_by('-endYear').first()
+
+    students=Job_student.objects.filter(student__yearBatch=selectedYear,status=Job_student.Status.PLACED).select_related('student','job','student__user')
+    return render(request,"administrator/report/studentReport.html",context={'years':years,'selectedYear':selectedYear,'students':students,'heads':heads})

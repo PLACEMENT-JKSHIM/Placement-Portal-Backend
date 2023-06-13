@@ -5,14 +5,19 @@ from home.models import Slider, Team,Job,Company,Rule,Gallery
 from administrator.models import Notice
 from student.models import Student,Branch
 from home.models import YearBatch
+
 class UserForm(ModelForm):
     yearBatch=forms.ModelChoiceField(queryset=YearBatch.objects.all())
-    def __init__(self,*args,**kwargs):
-        super(UserForm,self).__init__(*args,**kwargs)
+    def _init_(self,args,*kwargs):
+        super(UserForm,self)._init_(args,*kwargs)
         y=YearBatch.objects.all().order_by("-endYear").first()
         if y:
             self.fields['yearBatch'].initial=y.pk
+    class Meta:
+        model=User
+        fields=['username','password']
 
+class StaffForm(ModelForm):
     class Meta:
         model=User
         fields=['username','password']
@@ -36,7 +41,9 @@ class JobForm(ModelForm):
 
     def __init__(self,*args,**kwargs):
         super(JobForm,self).__init__(*args,**kwargs)
-        self.fields['yearBatch'].initial=YearBatch.objects.all().order_by("-endYear").first().pk
+        y=YearBatch.objects.all().order_by("-endYear").first()
+        if y:
+            self.fields['yearBatch'].initial=y.pk
     class Meta:
 
         model = Job
