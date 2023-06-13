@@ -18,27 +18,27 @@
         <p class="font-normal text-gray-700 dark:text-gray-400">PLACED</p>
         {% endif %}
         {% if student.status == 'A' %}
-        <form method="post" action="{% url 'viewmanageJobs' id=student.id %}"
+        <form method="post" action="{% url 'viewmanageSelections' id=student.id %}"
         class="text-center">
             {% csrf_token %}
             <input type="hidden" name="status" value="OF">
             {% include "../buttons/buttons.html" with btn="SELECT" id=student.id %}
         </form>
-        <form method="post" action="{% url 'viewmanageJobs' id=student.id %}"
+        <form method="post" action="{% url 'viewmanageSelections' id=student.id %}"
         class="text-center">
             {% csrf_token %}
             <input type="hidden" name="status" value="R">
             {% include "../buttons/buttons.html" with btn="REJECT" id=student.id %}
         </form>
         {% elif student.status == 'OF' %}
-        <form method="post" action="{% url 'viewmanageJobs' id=student.id %}"
+        <form method="post" action="{% url 'viewmanageSelections' id=student.id %}"
         class="text-center">
             {% csrf_token %}
             <input type="hidden" name="status" value="R">
             {% include "../buttons/buttons.html" with btn="REJECT" id=student.id %}
         </form>
         {% elif student.status == 'R' %}
-        <form method="post" action="{% url 'viewmanageJobs' id=student.id %}"
+        <form method="post" action="{% url 'viewmanageSelections' id=student.id %}"
         class="text-center">
             {% csrf_token %}
             <input type="hidden" name="status" value="OF">

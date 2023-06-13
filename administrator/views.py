@@ -852,12 +852,12 @@ def viewprofile(request,id):
     return render(request,"administrator/student/viewprofile.html",{'student':student})
 
 @staff_required
-def manageJobs(request):
+def manageSelections(request):
     jobSt=Job_student.objects.select_related('student','student__user')
-    return render(request,"administrator/manageJobs.html",context={'job_students':jobSt})
+    return render(request,"administrator/manageSelections.html",context={'job_students':jobSt})
 
 @staff_required
-def viewmanageJobs(request,id):
+def viewmanageSelections(request,id):
     student=get_object_or_404(Job_student,id=id)
     if request.method == 'POST':
         status=request.POST.get('status')
@@ -868,7 +868,7 @@ def viewmanageJobs(request,id):
         else:
             student.status = 'A'
         student.save()
-    return redirect("manageJobs")
+    return redirect("manageSelections")
 
 @superuser_required
 def resetportal(request):
