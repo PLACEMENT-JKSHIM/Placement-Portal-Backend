@@ -37,9 +37,6 @@ path('au/adminEditor/deletegimage/<int:id>',views.deletegimage, name='deletegima
 path('au/rule/delete/<int:id>',views.deleteRule,name='deleteRule'),
 path('au/rule/edit/<int:id>',views.editRule,name='editRule'),
 
-path('au/addStaff',views.addStaff,name='addStaff'), 
-path('au/deleteStaff/<str:uname>',views.deleteStaff,name='deleteStaff'), 
-
 path('au/company/addJob',views.addJob, name='addJob'),
 path('au/company/viewJob/<int:id>',views.viewJob, name='viewJob'),
 path('au/company/deleteJob/<int:id>',views.deleteJob, name='deleteJob'),
@@ -50,6 +47,11 @@ path('au/company/companies',views.companies, name='companies'),
 path('au/company/delete/<int:id>',views.deletecompany, name='deletecompany'), 
 path('au/company/selections',views.manageSelections,name='manageSelections'),
 path('au/company/selections/<int:id>',views.viewmanageSelections,name="viewmanageSelections"),
+
+path('au/deleteStaff/<str:uname>',views.deleteStaff,name='deleteStaff'),
+path('au/manageportal',views.manageportal,name='manageportal'),
+path('au/manageportal/deleteyearbatch/<int:id>',views.deleteYearBatch,name='deleteyearBatch'),
+path('au/manageportal/deletebranch/<int:id>',views.deleteBranch,name='deletebranch'),
 
 path('au/report/register',views.registerHome,name='registerHome'),
 path('au/report/register/resumes/<int:id>',views.downLoadResumes,name='downLoadResumes'),
