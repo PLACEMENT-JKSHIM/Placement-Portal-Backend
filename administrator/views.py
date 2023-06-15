@@ -3,7 +3,7 @@ from django.forms.models import model_to_dict
 from django.core import serializers
 from django.shortcuts import render,redirect
 from home.models import Slider,Team,Company,Job,Rule,Gallery
-from .forms import TeamForm, UserForm,StaffForm,SliderForm,JobForm,CompanyForm,NewsForm,RuleForm,UpdateMarksForm,GalleryForm
+from .forms import TeamForm, UserForm,StaffForm,SliderForm,JobForm,CompanyForm,NewsForm,RuleForm,UpdateMarksForm,GalleryForm,YearBatchForm,BranchForm
 from django.http import HttpResponse,JsonResponse
 import json
 from student.models import Student,PreviousJob,Branch
@@ -504,30 +504,13 @@ def deleteNews(request,id):
     messages.success(request, 'Deleted successfully.')
     return redirect('../../newsAndUpdates')
 
-@superuser_required
-def addStaff(request):
-    if request.method=='POST' and request.POST.get('username'):
-        form=StaffForm(request.POST)
-        if form.is_valid():
-            user=form.save(commit=False)
-            user.set_password(request.POST['password'])
-            user.is_staff=True
-            user.save()
-            messages.success(request, message="Added staff successfully")
-        else:
-            for field,errors in form.errors.items():
-                for error in errors:
-                    messages.error(request, message=f"{field} : {error}")
-    form=StaffForm()
-    staffs=User.objects.filter(is_staff=True,is_superuser=False)
-    return render(request,'administrator/addStaff.html',context={'staffs':staffs,'form':form})
 
 @superuser_required
 def deleteStaff(request,uname):
     staff=get_object_or_404(User,username=uname)
     staff.delete()
     messages.success(request, message="Deleted staff successfully")
-    return redirect(to="/au/addStaff")
+    return redirect("manageportal")
    
 @superuser_required
 def adminEditor(request):
@@ -886,6 +869,58 @@ def resetportal(request):
     notices.delete()
     return redirect('admin')
 
+@superuser_required
+def manageportal(request):
+    if request.method=='POST' and request.POST.get('startYear') :
+        form = YearBatchForm(request.POST)
+        if form.is_valid():
+            year = form.save()
+            messages.success(request, message=" {0}-{1} year added Successfully!".format(year.startYear,year.endYear))
+        else:
+            for field,errors in form.errors.items():
+                for error in errors:
+                    messages.error(request, message=f"{field} : {error}")
+    elif request.method=='POST' and request.POST.get('branchname1') :
+        form = BranchForm(request.POST)
+        if form.is_valid():
+            branch=form.save()
+            messages.success(request, message="Branch Combination {0}-{1} added successfully".format(branch.branchname1,branch.branchname2))
+        else:
+            for field,errors in form.errors.items():
+                for error in errors:
+                    messages.error(request, message=f"{field} : {error}")
+    elif request.method=='POST' and request.POST.get('username'):
+        form=StaffForm(request.POST)
+        if form.is_valid():
+            user=form.save(commit=False)
+            user.set_password(request.POST['password'])
+            user.is_staff=True
+            user.save()
+            messages.success(request, message="Added staff successfully")
+        else:
+            for field,errors in form.errors.items():
+                for error in errors:
+                    messages.error(request, message=f"{field} : {error} lol")
+
+    years=YearBatch.objects.all()
+    branches=Branch.objects.all()
+    staffs=User.objects.filter(is_staff=True,is_superuser=False)
+    staffform=StaffForm()
+    return render(request,"administrator/portal/manage_portal.html",{'years':years,'branches':branches,'staffs':staffs,'staffform':staffform})
+
+@superuser_required
+def deleteYearBatch(request, id):
+    academic_batch = get_object_or_404(YearBatch, id=id)
+    messages.success(request,message='{0}-{1} deleted successfully.'.format(academic_batch.startYear,academic_batch.endYear))
+    academic_batch.delete()
+    return redirect('manageportal')
+
+@superuser_required
+def deleteBranch(request,id):
+    branch=get_object_or_404(Branch,id=id)
+    messages.success(request,message='{0}-{1} deleted successfully.'.format(branch.branchname1,branch.branchname2))
+    branch.delete()
+    return redirect('manageportal')
 @staff_required
 def companyList(request):
     heads=["Company","Job Title","CTC","Number of applications","Number of job offers","Number of placed Students"]
