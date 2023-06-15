@@ -3,6 +3,7 @@ from datetime import datetime
 from django.contrib.auth.models import User
 from home.models import YearBatch
 from django.core.validators import MaxValueValidator, MinValueValidator 
+from cloudinary_storage.storage import RawMediaCloudinaryStorage
 
 class Branch(models.Model):
     branchname1 = models.CharField(max_length=100)
@@ -37,7 +38,7 @@ class Student(models.Model):
     nameAadhar=models.CharField(blank=True,max_length=50,verbose_name='Name as in Aadhar card')
     gender=models.CharField(max_length=1,choices=Gender.choices,default=Gender.MALE,verbose_name="Gender")
     image=models.ImageField(blank=True,null=True,upload_to='student')
-    resume=models.FileField(blank=True,null=True,upload_to='resume')
+    resume=models.FileField(blank=True,null=True,upload_to='resume',storage=RawMediaCloudinaryStorage)
     branch=models.ForeignKey(Branch,blank=True,null=True, on_delete=models.SET_NULL,verbose_name="Branch")
     phoneNo=models.IntegerField(blank=True,null=True,verbose_name="Phone number",validators=[MinValueValidator(1000000000),MaxValueValidator(99999999999)])
     alternatePhoneNo=models.IntegerField(blank=True,null=True,verbose_name="Alternate Phone number",validators=[MinValueValidator(1000000000),MaxValueValidator(99999999999)])

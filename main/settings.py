@@ -13,9 +13,9 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 from pathlib import Path
 import os
 import environ
+
 # Initialise environment variables
 env = environ.Env()
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 environ.Env.read_env(env_file=os.path.join(BASE_DIR, ".env"))
@@ -53,11 +53,14 @@ INSTALLED_APPS = [
     'livereload',
     "whitenoise.runserver_nostatic",
     'django.contrib.staticfiles',
+    'cloudinary_storage',
+    'cloudinary',
     'home',
     'student',
     'administrator',
     'widget_tweaks',
-    'mathfilters'
+    'mathfilters',
+    'django_cleanup.apps.CleanupConfig',
 ]
 
 MIDDLEWARE = [
@@ -76,6 +79,8 @@ ROOT_URLCONF = 'main.urls'
 # Base url to serve media files
 MEDIA_URL = '/media/'
 # Path where media is stored
+if env.get_value("PRODUCTION",default=False) or env.get_value("TEST_PRODUCTION",default=False):
+    DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 TEMPLATES = [
     {
@@ -111,6 +116,16 @@ if env.get_value("PRODUCTION",default=False):
             'OPTIONS': {  
                 'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"  
             }  
+        }  
+elif env.get_value("TEST_PRODUCTION",default=False):
+    dict1= {  
+            'ENGINE': 'django_psdb_engine-main',
+            'NAME': env('DB_NAME'),  
+            'HOST': env('DB_HOST'),
+            'PORT': env('DB_PORT'),
+            'USER': env('DB_USER'),
+            'PASSWORD': env('DB_PASSWORD'),
+            'OPTIONS': {'ssl': {'ca': Path.joinpath(BASE_DIR,env('MYSQL_ATTR_SSL_CA'))}, 'charset': 'utf8mb4'}, 
         }  
 else:
     dict1= {
@@ -176,3 +191,10 @@ else:
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': env.get_value("CLOUDINARY_NAME",default='') ,
+    'API_KEY':  env.get_value("CLOUDINARY_KEY",default='') ,
+    'API_SECRET':  env.get_value("CLOUDINARY_SECRET",default='') 
+}

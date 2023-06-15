@@ -16,8 +16,7 @@ RUN python manage.py migrate
 
 RUN python manage.py collectstatic --noinput
 
-RUN chmod +x ./createsuperuser.sh
-RUN ./createsuperuser.sh
+RUN python manage.py shell < script.py
 
 EXPOSE 80
 
