@@ -25,6 +25,7 @@ import io
 from django.conf import settings
 from django.http import Http404
 from django.core.exceptions import ValidationError
+from django.core.exceptions import PermissionDenied
 from django.contrib.auth.hashers import make_password
 from django.db import transaction
 from django.utils.timezone import datetime,timezone
@@ -42,7 +43,7 @@ def superuser_required(view_func):
         if not request.user.is_authenticated:
             return redirect(f'/login?next={request.path}')
         if not request.user.is_superuser:
-            raise Http404
+            raise PermissionDenied
         return view_func(request, *args, **kwargs)
     return wrapped_view
 

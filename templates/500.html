@@ -1,0 +1,14 @@
+{% extends "_base.html" %}
+{% block blocks %}
+<section class="flex items-center h-screen md:p-16">
+    <div class="container flex flex-col gap-6 items-center text-center justify-center md:px-5 px-3 mx-auto my-8">
+            <h2 class="mb-8 font-extrabold text-9xl text-primary cursor-default">
+                <span class="sr-only">Error</span>
+                <span class="inline-block duration-500 hover:translate-y-[-8px] transition-transform">5</span><span class="inline-block hover:translate-y-[-8px] duration-500 transition-transform">0</span><span class="inline-block hover:translate-y-[-8px] duration-500 transition-transform">0</span>
+            </h2>
+            <p class="text-2xl font-semibold md:text-3xl text-primary">Server error please contact administrator</p>
+            <p class="mt-4 mb-8 text-primary">But dont worry, you can find plenty of other things on our homepage.</p>
+            <a rel="noopener noreferrer" href="/" class="px-8 py-3 rounded-lg font-semibold border-2 border-secondary hover:bg-secondary hover:text-white text-primary uppercase">Back to homepage</a>
+        </div>
+</section>
+{% endblock blocks %}
