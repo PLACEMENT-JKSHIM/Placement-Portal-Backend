@@ -6,43 +6,35 @@
     <div class="p-4 sm:ml-4 overflow-auto">
         <h1 class="text-3xl font-bold text-center text-primary"><span class="underline underline-offset-8 decoration-7 decoration-secondary">Edit Company</span> Details </h1>
         <div class=" bg-white p-4">
-
             <form method="POST" action="{% url 'editCompany' company.id %}" enctype="multipart/form-data">
-                {% csrf_token %}
-                <div class="w-full flex justify-center ">
-                 
-
+              {% csrf_token %}
+              <div class="w-full flex justify-center ">
                 {% if form.instance.image %}
-  <img src="{{ form.instance.image.url }}" alt="Previous Image" class="h-56 w-56 rounded-3xl">
-  {% else %}
-  <img class="company-image relative h-56 w-56 rounded-lg" alt="H" data-name="{{ company.c_name|slice:'1'|upper }}">
-  
-{% endif %}</div>
-                <div class="mt-5">
-                    <label for="company_logo" class="block mb-2 text-sm font-semibold text-gray-900 dark:text-white mt-5">Update Company Logo</label>
-                    <input type="file" id="company_logo" name="image" class="block p-2.5 pl-5 pr-3 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border-2 border-primary focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                  </div>
-                <div class="mt-5">
-                  <label for="company_name" class="block mb-2 text-sm font-semibold text-gray-900 dark:text-white mt-5">Update Company Name</label>
-                  <input type="text" id="company_name" name="c_name" class="block p-2.5 pl-5 pr-3 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border-2 border-primary focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" value="{{ form.c_name.value }}" placeholder="Enter the company name...">
+                  <img src="{{ form.instance.image.url }}" alt="Previous Image" class="h-56 w-56 rounded-3xl">
+                {% else %}
+                  <img class="company-image relative h-56 w-56 rounded-lg" alt="H" data-name="{{ company.c_name|slice:'1'|upper }}">
+                {% endif %}
+              </div>
+              <div class="mt-5">
+                  <label for="company_logo" class="block mb-2 text-sm font-semibold text-gray-900 dark:text-white mt-5">Update Company Logo</label>
+                  <input type="file" id="company_logo" name="image" class="block p-2.5 pl-5 pr-3 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border-2 border-primary focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                 </div>
-               
-                <div class="mt-5">
-                  <label for="company_description" class="block mb-2 text-sm font-semibold text-gray-900 dark:text-white mt-5"> Update Company Description</label>
-                  <textarea id="company_description" name="about" rows="4" class="block p-2.5 pl-5 pr-3 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border-2 border-primary focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Enter the company description...">{{ form.about.value }}</textarea>
-                </div>
-                <div class="mt-5">
-                    <div class="relative w-40 m-auto mt-2">
-                        {% include "../../buttons/buttons.html" with main=True btn="Update" secondary=False %}
-                      </div>
-                </div>
-              </form>
+              <div class="mt-5">
+                <label for="company_name" class="block mb-2 text-sm font-semibold text-gray-900 dark:text-white mt-5">Update Company Name</label>
+                <input type="text" id="company_name" name="c_name" class="block p-2.5 pl-5 pr-3 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border-2 border-primary focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" value="{{ form.c_name.value }}" placeholder="Enter the company name...">
+              </div>
+              
+              <div class="mt-5">
+                <label for="company_description" class="block mb-2 text-sm font-semibold text-gray-900 dark:text-white mt-5"> Update Company Description</label>
+                <textarea id="company_description" name="about" rows="4" class="block p-2.5 pl-5 pr-3 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border-2 border-primary focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Enter the company description...">{{ form.about.value }}</textarea>
+              </div>
+              <div class="mt-5">
+                  <div class="relative w-40 m-auto mt-2">
+                      {% include "../../buttons/buttons.html" with main=True btn="Update" secondary=False %}
+                    </div>
+              </div>
+            </form>
         </div>
-        
-
-
-
-
     </div>
 </div>
 
