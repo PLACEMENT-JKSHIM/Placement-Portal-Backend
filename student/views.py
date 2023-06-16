@@ -12,13 +12,26 @@ from django.contrib.auth import authenticate
 from django.contrib.auth import logout
 from django.http import Http404
 from django.utils.timezone import datetime,timezone
+from home.models import  Rule
 
 def normaluser_required(view_func):
     def wrapped_view(request, *args, **kwargs):
         if not request.user.is_authenticated:
-            return redirect(f'/login?next={request.path}')
-        if request.user.is_superuser:
+                return redirect(f'/login?next={request.path}')
+        if request.user.is_staff:
             raise Http404
+        return view_func(request, *args, **kwargs)
+    return wrapped_view
+
+def normaluserWithProfile_required(view_func):
+    def wrapped_view(request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return redirect(f'/login?next={request.path}')
+        if request.user.is_staff:
+            raise Http404
+        if request.user.student and not request.user.student.nameAadhar:
+            messages.warning(request=request,message="Please fill your profile details")
+            return redirect("/profile/update")
         return view_func(request, *args, **kwargs)
     return wrapped_view
 
@@ -86,7 +99,7 @@ def editPreviousJob(request,id):
     form=PreviousJobForm(instance=pj)
     return render(request, "student/editpreviousjob.html",context={'form':form})
 
-@normaluser_required
+@normaluserWithProfile_required
 def registerCompany(request):
     student = Student.objects.get(user=request.user)
     Job.objects.filter(registration_last_date__lt=datetime.now(timezone.utc)).update(reg_open=False)
@@ -120,7 +133,7 @@ def changePassword(request):
         
     return render(request, 'student/changePassword.html')
 
-@normaluser_required
+@normaluserWithProfile_required
 def student_home(request):
     news=Notice.objects.filter(hidden=False).order_by('-updated_on')
     return render(request,"student/student_home.html",{'news':news})
@@ -152,7 +165,7 @@ def is_eligible(job, student):
             return False
         return True
 
-@normaluser_required
+@normaluserWithProfile_required
 def companyPage(request,id):
     job = get_object_or_404(Job,id=id)
     if job.reg_open==True and job.registration_last_date<datetime.now(timezone.utc):
@@ -172,3 +185,12 @@ def companyPage(request,id):
             return redirect('companyPage',id=id)
 
     return render(request,"student/companyPage.html",{'job':job,'id':id,'student':student,'eligible':eligible,'job_student':job_student})
+
+@normaluser_required
+def rules(request):
+    srules = Rule.objects.all()
+    return render(request, "student/rules.html",context={'srules':srules})
+
+@normaluserWithProfile_required
+def profile(request):
+    return render(request, "student/profile.html")

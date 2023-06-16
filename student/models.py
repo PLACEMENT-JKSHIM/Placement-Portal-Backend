@@ -3,6 +3,15 @@ from datetime import datetime
 from django.contrib.auth.models import User
 from home.models import YearBatch
 from django.core.validators import MaxValueValidator, MinValueValidator 
+from django.core.exceptions import ValidationError
+
+def validate_file_size(value):
+    filesize= value.size
+    
+    if filesize > 512*1024:
+        raise ValidationError("You cannot upload file more than 500KB")
+    else:
+        return value
 
 class Branch(models.Model):
     branchname1 = models.CharField(max_length=100)
@@ -36,8 +45,8 @@ class Student(models.Model):
     name=models.CharField(blank=True,max_length=50,verbose_name='Name as in 10th marks card')
     nameAadhar=models.CharField(blank=True,max_length=50,verbose_name='Name as in Aadhar card')
     gender=models.CharField(max_length=1,choices=Gender.choices,default=Gender.MALE,verbose_name="Gender")
-    image=models.ImageField(blank=True,null=True,upload_to='student')
-    resume=models.FileField(blank=True,null=True,upload_to='resume')
+    image=models.ImageField(blank=True,null=True,upload_to='student',validators=[validate_file_size])
+    resume=models.FileField(blank=True,null=True,upload_to='resume',validators=[validate_file_size])
     branch=models.ForeignKey(Branch,blank=True,null=True, on_delete=models.SET_NULL,verbose_name="Branch")
     phoneNo=models.IntegerField(blank=True,null=True,verbose_name="Phone number",validators=[MinValueValidator(1000000000),MaxValueValidator(99999999999)])
     alternatePhoneNo=models.IntegerField(blank=True,null=True,verbose_name="Alternate Phone number",validators=[MinValueValidator(1000000000),MaxValueValidator(99999999999)])
@@ -97,6 +106,10 @@ class Student(models.Model):
     created_at=models.DateTimeField(auto_now_add=True)
     updated_at=models.DateTimeField(auto_now=True)
 
+    def delete(self, *args, **kwargs):
+        self.user.delete()
+        return super(self.__class__, self).delete(*args, **kwargs)
+    
     def __str__(self):
         return self.user.username
      
