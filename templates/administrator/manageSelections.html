@@ -1,6 +1,37 @@
 {% extends "../administrator/_base_admin.html" %}
 {% block content %}
-<div class="p-3 text-2xl pb-7">Applied Student List</div>
+<div class="p-3 text-2xl">Applied Student List</div>
+{% load static %}
+<div class="text-2xl text-center uppercase text-primary hover:text-gray-900">
+    <h1>Statistics</h1>
+</div>
+<div class="md:m-6 md:mx-3 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 hover:shadow-md">
+    <div id="fullWidthTabContent" class="border-t border-gray-200 dark:border-gray-600">
+        <div class="p-4 bg-white rounded-lg md:p-8 dark:bg-gray-800 flex justify-center" id="stats" role="tabpanel" aria-labelledby="stats-tab">
+            <dl class="grid max-w-screen-xl grid-cols-2 gap-8 p-2 mx-auto text-primary sm:grid-cols-3 xl:grid-cols-6 dark:text-white sm:p-8">
+                <div class="flex flex-col items-center justify-center text-center">
+                    <dt class="mb-2 w-24 text-center text-3xl font-extrabold hover:scale-125 transition-all  duration-1000" id="animation1">0</dt>
+                    <dd class="font-light text-primary dark:text-gray-400">Students Placed</dd>
+                </div>
+                <div class="flex flex-col items-center justify-center text-center">
+                    <dt class="mb-2 w-24 text-center text-3xl font-extrabold hover:scale-125 transition-all  duration-1000" id="animation2">0</dt>
+                    <dd class="font-light text-primary dark:text-gray-400">Students Offered</dd>
+                </div>
+                <div class="flex flex-col items-center justify-center text-center">
+                    <dt class="mb-2 w-24 text-center text-3xl font-extrabold hover:scale-125 transition-all  duration-1000" id="animation3">0</dt>
+                    <dd class="font-light text-primary dark:text-gray-400">Students Applied</dd>
+                </div>
+                <div class="flex flex-col items-center justify-center text-center">
+                    <dt class="mb-2 w-24 text-center text-3xl font-extrabold hover:scale-125 transition-all  duration-1000" id="animation4">0</dt>
+                    <dd class="font-light text-primary dark:text-gray-400">Students Rejected</dd>
+                </div>
+            </dl>
+        </div>
+        
+    </div>
+</div>
+
+
 <div class="flex p-2 mb-3 md:justify-evenly gap-2 flex-wrap justify-center">
     <select name="years" id="years">
         <option disabled selected value> -- select an Academic year -- </option>
@@ -79,6 +110,49 @@
         document.forms[0].submit();
     });
 
+const totalPlaced = "{{placedStudents}}"
+const totalOffers = "{{offeredStudents}}"
+const totalApplied = "{{appliedStudents}}"
+const totalRejected = "{{rejectedStudents}}"
+
+const countAnimations = [
+  { id: "animation1", startValue: 0, endValue: totalPlaced },
+  { id: "animation2", startValue: 0, endValue: totalOffers },
+  { id: "animation3", startValue: 0, endValue: totalApplied },
+  { id: "animation4", startValue: 0, endValue: totalRejected },
+];
+
+const animationDuration = 2000; // 2 seconds
+const statisticsContainer = document.getElementById('stats');
+
+countAnimations.forEach(animation => {
+  const numberSpan = document.getElementById(animation.id);
+  let currentValue = animation.startValue;
+  const valueDifference = animation.endValue - animation.startValue;
+  const valueIncrement = valueDifference / (animationDuration / 10);
+
+  const observer = new IntersectionObserver(function(entries, observer) {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        animateCounters();
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.5 });
+
+  observer.observe(statisticsContainer);
+
+  function animateCounters() {
+  const intervalId = setInterval(function() {
+    currentValue += valueIncrement;
+    numberSpan.textContent = Math.round(currentValue);
+    if (currentValue >= animation.endValue) {
+      clearInterval(intervalId);
+    }
+  }, 10);
+}
+
+});
 </script>
 
 

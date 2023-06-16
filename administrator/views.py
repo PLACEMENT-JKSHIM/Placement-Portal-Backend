@@ -846,8 +846,16 @@ def manageSelections(request):
         selectedYear=Job.objects.filter(yearBatch=selectedYear).first()
 
 
-    jobSt=Job_student.objects.filter(job=selectedJob).select_related('student','student__user')
-    return render(request,"administrator/manageSelections.html",context={'job_students':jobSt,'selectedYear':selectedYear,'years':years,'selectedJob':selectedJob,'jobs':jobs})
+    jobSt=Job_student.objects.filter(job=selectedJob)
+    appliedStudents=Job_student.objects.filter(status=Job_student.Status.APPLIED)
+    offeredStudents=Job_student.objects.filter(status=Job_student.Status.OFFERED)
+    placedStudents=Job_student.objects.filter(status=Job_student.Status.PLACED)
+    rejectedStudents=Job_student.objects.filter(status=Job_student.Status.REJECTED)
+    studentsPlacedCount = placedStudents.count() if placedStudents else 0
+    studentsOfferedCount = offeredStudents.count() if offeredStudents else 0
+    studentsAppliedCount = appliedStudents.count() if appliedStudents else 0
+    studentsRejectedCount = rejectedStudents.count() if rejectedStudents else 0
+    return render(request,"administrator/manageSelections.html",context={'job_students':jobSt,'selectedYear':selectedYear,'years':years,'selectedJob':selectedJob,'jobs':jobs,'appliedStudents':studentsAppliedCount,'offeredStudents':studentsOfferedCount,'placedStudents':studentsPlacedCount,'rejectedStudents':studentsRejectedCount})
 
 @staff_required
 def viewmanageSelections(request,id):
