@@ -4,27 +4,32 @@
     <script lang="javascript" src="{% static "src/js/xlsx.full.min.js" %}"></script>
 {% endblock meta %}
 {% block content %}
-        <div class="p-3 text-2xl pb-7">Registration List {% if selected != -1 %}{{selected.job}}{% endif %}</div>
-        <div class="flex p-2 mb-3 md:justify-between gap-2 flex-wrap justify-center">
-            <select name="years" id="years">
-                <option disabled selected value> -- select an Academic year -- </option>
-                {% for year in years %}
-                    <option value="{{year.pk}}" {% if selectedYear.pk == year.pk %}selected{% endif %}>{{year}}</option>
-                {% endfor %}
-            </select>
-            <select name="jobs" id="jobs">
-                <option disabled selected value> -- select an job-company -- </option>
-                <option value="0" {% if selected.id == 0 %}selected{% endif %}>All</option>
-                {% for job in jobs %}
-                  <option value="{{job.pk}}" {% if selected.id == job.pk %}selected{% endif %}>{{job}}</option>
-                {% endfor %}
-            </select>
-            <div class="flex flex-wrap justify-end gap-3 md:justify-center">
-                {% include "../../buttons/buttons.html" with id="printSheet" btn="Print Sheet" %}
-                {% include "../../buttons/buttons.html" with id="printResume" btn="Print Resumes" secondary=True %}
-                {% include "../../buttons/buttons.html" with id="printImage" btn="Print Images" %}
-            </div>
-        </div>
+<div class="p-3 text-2xl pb-7">Registration List {% if selected != -1 %}{{selected.job}}{% endif %}</div>
+<div class="flex p-2 mb-3 md:justify-between gap-2 flex-wrap justify-center">
+    <select name="years" id="years">
+        <option disabled selected value> -- select an Academic year -- </option>
+        {% for year in years %}
+            <option value="{{year.pk}}" {% if selectedYear.pk == year.pk %}selected{% endif %}>{{year}}</option>
+        {% endfor %}
+    </select>
+    <select name="jobs" id="jobs">
+        <option disabled selected value> -- select an job-company -- </option>
+        <option value="0" {% if selected.id == 0 %}selected{% endif %}>All</option>
+        {% for job in jobs %}
+            <option value="{{job.pk}}" {% if selected.id == job.pk %}selected{% endif %}>{{job}}</option>
+        {% endfor %}
+    </select>
+    <div class="flex flex-wrap justify-end gap-3 md:justify-center">
+        {% include "../../buttons/buttons.html" with id="printSheet" btn="Print Sheet" %}
+        {% include "../../buttons/buttons.html" with id="printResume" btn="Print Resumes" secondary=True %}
+        {% include "../../buttons/buttons.html" with id="printImage" btn="Print Images" %}
+    </div>
+</div>
+{% if stLen %}
+<div class="text-center text-primary font-bold">
+    Number of students applied is <span class="text-lg">{{stLen}}</span>
+</div>
+{% endif %}
 
 <div class="relative overflow-auto  shadow-md sm:rounded-lg">
     <table class="w-full h-screen-50 text-sm text-left text-gray-500 dark:text-gray-400 ">

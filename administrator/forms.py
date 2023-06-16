@@ -3,13 +3,13 @@ from django.contrib.auth.models import User
 from django import forms
 from home.models import Slider, Team,Job,Company,Rule,Gallery
 from administrator.models import Notice
-from student.models import Student
+from student.models import Student,Branch
 from home.models import YearBatch
 
 class UserForm(ModelForm):
     yearBatch=forms.ModelChoiceField(queryset=YearBatch.objects.all())
-    def _init_(self,args,*kwargs):
-        super(UserForm,self)._init_(args,*kwargs)
+    def __init__(self,*args,**kwargs):
+        super(UserForm,self).__init__(*args,**kwargs)
         y=YearBatch.objects.all().order_by("-endYear").first()
         if y:
             self.fields['yearBatch'].initial=y.pk
@@ -116,3 +116,13 @@ class UpdateMarksForm(ModelForm):
         if commit:
             instance.save()
         return instance
+
+class YearBatchForm(ModelForm):
+    class Meta:
+        model=YearBatch
+        fields='__all__'
+
+class BranchForm(ModelForm):
+    class Meta:
+        model=Branch
+        fields='__all__'

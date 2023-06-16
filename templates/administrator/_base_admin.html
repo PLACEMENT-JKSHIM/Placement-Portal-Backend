@@ -144,27 +144,7 @@
           <span class="flex-1 ml-3 whitespace-nowrap">Edit team/homepage</span>
         </a>
       </li>
-      {% endif %} {% if user.is_superuser %}
-      <li>
-        <a
-          href="/au/addStaff"
-          class="group flex items-center p-2 text-base font-normal text-sidebarfont rounded-full hover:text-primary hover:bg-white hover:font-semibold hover:shadow-[0px_0px_10px_2px] hover:shadow-slate-400 [&>svg]:hover:animate-[spin_700ms_ease_1] dark:hover:bg-gray-700"
-        >
-          <svg
-            aria-hidden="true"
-            class="flex-shrink-0 w-6 h-6 text-sidebaricons transition duration-75 group-hover:text-primary dark:group-hover:text-white"
-            fill="currentColor"
-            viewBox="0 0 20 20"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z"
-            ></path>
-          </svg>
-          <span class="flex-1 ml-3 whitespace-nowrap">Add/Delete staff</span>
-        </a>
-      </li>
-      {% endif %}
+      {% endif %} 
       <li>
         <a
           href="/au/student/search"
@@ -334,6 +314,14 @@
                   <span class="flex-1 whitespace-nowrap">View Companys</span>
                 </a>
               </li>
+              <li>
+                <a
+                  href="/au/company/selections"
+                  class="flex items-center w-full p-2 text-base font-normal border-2 border-secondary text-white transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 hover:text-primary hover:border-white hover:font-semibold dark:hover:bg-gray-700"
+                >
+                  <span class="flex-1 whitespace-nowrap">Manage Selections</span>
+                </a>
+              </li>
             </ul>
           </li>
         </ul>
@@ -385,7 +373,7 @@
                   href="/au/report/list"
                   class="flex items-center w-full p-2 text-base font-normal border-2 border-secondary text-white transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 hover:text-primary hover:border-white hover:font-semibold dark:hover:bg-gray-700"
                 >
-                  <span class="flex-1 whitespace-nowrap">Student List</span>
+                  <span class="flex-1 whitespace-nowrap">Yearly Report</span>
                 </a>
               </li>
               <li>
@@ -412,11 +400,9 @@
       </li>
       {% if user.is_superuser %}
       <li class="mt-4">
-        <div
-          data-modal-target="popup-modal"
-          data-modal-toggle="popup-modal"
-          class="group cursor-pointer flex items-center p-2 text-base font-normal text-sidebarfont rounded-full hover:text-primary hover:bg-white hover:font-semibold hover:shadow-[0px_0px_10px_2px] hover:shadow-slate-400 [&>svg]:hover:animate-[spin_700ms_ease_1] dark:hover:bg-gray-700"
-          type="button"
+          <a
+          href="/au/manageportal"
+          class="group flex items-center p-2 text-base font-normal text-sidebarfont rounded-full hover:text-primary hover:bg-white hover:font-semibold hover:shadow-[0px_0px_10px_2px] hover:shadow-slate-400 [&>svg]:hover:animate-[spin_700ms_ease_1] dark:hover:bg-gray-700"
         >
           <svg
             aria-hidden="true"
@@ -431,78 +417,13 @@
               d="M7.84 1.804A1 1 0 018.82 1h2.36a1 1 0 01.98.804l.331 1.652a6.993 6.993 0 011.929 1.115l1.598-.54a1 1 0 011.186.447l1.18 2.044a1 1 0 01-.205 1.251l-1.267 1.113a7.047 7.047 0 010 2.228l1.267 1.113a1 1 0 01.206 1.25l-1.18 2.045a1 1 0 01-1.187.447l-1.598-.54a6.993 6.993 0 01-1.929 1.115l-.33 1.652a1 1 0 01-.98.804H8.82a1 1 0 01-.98-.804l-.331-1.652a6.993 6.993 0 01-1.929-1.115l-1.598.54a1 1 0 01-1.186-.447l-1.18-2.044a1 1 0 01.205-1.251l1.267-1.114a7.05 7.05 0 010-2.227L1.821 7.773a1 1 0 01-.206-1.25l1.18-2.045a1 1 0 011.187-.447l1.598.54A6.993 6.993 0 017.51 3.456l.33-1.652zM10 13a3 3 0 100-6 3 3 0 000 6z"
             ></path>
           </svg>
-          <span class="flex-1 ml-3 whitespace-nowrap">Reset Portal</span>
-        </div>
+          <span class="flex-1 ml-3 whitespace-nowrap">Manage Portal</span>
+        </a>
       </li>
       {% endif %}
     </ul>
   </div>
 </aside>
-<div
-  id="popup-modal"
-  tabindex="-1"
-  class="fixed top-0 left-0 right-0 z-50 hidden p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] md:h-full"
->
-  <div class="relative w-full h-full max-w-md md:h-auto">
-    <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
-      <button
-        type="button"
-        class="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-800 dark:hover:text-white"
-        data-modal-hide="popup-modal"
-      >
-        <svg
-          aria-hidden="true"
-          class="w-5 h-5"
-          fill="currentColor"
-          viewBox="0 0 20 20"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            fill-rule="evenodd"
-            d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-            clip-rule="evenodd"
-          ></path>
-        </svg>
-        <span class="sr-only">Close modal</span>
-      </button>
-      <div class="p-6 text-center">
-        <svg
-          aria-hidden="true"
-          class="mx-auto mb-4 text-gray-400 w-14 h-14 dark:text-gray-200"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-          ></path>
-        </svg>
-        <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
-          Are you sure you want to reset the portal?
-        </h3>
-        <a href="/au/reset">
-          <button
-            data-modal-hide="popup-modal"
-            type="button"
-            class="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center mr-2"
-          >
-            Yes, I'm sure
-          </button></a
-        >
-        <button
-          data-modal-hide="popup-modal"
-          type="button"
-          class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600"
-        >
-          No, cancel
-        </button>
-      </div>
-    </div>
-  </div>
 </div>
 <div class="pl-1 pt-5 md:pl-[270px] pr-3 w-full">
   {% block content %} {% endblock content %}

@@ -54,10 +54,10 @@
     </table>
 </div>
 <form method="get">
-    <input type="hidden" name="year" value="">
+    <input type="hidden" name="year" value="{{selectedYear.pk}}">
 </form>
 <script>
-    // const years = document.getElementById('years');
+    const years = document.getElementById('years');
     const colIndexesToDelete =new Map()
 
     const colSelect=document.getElementById('colSelect')

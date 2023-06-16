@@ -3,7 +3,7 @@ from django.forms.models import model_to_dict
 from django.core import serializers
 from django.shortcuts import render,redirect
 from home.models import Slider,Team,Company,Job,Rule,Gallery
-from .forms import TeamForm, UserForm,StaffForm,SliderForm,JobForm,CompanyForm,NewsForm,RuleForm,UpdateMarksForm,GalleryForm
+from .forms import TeamForm, UserForm,StaffForm,SliderForm,JobForm,CompanyForm,NewsForm,RuleForm,UpdateMarksForm,GalleryForm,YearBatchForm,BranchForm
 from django.http import HttpResponse,JsonResponse
 import json
 from student.models import Student,PreviousJob,Branch
@@ -448,10 +448,13 @@ def changePasswordAdmin(request):
             messages.error(request, 'Passwords do not match')
         else:
             # find the user and update the password
-            user = User.objects.get(username=username)
-            user.set_password(new_password)
-            user.save()
-            messages.success(request, f'Password updated successfully for user {username}')
+            user = User.objects.filter(username=username).first()
+            if user:
+                user.set_password(new_password)
+                user.save()
+                messages.success(request, f'Password updated successfully for user {username}')
+            else:
+                messages.error(request, f'{username} username doesnt exist')
             return redirect('changePasswordAdmin')
 
     return render(request, 'administrator/student/changePasswordAdmin.html')
@@ -504,30 +507,13 @@ def deleteNews(request,id):
     messages.success(request, 'Deleted successfully.')
     return redirect('../../newsAndUpdates')
 
-@superuser_required
-def addStaff(request):
-    if request.method=='POST' and request.POST.get('username'):
-        form=StaffForm(request.POST)
-        if form.is_valid():
-            user=form.save(commit=False)
-            user.set_password(request.POST['password'])
-            user.is_staff=True
-            user.save()
-            messages.success(request, message="Added staff successfully")
-        else:
-            for field,errors in form.errors.items():
-                for error in errors:
-                    messages.error(request, message=f"{field} : {error}")
-    form=StaffForm()
-    staffs=User.objects.filter(is_staff=True,is_superuser=False)
-    return render(request,'administrator/addStaff.html',context={'staffs':staffs,'form':form})
 
 @superuser_required
 def deleteStaff(request,uname):
     staff=get_object_or_404(User,username=uname)
     staff.delete()
     messages.success(request, message="Deleted staff successfully")
-    return redirect(to="/au/addStaff")
+    return redirect("manageportal")
    
 @superuser_required
 def adminEditor(request):
@@ -603,29 +589,6 @@ def profileEditBlockAll(req):
 def profileEditUnblockAll(req):
     Student.objects.all().update(editable=True)
     return redirect("blockStudent")
-
-@superuser_required
-def changePasswordAdmin(request):
-    if request.method == 'POST':
-        # get the input values from the POST request
-        username = request.POST.get('username')
-        new_password = request.POST.get('newpassword')
-        confirm_password = request.POST.get('confirmpassword')
-
-        # perform basic form validation
-        if not all([username, new_password, confirm_password]):
-            messages.error(request, 'All fields are required')
-        elif new_password != confirm_password:
-            messages.error(request, 'Passwords do not match')
-        else:
-            # find the user and update the password
-            user = User.objects.get(username=username)
-            user.set_password(new_password)
-            user.save()
-            messages.success(request, f'Password updated successfully for user {username}')
-            return redirect('changePasswordAdmin')
-
-    return render(request, 'administrator/student/changePasswordAdmin.html')
 
 @superuser_required
 def deleteTeamMember(request,id):
@@ -729,7 +692,10 @@ def registerList(request,id):
     selected={'id':id}
     years=YearBatch.objects.all()
     if request.GET.get("year"):
-        selectedYear=YearBatch.objects.filter(pk=int(request.GET.get("year"))).first()
+        try:
+            selectedYear=YearBatch.objects.filter(pk=int(request.GET.get("year"))).first()
+        except:
+            pass
     if not selectedYear:
         selectedYear=YearBatch.objects.all().order_by('-endYear').first()
 
@@ -744,9 +710,10 @@ def registerList(request,id):
         students.append(j.student)
         pjs.append(PreviousJob.objects.filter(user=j.student.user))
         
+    stLen=len(students)
     students = zip(students, pjs)
     jobs=Job.objects.filter(yearBatch=selectedYear)
-    return render(request,"administrator/report/registerList.html",context={'heads':heads,'jobs':jobs,'students':students,'selected':selected,'years':years,'selectedYear':selectedYear,})
+    return render(request,"administrator/report/registerList.html",context={'heads':heads,'jobs':jobs,'students':students,'selected':selected,'years':years,'selectedYear':selectedYear,'stLen':stLen})
     
 @staff_required
 def downLoadResumes(request,id):
@@ -852,23 +819,45 @@ def viewprofile(request,id):
     return render(request,"administrator/student/viewprofile.html",{'student':student})
 
 @staff_required
-def manageJobs(request):
-    jobSt=Job_student.objects.select_related('student','student__user')
-    return render(request,"administrator/manageJobs.html",context={'job_students':jobSt})
+def manageSelections(request):
+    years=YearBatch.objects.all()
+
+
+    selectedYear=False
+    if request.GET.get("year"):
+        try:
+            selectedYear=YearBatch.objects.filter(pk=int(request.GET.get("year"))).first()
+        except:
+            pass
+
+    if not selectedYear:
+        selectedYear=YearBatch.objects.all().order_by('-endYear').first()
+
+    jobs=Job.objects.filter(yearBatch=selectedYear)
+
+    selectedJob=False
+    if request.GET.get("job"):
+        try:
+            selectedJob=Job.objects.filter(pk=int(request.GET.get("job")),yearBatch=selectedYear).first()
+        except:
+            pass
+
+    if not selectedYear:
+        selectedYear=Job.objects.filter(yearBatch=selectedYear).first()
+
+
+    jobSt=Job_student.objects.filter(job=selectedJob).select_related('student','student__user')
+    return render(request,"administrator/manageSelections.html",context={'job_students':jobSt,'selectedYear':selectedYear,'years':years,'selectedJob':selectedJob,'jobs':jobs})
 
 @staff_required
-def viewmanageJobs(request,id):
+def viewmanageSelections(request,id):
     student=get_object_or_404(Job_student,id=id)
     if request.method == 'POST':
         status=request.POST.get('status')
-        if status == 'OF':
-            student.status = 'OF'
-        elif status == 'R':
-            student.status = 'R'
-        else:
-            student.status = 'A'
+        if status == Job_student.Status.OFFERED or status == Job_student.Status.REJECTED or status == Job_student.Status.PLACED:
+            student.status=status
         student.save()
-    return redirect("manageJobs")
+    return redirect(request.META.get('HTTP_REFERER', '/'))
 
 @superuser_required
 def resetportal(request):
@@ -886,6 +875,62 @@ def resetportal(request):
     notices.delete()
     return redirect('admin')
 
+@superuser_required
+def manageportal(request):
+    if request.method=='POST' and request.POST.get('startYear') :
+        form = YearBatchForm(request.POST)
+        if form.is_valid():
+            year = form.save()
+            messages.success(request, message=" {0}-{1} year added Successfully!".format(year.startYear,year.endYear))
+        else:
+            for field,errors in form.errors.items():
+                for error in errors:
+                    messages.error(request, message=f"{field} : {error}")
+    elif request.method=='POST' and request.POST.get('branchname1') :
+        form = BranchForm(request.POST)
+        if form.is_valid():
+            branch=form.save()
+            messages.success(request, message="Branch Combination {0}-{1} added successfully".format(branch.branchname1,branch.branchname2))
+        else:
+            for field,errors in form.errors.items():
+                for error in errors:
+                    messages.error(request, message=f"{field} : {error}")
+    elif request.method=='POST' and request.POST.get('username'):
+        form=StaffForm(request.POST)
+        if form.is_valid():
+            user=form.save(commit=False)
+            user.set_password(request.POST['password'])
+            user.is_staff=True
+            user.save()
+            messages.success(request, message="Added staff successfully")
+        else:
+            for field,errors in form.errors.items():
+                for error in errors:
+                    messages.error(request, message=f"{field} : {error} lol")
+
+    years=YearBatch.objects.all()
+    branches=Branch.objects.all()
+    staffs=User.objects.filter(is_staff=True,is_superuser=False)
+    staffform=StaffForm()
+    return render(request,"administrator/portal/manage_portal.html",{'years':years,'branches':branches,'staffs':staffs,'staffform':staffform})
+
+@superuser_required
+def deleteYearBatch(request, id):
+    academic_batch = get_object_or_404(YearBatch, id=id)
+    st=Student.objects.filter(yearBatch=academic_batch)
+    for s in st:
+        s.delete()
+    academic_batch.delete()
+
+    messages.success(request,message='{0}-{1} deleted successfully.'.format(academic_batch.startYear,academic_batch.endYear))
+    return redirect('manageportal')
+
+@superuser_required
+def deleteBranch(request,id):
+    branch=get_object_or_404(Branch,id=id)
+    messages.success(request,message='{0}-{1} deleted successfully.'.format(branch.branchname1,branch.branchname2))
+    branch.delete()
+    return redirect('manageportal')
 @staff_required
 def companyList(request):
     heads=["Company","Job Title","CTC","Number of applications","Number of job offers","Number of placed Students"]
@@ -893,7 +938,10 @@ def companyList(request):
 
     selectedYear=False
     if request.GET.get("year"):
-        selectedYear=YearBatch.objects.filter(pk=int(request.GET.get("year"))).first()
+        try:
+            selectedYear=YearBatch.objects.filter(pk=int(request.GET.get("year"))).first()
+        except:
+            passs
 
     
     if not selectedYear:
@@ -911,8 +959,10 @@ def student_report_list(request):
 
     selectedYear=False
     if request.GET.get("year"):
-        selectedYear=YearBatch.objects.filter(pk=int(request.GET.get("year"))).first()
-
+        try:
+            selectedYear=YearBatch.objects.filter(pk=int(request.GET.get("year"))).first()
+        except:
+            pass
     
     if not selectedYear:
         selectedYear=YearBatch.objects.all().order_by('-endYear').first()

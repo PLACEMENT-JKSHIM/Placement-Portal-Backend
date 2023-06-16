@@ -1,0 +1,85 @@
+{% extends "../administrator/_base_admin.html" %}
+{% block content %}
+<div class="p-3 text-2xl pb-7">Applied Student List</div>
+<div class="flex p-2 mb-3 md:justify-evenly gap-2 flex-wrap justify-center">
+    <select name="years" id="years">
+        <option disabled selected value> -- select an Academic year -- </option>
+        {% for year in years %}
+            <option value="{{year.pk}}" {% if selectedYear.pk == year.pk %}selected{% endif %}>{{year}}</option>
+        {% endfor %}
+    </select>
+    <form>
+        <input name="year" class="hidden" value="{{selectedYear}}"/>
+        <input name="job" class="hidden" value="{{selectedJob.pk}}"/>
+    </form>
+    <select name="jobs" id="jobs">
+        <option disabled selected value> -- select an Job -- </option>
+        {% for job in jobs %}
+            <option value="{{job.pk}}" {% if selectedJob.pk == job.pk %}selected{% endif %}>{{job}}</option>
+        {% endfor %}
+    </select>
+</div>
+<div class="flex flex-row flex-wrap justify-around items-center gap-4">
+    {% for student in job_students %}
+    <div class="block max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700 items-center">
+        <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{{student.student.user}}</h5>
+        <p class="font-normal text-gray-700 dark:text-gray-400">Name: {{student.student.username}}</p>
+        <p class="font-normal text-gray-700 dark:text-gray-400">Company Name: {{student.job.company.c_name}}</p>
+        <p class="font-normal text-gray-700 dark:text-gray-400">CTC: {{student.job.ctc_pa}} LPA</p>
+        {% if student.status == "A" %}
+        <p class="font-normal text-gray-700 dark:text-gray-400">APPLIED</p>
+        {% elif student.status == "OF" %}
+        <p class="font-normal text-gray-700 dark:text-gray-400">OFFERED</p>
+        {% elif student.status == "R" %}
+        <p class="font-normal text-gray-700 dark:text-gray-400">REJECTED</p>
+        {% elif student.status == "P" %}
+        <p class="font-normal text-gray-700 dark:text-gray-400">PLACED</p>
+        {% endif %}
+        {% if not student.status == 'OF' %}
+        <form method="post" action="{% url 'viewmanageSelections' id=student.id %}"
+        class="text-center">
+            {% csrf_token %}
+            <input type="hidden" name="status" value="OF">
+            {% include "../buttons/buttons.html" with btn="SELECT" id=student.id %}
+        </form>
+        {% endif %}
+        {% if not student.status == 'P' %}
+        <form method="post" action="{% url 'viewmanageSelections' id=student.id %}"
+        class="text-center">
+            {% csrf_token %}
+            <input type="hidden" name="status" value="P">
+            {% include "../buttons/buttons.html" with btn="PLACE" id=student.id %}
+        </form>
+        {% endif %}
+        {% if not student.status == 'R' %}
+        <form method="post" action="{% url 'viewmanageSelections' id=student.id %}"
+        class="text-center">
+            {% csrf_token %}
+            <input type="hidden" name="status" value="R">
+            {% include "../buttons/buttons.html" with btn="REJECT" id=student.id %}
+        </form>
+        {% endif %}
+    </div>
+    {% endfor %}
+</div>
+<script>
+    const years = document.getElementById('years');
+
+    years.addEventListener('change', (e) => {
+        document.forms[0].action= "{% url 'manageSelections'  %}"
+        document.forms[0].querySelectorAll('input')[0].value=e.target.value
+        document.forms[0].submit();
+    });
+
+    const jobs = document.getElementById('jobs');
+
+    jobs.addEventListener('change', (e) => {
+        document.forms[0].action= "{% url 'manageSelections'  %}"
+        document.forms[0].querySelectorAll('input')[1].value=e.target.value
+        document.forms[0].submit();
+    });
+
+</script>
+
+
+{% endblock content %}
