@@ -6,12 +6,8 @@
             <form action="" method="post" class="bg-white">
                 {% csrf_token %}
                 <div class="px-4 pt-3">
-                    <label class="my-3 font-semibold" for="username">Set staff username</label><br>
-                    <input class="my-3 w-full rounded-lg border-gray-300" type="text"
-                        name="username" placeholder="Enter staff username" required><br>
-                    <label class="my-3 font-semibold" for="password">Set a password</label><br>
-                    <input class="my-3 w-full rounded-lg border-gray-300" type="password"
-                        name="password" placeholder="Password"><br>
+                    {% include "../custom_fields/_inputT.html" with type="text" customOnly=True classL="my-3 font-semibold" classI="my-3 w-full rounded-lg border-gray-300" id="username" label="Set staff username"  placeholder="Enter staff username" autofocus=True required=True%}
+                    {% include "../custom_fields/_inputT.html" with type="password" customOnly=True classL="my-3 font-semibold" classI="my-3 w-full rounded-lg border-gray-300" id="password" label="Set a password"  placeholder="Set password" required=True%}
                 </div>
                 <div class="text-center mt-5 p-1 pb-2 bg-gray-100 font-semibold">
                     {% include "../buttons/buttons.html" with btn="Add Staff" %}
