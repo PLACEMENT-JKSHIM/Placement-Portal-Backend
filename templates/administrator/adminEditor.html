@@ -194,12 +194,10 @@
                <form class="space-y-6" action="" method="POST" enctype="multipart/form-data">
                   {% csrf_token %}
                   <div>
-                     <label for="mem_name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Member name</label>
-                     <input type="text" name="mem_name" id="mem_name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" required>
+                     {% include "../custom_fields/_inputT.html" with type="text" id="mem_name" label="Member name" autofocus=True required=True%}
                   </div>
                   <div>
-                        <label for="mem_designation" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Designation</label>
-                        <input type="text" name="mem_designation" id="mem_designation" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" required>
+                     {% include "../custom_fields/_inputT.html" with type="text" id="mem_designation" label="Designation" required=True%}
                   </div>
                   <div>
                      <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="mem_image">Member photo</label>
