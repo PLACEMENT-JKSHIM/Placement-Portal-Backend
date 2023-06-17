@@ -1,14 +1,15 @@
 import http
+from django.db.models import Max,Avg
 from django.forms.models import model_to_dict
 from django.core import serializers
 from django.shortcuts import render,redirect
 from home.models import Slider,Team,Company,Job,Rule,Gallery
-from .forms import TeamForm, UserForm,StaffForm,SliderForm,JobForm,CompanyForm,NewsForm,RuleForm,UpdateMarksForm,GalleryForm,YearBatchForm,BranchForm
+from .forms import TeamForm, UserForm,StaffForm,SliderForm,JobForm,CompanyForm,NewsForm,RuleForm,UpdateMarksForm,GalleryForm,YearBatchForm,BranchForm,StatisticForm
 from django.http import HttpResponse,JsonResponse
 import json
 from student.models import Student,PreviousJob,Branch
 from home.models import Job,YearBatch
-from administrator.models import Notice,Job_student
+from administrator.models import Notice,Job_student,Statistic
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from django.db import IntegrityError
@@ -29,6 +30,9 @@ from django.contrib.auth.hashers import make_password
 from django.db import transaction
 from django.utils.timezone import datetime,timezone
 from django.db.models import Count,Q
+
+#GLOBALS
+statistic_obj = Statistic.objects.all()[0]
 heads=['USN']
 unwanted=['id','user','editable','created_at','updated_at','status','job_student','image','resume','previousjob']
 for s in Student._meta.get_fields():
@@ -36,6 +40,8 @@ for s in Student._meta.get_fields():
         heads.append(s.verbose_name)
 
 heads.append('Previous Experience')
+
+
 
 def superuser_required(view_func):
     def wrapped_view(request, *args, **kwargs):
@@ -914,13 +920,23 @@ def manageportal(request):
         else:
             for field,errors in form.errors.items():
                 for error in errors:
-                    messages.error(request, message=f"{field} : {error} lol")
+                    messages.error(request, message=f"{field} : {error} ")
+    elif request.method=='POST' and request.POST.get('placed_count'):
+        form=StatisticForm(request.POST,instance=statistic_obj)
+        if form.is_valid():
+            form.save()
+            messages.success(request,message="Placement Stats Updated successfully")
+        else:
+            for field,errors in form.errors.items():
+                for error in errors:
+                    messages.error(request, message=f"{field} : {error}")
 
     years=YearBatch.objects.all()
     branches=Branch.objects.all()
     staffs=User.objects.filter(is_staff=True,is_superuser=False)
     staffform=StaffForm()
-    return render(request,"administrator/portal/manage_portal.html",{'years':years,'branches':branches,'staffs':staffs,'staffform':staffform})
+    statsform=StatisticForm(instance=statistic_obj)
+    return render(request,"administrator/portal/manage_portal.html",{'years':years,'branches':branches,'staffs':staffs,'staffform':staffform,'statsform':statsform})
 
 @superuser_required
 def deleteYearBatch(request, id):
@@ -949,7 +965,7 @@ def companyList(request):
         try:
             selectedYear=YearBatch.objects.filter(pk=int(request.GET.get("year"))).first()
         except:
-            passs
+            pass
 
     
     if not selectedYear:
@@ -977,3 +993,22 @@ def student_report_list(request):
 
     students=Job_student.objects.filter(student__yearBatch=selectedYear,status=Job_student.Status.PLACED).select_related('student','job','student__user')
     return render(request,"administrator/report/studentReport.html",context={'years':years,'selectedYear':selectedYear,'students':students,'heads':heads})
+
+
+
+@superuser_required
+def yearbatch_stats(request):
+    if request.method=='POST' and request.POST.get('year'):
+        year=request.POST.get('year')
+        jobs=Job.objects.filter(yearBatch=year)
+        statistic_obj.placed_count=Job_student.objects.filter(student__yearBatch=year,job__in=jobs,status=Job_student.Status.PLACED).count()
+        statistic_obj.offers_count=Job_student.objects.filter(student__yearBatch=year,job__in=jobs,status=Job_student.Status.OFFERED).count()
+        statistic_obj.highest_ctc = Job.objects.filter(yearBatch=year).aggregate(max_ctc=Max('ctc_pa')).get('max_ctc', 0) or 0
+        statistic_obj.avg_ctc = Job.objects.filter(yearBatch=year).aggregate(avg_ctc=Avg('ctc_pa')).get('avg_ctc', 0) or 0
+        statistic_obj.companies_visited = jobs.filter(yearBatch=year).values('company').distinct().count()
+        statistic_obj.save()
+        messages.success(request,message="Placement Stats Updated successfully")
+    
+    return redirect('manageportal')
+    
+

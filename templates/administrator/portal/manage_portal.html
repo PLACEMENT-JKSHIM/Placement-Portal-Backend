@@ -339,8 +339,49 @@
             </div>
                   
                 <div class="hidden" id="tab-stats">
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit. Eligendi ad odit, adipisci dolore doloribus sapiente accusantium veniam molestias nihil sequi dolor ullam sit eveniet voluptatem veritatis nostrum amet neque distinctio vitae impedit soluta ex magnam? Qui, nulla officia dolores non, sunt debitis perferendis aliquid et facere eaque accusamus neque maiores assumenda fugiat fuga. Expedita laboriosam tenetur corporis aut exercitationem, ad blanditiis non ullam? Commodi fuga asperiores, ab ipsum porro aliquid deserunt nulla quae dolorem! Aut atque nobis tenetur! Unde ducimus nobis in corrupti repellat doloremque architecto voluptatibus deserunt doloribus quod, incidunt eius iste esse cumque illo cupiditate dolor dolore alias?
-                 </div>
+                    <form method="POST">
+                        {% csrf_token %}
+                        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-12 gap-3 text-sm">
+                          <div class="sm:col-span-1 md:col-span-6">
+                            {% include "../../custom_fields/_input.html" with field=statsform.placed_count %}
+                          </div>
+                          <div class="sm:col-span-1 md:col-span-6">
+                            {% include "../../custom_fields/_input.html" with field=statsform.offers_count %}
+                          </div>
+                          <div class="sm:col-span-1 md:col-span-6">
+                            {% include "../../custom_fields/_input.html" with field=statsform.highest_ctc %}
+                          </div>
+                          <div class="sm:col-span-1 md:col-span-6">
+                            {% include "../../custom_fields/_input.html" with field=statsform.avg_ctc %}
+                          </div>
+                          <div class="sm:col-span-1 md:col-span-6">
+                            {% include "../../custom_fields/_input.html" with field=statsform.companies_visited %}
+                          </div>
+                          
+                                    <div class="relative sm:col-span-1 md:col-span-12 w-40 m-auto mt-4">
+                                        {% include "../../buttons/buttons.html" with main=True btn="Update Stats" secondary=False %}
+                                    </div>
+                                </form>
+                                <div class="mt-10 pt-10 border-t border-secondary">
+                                    <h1 class="text-xl font-bold text-primary"><span class="underline underline-offset-8 decoration-7 decoration-secondary">Calulate</span>&nbsp;Batchwise</h1>
+                                    <form method="POST" action="{% url 'year_stats' %}">
+                                        {% csrf_token %}
+                                        <div class="sm:col-span-1 md:col-span-6">
+                                            <select name="year" id="year">
+                                                <option disabled selected value> -- select an Academic year -- </option>
+                                                {% for year in years %}
+                                                    <option value="{{ year.pk }}">{{ year }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                        <div class="relative sm:col-span-1 md:col-span-12 w-40 m-auto mt-4">
+                                            {% include "../../buttons/buttons.html" with main=True btn="Add Job" secondary=False %}
+                                        </div>
+                                    </form>
+                                
+                                </div>
+                            </div>
+                
             </div>
         </div>
 
