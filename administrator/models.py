@@ -41,3 +41,11 @@ class Statistic(models.Model):
     companies_visited = models.IntegerField(default=0, verbose_name='Companies Visited')
     def __str__(self):
         return f"Statistics"
+    
+class Job_branch(models.Model):
+    job = models.ForeignKey(Job, on_delete=models.CASCADE)
+    branch = models.ForeignKey('student.Branch', on_delete=models.CASCADE)
+    class Meta:
+        unique_together = (('job', 'branch'),)
+    def __str__(self):
+        return f"{self.job}-{self.branch}"

@@ -84,6 +84,21 @@
                         </label>
                         {{form.yearBatch}}
                     </div>
+                    <div class="sm:col-span-1 md:col-span-6">
+                      <label for="id_allowed_branches">Allowed Branches:</label>
+                      <div class="mb-4">
+                        {% for branch in branches %}
+                          <div class="flex items-center">
+                            <input type="checkbox" name="allowed_branches" id="branch_{{ branch.id }}" value="{{ branch.id }}" class="form-checkbox"   {% for associated_branch in associated_branches %}
+                            {% if associated_branch == branch.id %}
+                                checked
+                            {% endif %}
+                        {% endfor %}>
+                            <label for="branch_{{ branch.id }}" class="ml-2">{{ branch }}</label>
+                          </div>
+                        {% endfor %}
+                      </div>
+                  </div>
                       <div class="relative sm:col-span-1 md:col-span-12 w-40 m-auto mt-4">
                         {% include "../../buttons/buttons.html" with main=True btn="Update" secondary=False %}
                     </div>

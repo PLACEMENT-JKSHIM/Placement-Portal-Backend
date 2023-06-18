@@ -272,7 +272,7 @@
                     <div class="hidden" id="tab-staff">
                      
                      
-                     <div class="p-2 text-2xl pb-7 text-center">Add/Delete Staff</div>
+                        <h1 class="text-3xl font-bold text-center mb-4 text-primary"><span class="underline underline-offset-8 decoration-7 decoration-secondary">Manage </span>&nbsp;Staff</h1>
                      <div class="rounded-lg border-slate-300 text-left overflow-auto border-2">
                          <div class="bg-primary h-10 text-white px-4 pt-2 uppercase font-semibold text-center">Add staff</div>
                          <form action="" method="post" class="bg-white">
@@ -347,6 +347,7 @@
             </div>
                   
                 <div class="hidden" id="tab-stats">
+                    <h1 class="text-2xl font-bold text-center mb-4 text-primary"><span class="underline underline-offset-8 decoration-7 decoration-secondary">Edit</span>&nbsp;Statistics</h1>
                     <form method="POST">
                         {% csrf_token %}
                         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-12 gap-3 text-sm">
@@ -371,7 +372,7 @@
                                     </div>
                                 </form>
                                 <div class="mt-10 pt-10 border-t border-secondary">
-                                    <h1 class="text-xl font-bold text-primary"><span class="underline underline-offset-8 decoration-7 decoration-secondary">Calulate</span>&nbsp;Batchwise</h1>
+                                    <h1 class="text-xl font-bold text-primary mb-3"><span class="underline underline-offset-8 decoration-7 decoration-secondary">Calulate</span>&nbsp;Batchwise</h1>
                                     <form method="POST" action="{% url 'year_stats' %}">
                                         {% csrf_token %}
                                         <div class="sm:col-span-1 md:col-span-6">

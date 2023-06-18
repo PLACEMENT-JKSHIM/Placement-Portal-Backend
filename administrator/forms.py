@@ -61,6 +61,8 @@ class JobForm(ModelForm):
             'interview_date': forms.DateInput(attrs={'type': 'date'}),
 
             'test_date': forms.DateInput(attrs={'type': 'date'}),
+
+            'allowed_branches': forms.CheckboxSelectMultiple,
         }
 
 class CompanyForm(ModelForm):

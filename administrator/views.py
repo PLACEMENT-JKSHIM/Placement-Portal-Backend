@@ -9,7 +9,7 @@ from django.http import HttpResponse,JsonResponse
 import json
 from student.models import Student,PreviousJob,Branch
 from home.models import Job,YearBatch
-from administrator.models import Notice,Job_student,Statistic
+from administrator.models import Notice,Job_student,Statistic,Job_branch
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from django.db import IntegrityError
@@ -366,19 +366,28 @@ def applyUnblockAll(req):
 
 @superuser_required
 def addJob(request):
+    branches=Branch.objects.all()
     if request.method == 'POST':
         form = JobForm(request.POST)
         if form.is_valid():
             job = form.save()
-            messages.success(request, message=" {0} added Successfully!".format(job.title))
+            selected_branches = request.POST.getlist('allowed_branches')
+            print(selected_branches)
+            for branch_id in selected_branches:
+                branch = Branch.objects.get(id=branch_id)
+                job_branch = Job_branch.objects.create(job=job, branch=branch)
+                job_branch.save()
+            job.save()
+            messages.success(request, f"{job.title} added successfully!")
+            return redirect('jobs')
         else:
-            for field,errors in form.errors.items():
+            for field, errors in form.errors.items():
                 for error in errors:
-                    messages.error(request, message=f"{field} : {error}")
-        return redirect('jobs')
+                    messages.error(request, f"{field}: {error}")
     else:
         form = JobForm()
-    context = {'form': form}
+    
+    context = {'form': form,"branches":branches}
     return render(request, "administrator/company/addjob.html", context)
 
 @superuser_required
@@ -790,9 +799,18 @@ def deleteJob(request, id):
 @superuser_required
 def editJob(request,id):
     job=get_object_or_404(Job,id=id)
+    branches=Branch.objects.all()
+    job_branches = Job_branch.objects.filter(job=job)
+    associated_branches = list(job_branches.values_list('branch_id', flat=True))
+    print(associated_branches)
     jobname=job.title
     if request.method=='POST':
         form = JobForm(request.POST,instance=job)
+        updated_branches = request.POST.getlist('allowed_branches')
+        Job_branch.objects.filter(job=job).delete()
+        for branch_id in updated_branches:
+            branch = Branch.objects.get(id=branch_id)
+            Job_branch.objects.create(job=job, branch=branch)
         if form.is_valid():
             form.save()
             messages.success(request, message=" {0} updated Successfully!".format(jobname))
@@ -803,7 +821,9 @@ def editJob(request,id):
     else:
         form=JobForm(instance=job)
         context={
-            'form':form
+            'form':form,
+            'branches':branches,
+            'associated_branches':associated_branches
         }
         return render(request,"administrator/company/editJob.html",context)
     return redirect('viewJob', id=job.id)
