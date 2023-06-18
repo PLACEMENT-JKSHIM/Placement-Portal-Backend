@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from .forms import StudentForm,PreviousJobForm
 from .models import Student,PreviousJob
 from django.contrib.auth.decorators import login_required
-from administrator.models import Notice,Job_student
+from administrator.models import Job_branch, Notice,Job_student
 from home.models import Company
 from django.contrib import messages
 from django.shortcuts import get_object_or_404
@@ -139,6 +139,10 @@ def student_home(request):
     return render(request,"student/student_home.html",{'news':news})
 
 def is_eligible(job, student):
+        student_branch = student.branch.id
+        job_branches = Job_branch.objects.filter(job=job)
+        if student_branch not in job_branches.values_list('branch', flat=True):
+            return False
         if not student.name:
             return False
         if student.cgpa < job.curr_cgpa:
@@ -168,6 +172,7 @@ def is_eligible(job, student):
 @normaluserWithProfile_required
 def companyPage(request,id):
     job = get_object_or_404(Job,id=id)
+    job_branches=Job_branch.objects.filter(job=job)
     if job.reg_open==True and job.registration_last_date<datetime.now(timezone.utc):
         job.reg_open=False
         job.save()
@@ -184,7 +189,7 @@ def companyPage(request,id):
                 messages.error(request, 'Already applied.')
             return redirect('companyPage',id=id)
 
-    return render(request,"student/companyPage.html",{'job':job,'id':id,'student':student,'eligible':eligible,'job_student':job_student})
+    return render(request,"student/companyPage.html",{'job':job,'id':id,'student':student,'eligible':eligible,'job_student':job_student,'job_branches':job_branches})
 
 @normaluser_required
 def rules(request):
