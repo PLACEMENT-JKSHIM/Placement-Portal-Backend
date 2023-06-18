@@ -778,11 +778,13 @@ def downLoadImages(request,id):
 @staff_required
 def viewJob(request,id):
     job=get_object_or_404(Job,id=id)
+    job_branches=Job_branch.objects.filter(job=job)
     if job.reg_open==True and job.registration_last_date<datetime.now(timezone.utc):
         job.reg_open=False
         job.save()
     context={
-        'job':job
+        'job':job,
+        'job_branches':job_branches
     }
     return render(request,"administrator/company/viewJob.html",context)
 
