@@ -2,12 +2,24 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.core.validators import MaxValueValidator, MinValueValidator
 from datetime import date
+import uuid
 # Create your models here.
+
+
+def generate_unique_filename(instance, filename, folder):
+   unique_id = uuid.uuid4().hex
+
+   extension = filename.split('.')[-1]
+
+   unique_filename = f"{folder}/{unique_id}.{extension}"
+
+   return unique_filename
+
 
 class Company(models.Model):
     c_name = models.CharField(max_length=60, blank=False, null=False, verbose_name='Company Name')
     about = models.CharField(max_length=1000, null=True, blank=True, verbose_name='About')
-    image = models.ImageField(upload_to='images', blank=True,null=True, default=None,  verbose_name='Image')
+    image = models.ImageField(upload_to=lambda instance, filename: generate_unique_filename(instance, filename, 'images'), blank=True,null=True, default=None,  verbose_name='Image')
 
 
     def __str__(self):
@@ -16,7 +28,7 @@ class Company(models.Model):
 class Team(models.Model):
     mem_name = models.CharField(max_length=60, verbose_name='Member Name', null=False)
     mem_designation = models.CharField(max_length=60, verbose_name='Member Designation', null=False)
-    mem_image = models.ImageField(upload_to='teams', blank=True,null=True, verbose_name='Member Image')
+    mem_image = models.ImageField(upload_to=lambda instance, filename: generate_unique_filename(instance, filename, 'teams'), blank=True,null=True, verbose_name='Member Image')
     mem_description = models.TextField(null=True, blank=True, default='', verbose_name='Member Description')
 
     def __str__(self):
@@ -28,14 +40,14 @@ class Rule(models.Model):
         return f"{self.rule}"
 
 class Slider(models.Model):
-    slider_image = models.ImageField(upload_to='sliders', verbose_name='Slider Image')
+    slider_image = models.ImageField(upload_to=lambda instance, filename: generate_unique_filename(instance, filename, 'sliders'), verbose_name='Slider Image')
     def __str__(self):
         return f"{self.slider_image}"
 
 class Gallery(models.Model):
     title = models.CharField(max_length=30, verbose_name='Gallery Title', null=False)
     description = models.CharField(max_length=100, verbose_name='Gallery Description')
-    image= models.ImageField(upload_to='gallery', verbose_name='Gallery Image',null=False)
+    image= models.ImageField(upload_to=lambda instance, filename: generate_unique_filename(instance, filename, 'gallery'), verbose_name='Gallery Image',null=False)
     def __str__(self):
         return f"{self.title}"
 
