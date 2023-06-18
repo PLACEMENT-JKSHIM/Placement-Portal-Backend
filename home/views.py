@@ -30,6 +30,7 @@ def index(request):
     teams = Team.objects.all()
     gallery = Gallery.objects.all()
     statistics = Statistic.objects.all().first()
+    print(statistics)
     return render(request, "home/index.html",context={'gallery':gallery,'sliders':sliders,'teams':teams,'total_placed':total_placed,'total_offered':total_offered,'highest_package':highest_package,'average_package':average_package,'total_companies':total_companies,'statistics':statistics})
 
 

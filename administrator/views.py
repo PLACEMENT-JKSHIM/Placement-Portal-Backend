@@ -1010,5 +1010,25 @@ def yearbatch_stats(request):
         messages.success(request,message="Placement Stats Updated successfully")
     
     return redirect('manageportal')
+
+@superuser_required
+def editBranch(request,id):
+    branch=get_object_or_404(Branch,id=id)
+    if request.method=='POST':
+        form = BranchForm(request.POST,instance=branch)
+        if form.is_valid():
+            form.save()
+            messages.success(request, message=" Branch updated Successfully!")
+        else:
+            for field,errors in form.errors.items():
+                for error in errors:
+                    messages.error(request, message=f"{field} : {error}")
+    else:
+        form=BranchForm(instance=branch)
+        context={
+            'form':form
+        }
+        return render(request,"administrator/portal/editBranch.html",context)
+    return redirect("manageportal")
     
 

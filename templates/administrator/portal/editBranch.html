@@ -1,0 +1,23 @@
+{% extends "../_base_admin.html" %} 
+{% block content %}
+
+<div class="text-center">
+    <h1 class="p-2 text-2xl pb-7 uppercase font-semibold text-primary">Edit Branch</h1>
+        <div class="rounded-lg border-primary text-left overflow-auto border-2">
+            <form action="" method="POST">
+                {% csrf_token %}
+                <div class="px-4 pt-3 flex flex-col gap-2">
+                    {% include "../../custom_fields/_input.html" with field=form.branchname1 %}
+                </div>
+                <div class="px-4 pt-3 flex flex-col gap-2">
+                    {% include "../../custom_fields/_input.html" with field=form.branchname2 %}
+                </div>
+                <div class="text-center mt-5 p-1 pb-2 bg-gray-100 font-semibold">
+                    {% include "../../buttons/buttons.html" with btn="Update Branch" %}
+                </div>
+            </form>
+        </div>
+      
+
+</div>
+{% endblock content %}
