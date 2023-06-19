@@ -373,6 +373,8 @@ def addJob(request):
             job = form.save()
             selected_branches = request.POST.getlist('allowed_branches')
             print(selected_branches)
+            if not selected_branches:  # Check if selected_branches is empty(select all branches if no branch selected)
+                selected_branches = [str(branch.id) for branch in branches]
             for branch_id in selected_branches:
                 branch = Branch.objects.get(id=branch_id)
                 job_branch = Job_branch.objects.create(job=job, branch=branch)
@@ -809,6 +811,8 @@ def editJob(request,id):
     if request.method=='POST':
         form = JobForm(request.POST,instance=job)
         updated_branches = request.POST.getlist('allowed_branches')
+        if not updated_branches: 
+            updated_branches = [str(branch.id) for branch in branches]
         Job_branch.objects.filter(job=job).delete()
         for branch_id in updated_branches:
             branch = Branch.objects.get(id=branch_id)
