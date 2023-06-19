@@ -373,13 +373,14 @@
                                 </form>
                                 <div class="mt-10 pt-10 border-t border-secondary">
                                     <h1 class="text-xl font-bold text-primary mb-3"><span class="underline underline-offset-8 decoration-7 decoration-secondary">Calulate</span>&nbsp;Batchwise</h1>
-                                    <form method="POST" action="{% url 'year_stats' %}">
+                                    <form method="POST" action="{% url 'manageportal' %}">
                                         {% csrf_token %}
                                         <div class="sm:col-span-1 md:col-span-6">
+                                            <label for="batch" class="block text-sm font-medium text-gray-700 dark:text-gray-200">{% if statYear  %}Cuurent Batch:{{ statYear }}{% endif %}</label>
                                             <select name="year" id="year">
                                                 <option disabled selected value> -- select an Academic year -- </option>
                                                 {% for year in years %}
-                                                    <option value="{{ year.pk }}">{{ year }}</option>
+                                                    <option value="{{ year.pk }}" {% if statYear.pk == year.pk %}selected{% endif %}>{{ year }}</option>
                                                 {% endfor %}
                                             </select>
                                         </div>

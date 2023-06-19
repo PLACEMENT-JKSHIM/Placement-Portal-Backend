@@ -33,6 +33,7 @@ from django.db.models import Count,Q
 
 #GLOBALS
 statistic_obj = Statistic.objects.all()[0]
+statYear=None
 heads=['USN']
 unwanted=['id','user','editable','created_at','updated_at','status','job_student','image','resume','previousjob']
 for s in Student._meta.get_fields():
@@ -917,6 +918,7 @@ def resetportal(request):
 
 @superuser_required
 def manageportal(request):
+    global statYear
     if request.method=='POST' and request.POST.get('startYear') :
         form = YearBatchForm(request.POST)
         if form.is_valid():
@@ -956,13 +958,26 @@ def manageportal(request):
             for field,errors in form.errors.items():
                 for error in errors:
                     messages.error(request, message=f"{field} : {error}")
-
+    elif request.method=='POST' and request.POST.get('year'):
+        year=request.POST.get('year')
+        statYear=YearBatch.objects.filter(pk=year).first()
+        jobs=Job.objects.filter(yearBatch=year)
+        statistic_obj.placed_count=Job_student.objects.filter(student__yearBatch=year,job__in=jobs,status=Job_student.Status.PLACED).count()
+        statistic_obj.offers_count=Job_student.objects.filter(student__yearBatch=year,job__in=jobs,status=Job_student.Status.OFFERED).count()
+        statistic_obj.highest_ctc = Job.objects.filter(yearBatch=year).aggregate(max_ctc=Max('ctc_pa')).get('max_ctc', 0) or 0
+        statistic_obj.avg_ctc = Job.objects.filter(yearBatch=year).aggregate(avg_ctc=Avg('ctc_pa')).get('avg_ctc', 0) or 0
+        statistic_obj.companies_visited = jobs.filter(yearBatch=year).values('company').distinct().count()
+        statistic_obj.save()
+        messages.success(request,message="Placement Stats Updated successfully")
+   
     years=YearBatch.objects.all()
+    if not years:
+        statYear = None
     branches=Branch.objects.all()
     staffs=User.objects.filter(is_staff=True,is_superuser=False)
     staffform=StaffForm()
     statsform=StatisticForm(instance=statistic_obj)
-    return render(request,"administrator/portal/manage_portal.html",{'years':years,'branches':branches,'staffs':staffs,'staffform':staffform,'statsform':statsform})
+    return render(request,"administrator/portal/manage_portal.html",{'years':years,'branches':branches,'staffs':staffs,'staffform':staffform,'statsform':statsform,'statYear':statYear})
 
 @superuser_required
 def deleteYearBatch(request, id):
@@ -1021,21 +1036,6 @@ def student_report_list(request):
     return render(request,"administrator/report/studentReport.html",context={'years':years,'selectedYear':selectedYear,'students':students,'heads':heads})
 
 
-
-@superuser_required
-def yearbatch_stats(request):
-    if request.method=='POST' and request.POST.get('year'):
-        year=request.POST.get('year')
-        jobs=Job.objects.filter(yearBatch=year)
-        statistic_obj.placed_count=Job_student.objects.filter(student__yearBatch=year,job__in=jobs,status=Job_student.Status.PLACED).count()
-        statistic_obj.offers_count=Job_student.objects.filter(student__yearBatch=year,job__in=jobs,status=Job_student.Status.OFFERED).count()
-        statistic_obj.highest_ctc = Job.objects.filter(yearBatch=year).aggregate(max_ctc=Max('ctc_pa')).get('max_ctc', 0) or 0
-        statistic_obj.avg_ctc = Job.objects.filter(yearBatch=year).aggregate(avg_ctc=Avg('ctc_pa')).get('avg_ctc', 0) or 0
-        statistic_obj.companies_visited = jobs.filter(yearBatch=year).values('company').distinct().count()
-        statistic_obj.save()
-        messages.success(request,message="Placement Stats Updated successfully")
-    
-    return redirect('manageportal')
 
 @superuser_required
 def editBranch(request,id):
