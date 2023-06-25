@@ -1,0 +1,5 @@
+{% load widget_tweaks %}
+<div>
+    <label for="{{id}}" class="{{classL}} {%if not customOnly%}block mb-2 text-sm font-medium text-gray-900 dark:text-white{%endif%}">{{label}} {% if required %}<span class="text-red-600">*</span>{% endif %}</label>
+    <input type={{type}} placeholder="{{placeholder}}" name={{id}} id={{id}}  {% if required %}required{% endif %} {% if autofocus %}autofocus{% endif %} class="{{classI}} {%if not customOnly%}bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5{%endif%}"/>
+</div>

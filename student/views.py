@@ -142,31 +142,33 @@ def is_eligible(job, student):
         student_branch = student.branch.id
         job_branches = Job_branch.objects.filter(job=job)
         if student_branch not in job_branches.values_list('branch', flat=True):
-            return False
+            return False,"Your branch is not eligible"
         if not student.name:
-            return False
+            return False,"Please fill profile details"
         if student.cgpa < job.curr_cgpa:
-            return False
+            return False,"Cgpa is low"
         if student.tenPercentage < job.sslc:
-            return False
+            return False,"10th percentage low"
         if student.twelvePercentage < job.puc and student.diplomaPercentage < job.diploma:
-            return False
+            return False,"12th percentage low"
         if student.degreePercentage < job.degree:
-            return False
+            return False,"Degree percentage low"
+        if student.diplomaPercentage < job.diploma:
+            return False,"Diploma percentage low"
         if student.activeBacklog > job.max_activebacklog:
-            return False
+            return False,"Active backlogs are more"
         if student.totalBacklog > job.max_histbacklog:
-            return False
+            return False,"Total backlogs are more"
         if student.gap_edu > job.gap_edu:
-            return False
+            return False,"Gap is eduction is more"
         if job.min_dob and (not student.dateOfBirth or student.dateOfBirth < job.min_dob):
-            return False
+            return False,"Date of birth out of range"
         if job.max_dob and (not student.dateOfBirth or student.dateOfBirth > job.max_dob):
-            return False
+            return False,"Date of birth out of range"
         if student.yearBatch != job.yearBatch:
-            return False
+            return False,"Job not applicable for your academic year"
         if not student.branch:
-            return False
+            return False,"Please fill profile details"
         return True
 
 @normaluserWithProfile_required
@@ -177,7 +179,7 @@ def companyPage(request,id):
         job.reg_open=False
         job.save()
     student = request.user.student
-    eligible = is_eligible(job,student)
+    eligible,reason = is_eligible(job,student)
     job_student = Job_student.objects.filter(job=job,student=student).first()
 
     if request.method == 'POST' and eligible:
@@ -189,7 +191,7 @@ def companyPage(request,id):
                 messages.error(request, 'Already applied.')
             return redirect('companyPage',id=id)
 
-    return render(request,"student/companyPage.html",{'job':job,'id':id,'student':student,'eligible':eligible,'job_student':job_student,'job_branches':job_branches})
+    return render(request,"student/companyPage.html",{'job':job,'id':id,'student':student,'eligible':eligible,'job_student':job_student,'job_branches':job_branches,'reason':reason})
 
 @normaluser_required
 def rules(request):

@@ -4,6 +4,8 @@ from django.contrib.auth.models import User
 from home.models import YearBatch
 from django.core.validators import MaxValueValidator, MinValueValidator 
 from django.core.exceptions import ValidationError
+import home.models as m
+
 
 def validate_file_size(value):
     filesize= value.size
@@ -45,8 +47,8 @@ class Student(models.Model):
     name=models.CharField(blank=True,max_length=50,verbose_name='Name as in 10th marks card')
     nameAadhar=models.CharField(blank=True,max_length=50,verbose_name='Name as in Aadhar card')
     gender=models.CharField(max_length=1,choices=Gender.choices,default=Gender.MALE,verbose_name="Gender")
-    image=models.ImageField(blank=True,null=True,upload_to='student',validators=[validate_file_size])
-    resume=models.FileField(blank=True,null=True,upload_to='resume',validators=[validate_file_size])
+    image=models.ImageField(blank=True,null=True,upload_to=lambda instance, filename: m.generate_unique_filename(instance, filename, 'student'),validators=[validate_file_size])
+    resume=models.FileField(blank=True,null=True,upload_to=lambda instance, filename: m.generate_unique_filename(instance, filename, 'resume'),validators=[validate_file_size])
     branch=models.ForeignKey(Branch,blank=True,null=True, on_delete=models.SET_NULL,verbose_name="Branch")
     phoneNo=models.IntegerField(blank=True,null=True,verbose_name="Phone number",validators=[MinValueValidator(1000000000),MaxValueValidator(99999999999)])
     alternatePhoneNo=models.IntegerField(blank=True,null=True,verbose_name="Alternate Phone number",validators=[MinValueValidator(1000000000),MaxValueValidator(99999999999)])

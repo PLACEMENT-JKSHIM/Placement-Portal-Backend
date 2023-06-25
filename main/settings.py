@@ -57,7 +57,8 @@ INSTALLED_APPS = [
     'student',
     'administrator',
     'widget_tweaks',
-    'mathfilters'
+    'mathfilters',
+    'django_cleanup.apps.CleanupConfig'
 ]
 
 MIDDLEWARE = [
