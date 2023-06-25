@@ -58,5 +58,6 @@ path('au/report/register/images/<int:id>',views.downLoadImages,name='downLoadIma
 path('au/report/register/<int:id>',views.registerList,name='registerList'),
 path('au/report/company',views.companyList,name="companylist"),
 path('au/report/list',views.student_report_list,name="studentReportList"),
+path('au/manageportal/editbranch/<int:id>',views.editBranch,name='editBranch'),
 
 ]

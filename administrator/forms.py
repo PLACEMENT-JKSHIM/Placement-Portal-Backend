@@ -2,7 +2,7 @@ from django.forms import ModelForm
 from django.contrib.auth.models import User
 from django import forms
 from home.models import Slider, Team,Job,Company,Rule,Gallery
-from administrator.models import Notice
+from administrator.models import Notice,Statistic
 from student.models import Student,Branch
 from home.models import YearBatch
 
@@ -61,6 +61,8 @@ class JobForm(ModelForm):
             'interview_date': forms.DateInput(attrs={'type': 'date'}),
 
             'test_date': forms.DateInput(attrs={'type': 'date'}),
+
+            'allowed_branches': forms.CheckboxSelectMultiple,
         }
 
 class CompanyForm(ModelForm):
@@ -125,4 +127,9 @@ class YearBatchForm(ModelForm):
 class BranchForm(ModelForm):
     class Meta:
         model=Branch
+        fields='__all__'
+
+class StatisticForm(ModelForm):
+    class Meta:
+        model=Statistic
         fields='__all__'

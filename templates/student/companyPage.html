@@ -111,7 +111,9 @@
             <span class="font-normal text-gray-700 dark:text-gray-400"><span class="font-bold">Born Between : </span>{{ job.min_dob }} - {{ job.max_dob }}</span>
         </li>
         <li>
-            <span class="font-normal text-gray-700 dark:text-gray-400"><span class="font-bold">Allowed Branches : </span>{{ job.branch }}</span>
+            <span class="font-normal text-gray-700 dark:text-gray-400"><span class="font-bold">Allowed Branches : </span>{% for job_branch in job_branches %}
+            {{ job_branch.branch }} ,
+        {% endfor %}</span>
         </li>
         <li>
             <span class="font-normal text-gray-700 dark:text-gray-400"><span class="font-bold">Other : </span>{{ job.notes }}</span>
