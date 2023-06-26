@@ -24,7 +24,11 @@
                     <dd class="font-light text-primary text-center dark:text-gray-400">Average Package (LPA)</dd>
                 </div>               
                 <div class="flex flex-col items-center justify-center">
-                    <dt class="mb-2 w-24 text-center text-3xl font-extrabold hover:scale-125 transition-all  duration-1000" id="animation5">0</dt>
+                    <dt class="mb-2 text-3xl font-extrabold hover:scale-125 transition-all  duration-1000" id="animation5">0</dt>
+                    <dd class="font-light text-primary text-center dark:text-gray-400">Median Package (LPA)</dd>
+                </div>               
+                <div class="flex flex-col items-center justify-center">
+                    <dt class="mb-2 w-24 text-center text-3xl font-extrabold hover:scale-125 transition-all  duration-1000" id="animation6">0</dt>
                     <dd class="font-light text-center text-primary dark:text-gray-400">Companies Participated</dd>
                 </div>
             </dl>
@@ -37,6 +41,7 @@ const totalPlaced = "{{statistics.placed_count}}"
 const totalOffers = "{{statistics.offers_count}}"
 const highestPackage = "{{statistics.highest_ctc}}"
 const averagePackage = "{{statistics.avg_ctc}}"
+const medianPackage = "{{statistics.median_ctc}}"
 const totalCompanies = "{{statistics.companies_visited}}"
 
 const countAnimations = [
@@ -44,7 +49,8 @@ const countAnimations = [
   { id: "animation2", startValue: 0, endValue: totalOffers },
   { id: "animation3", startValue: 0, endValue: highestPackage },
   { id: "animation4", startValue: 0, endValue: averagePackage },
-  { id: "animation5", startValue: 0, endValue: totalCompanies },
+  { id: "animation5", startValue: 0, endValue: medianPackage },
+  { id: "animation6", startValue: 0, endValue: totalCompanies },
 ];
 
 const animationDuration = 2000; // 2 seconds
@@ -72,7 +78,7 @@ countAnimations.forEach(animation => {
     currentValue += valueIncrement;
     if (animation.id === "animation3") {
       numberSpan.textContent = currentValue.toFixed(2);
-    } else if (animation.id === "animation4") {
+    } else if (animation.id === "animation4" || animation.id === "animation5") {
       numberSpan.textContent = currentValue.toFixed(1);
     } else {
       numberSpan.textContent = Math.round(currentValue);
