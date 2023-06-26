@@ -1,7 +1,7 @@
 {% load static %}
 {% block content %}
 <div class="text-center text-3xl uppercase font-extrabold text-primary my-6 hover:text-gray-900">
-    <h1>Placement Statistics</h1>
+    <h1>Placement Statistics</h1>  
 </div>
 <div class="md:m-6 md:mx-3 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 hover:shadow-md">
     <div id="fullWidthTabContent" class="border-t border-gray-200 dark:border-gray-600">
@@ -22,7 +22,7 @@
                 <div class="flex flex-col items-center justify-center">
                     <dt class="mb-2 text-3xl font-extrabold hover:scale-125 transition-all  duration-1000" id="animation4">0</dt>
                     <dd class="font-light text-primary text-center dark:text-gray-400">Average Package (LPA)</dd>
-                </div>
+                </div>               
                 <div class="flex flex-col items-center justify-center">
                     <dt class="mb-2 w-24 text-center text-3xl font-extrabold hover:scale-125 transition-all  duration-1000" id="animation5">0</dt>
                     <dd class="font-light text-center text-primary dark:text-gray-400">Companies Participated</dd>
@@ -33,11 +33,11 @@
     </div>
 </div>
 <script>
-const totalPlaced = "{{total_placed}}"
-const totalOffers = "{{total_offered}}"
-const highestPackage = "{{highest_package}}"
-const averagePackage = "{{average_package}}"
-const totalCompanies = "{{total_companies}}"
+const totalPlaced = "{{statistics.placed_count}}"
+const totalOffers = "{{statistics.offers_count}}"
+const highestPackage = "{{statistics.highest_ctc}}"
+const averagePackage = "{{statistics.avg_ctc}}"
+const totalCompanies = "{{statistics.companies_visited}}"
 
 const countAnimations = [
   { id: "animation1", startValue: 0, endValue: totalPlaced },

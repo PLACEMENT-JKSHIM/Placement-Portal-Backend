@@ -5,12 +5,11 @@
 
 <section class="h-screen  bg-slate-100">
     <div class="py-8 px-4 mx-auto max-w-screen-xl sm:py-16 lg:px-6">
-        <!-- <div class="p-3 max-w-screen lg:mb-16 text-center shadow-md border-2 border-secondary shadow-secondary"> -->
-        <div class="p-3 max-w-screen lg:mb-16 text-center border-2 shadow-md shadow-gray-400">
-            <h2 class="mb-4 text-2xl tracking-tight font-bold text-primary"><span class="underline underline-offset-8 decoration-7 decoration-secondary">{{request.user.username|slice:"0:5"}}</span>{{request.user.username|slice:"5:"}}</h2>
+        <div class="p-3 max-w-screen lg:mb-10 text-center border-2 shadow-md shadow-gray-400 rounded-full bg-gradient-to-r from-[rgba(0,0,255,0.34)] to-secondary/40">
+            <h2 class="mb-4 text-2xl tracking-tight font-bold text-primary uppercase"><span class="underline underline-offset-8 decoration-7 decoration-secondary">{{request.user.username|slice:"0:5"}}</span>{{request.user.username|slice:"5:"}}</h2>
             <p id="typer" class="text-primary text-xl font-semibold sm:text-3xl"><span class="typed-text"></span><span class="cursor">&nbsp;</span></p>
         </div>
-        <hr class="w-48 h-1 mx-auto my-2 bg-primary border-0 rounded md:my-2 dark:bg-gray-700">
+        <hr class="w-48 h-1 mx-auto my-2 bg-primary border-0 rounded md:my-3 dark:bg-gray-700">
         <div class="p-2">
             <h2 class="mb-6 text-4xl tracking-tight font-bold text-blue-600">
                 <span class="text-blue-800 text-2xl font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800 ml-2">
@@ -45,7 +44,7 @@
 <script>
     const typedTextSpan = document.querySelector(".typed-text");
     const cursorSpan = document.querySelector(".cursor");
-    const textArray = ["Hello! "+"{{request.user.student.name }}","Welcome to placement portal","Keep your company's lights on with customizable"];
+    const textArray = ["Hello! "+"{{request.user.student.name}}","Welcome to Placement Portal JKSHIM","Opportunities meet ambition here", "Unlock your MBA career potential.","Embrace the journey to success"];
     const typingDelay = 200;
     const erasingDelay = 100;
     const newTextDelay = 2000; // Delay between current and next text

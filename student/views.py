@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from .forms import StudentForm,PreviousJobForm
 from .models import Student,PreviousJob
 from django.contrib.auth.decorators import login_required
-from administrator.models import Notice,Job_student
+from administrator.models import Job_branch, Notice,Job_student
 from home.models import Company
 from django.contrib import messages
 from django.shortcuts import get_object_or_404
@@ -12,13 +12,26 @@ from django.contrib.auth import authenticate
 from django.contrib.auth import logout
 from django.http import Http404
 from django.utils.timezone import datetime,timezone
+from home.models import  Rule
 
 def normaluser_required(view_func):
     def wrapped_view(request, *args, **kwargs):
         if not request.user.is_authenticated:
-            return redirect(f'/login?next={request.path}')
-        if request.user.is_superuser:
+                return redirect(f'/login?next={request.path}')
+        if request.user.is_staff:
             raise Http404
+        return view_func(request, *args, **kwargs)
+    return wrapped_view
+
+def normaluserWithProfile_required(view_func):
+    def wrapped_view(request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return redirect(f'/login?next={request.path}')
+        if request.user.is_staff:
+            raise Http404
+        if request.user.student and not request.user.student.nameAadhar:
+            messages.warning(request=request,message="Please fill your profile details")
+            return redirect("/profile/update")
         return view_func(request, *args, **kwargs)
     return wrapped_view
 
@@ -86,7 +99,7 @@ def editPreviousJob(request,id):
     form=PreviousJobForm(instance=pj)
     return render(request, "student/editpreviousjob.html",context={'form':form})
 
-@normaluser_required
+@normaluserWithProfile_required
 def registerCompany(request):
     student = Student.objects.get(user=request.user)
     Job.objects.filter(registration_last_date__lt=datetime.now(timezone.utc)).update(reg_open=False)
@@ -120,46 +133,58 @@ def changePassword(request):
         
     return render(request, 'student/changePassword.html')
 
-@normaluser_required
+@normaluserWithProfile_required
 def student_home(request):
     news=Notice.objects.filter(hidden=False).order_by('-updated_on')
     return render(request,"student/student_home.html",{'news':news})
 
 def is_eligible(job, student):
-        if not student.name:
-            return False
-        if student.cgpa < job.curr_cgpa:
-            return False
-        if student.tenPercentage < job.sslc:
-            return False
-        if student.twelvePercentage < job.puc and student.diplomaPercentage < job.diploma:
-            return False
-        if student.degreePercentage < job.degree:
-            return False
-        if student.activeBacklog > job.max_activebacklog:
-            return False
-        if student.totalBacklog > job.max_histbacklog:
-            return False
-        if student.gap_edu > job.gap_edu:
-            return False
-        if job.min_dob and (not student.dateOfBirth or student.dateOfBirth < job.min_dob):
-            return False
-        if job.max_dob and (not student.dateOfBirth or student.dateOfBirth > job.max_dob):
-            return False
-        if student.yearBatch != job.yearBatch:
-            return False
-        if not student.branch:
-            return False
-        return True
+        student_branch = student.branch.id
+        job_branches = Job_branch.objects.filter(job=job)
+        job_student=Job_student.objects.filter(student=student,status=Job_student.Status.PLACED).first()
 
-@normaluser_required
+        if not student.name:
+            return False,"Please fill profile details"
+        if not student.branch:
+            return False,"Please fill profile details"
+        if student_branch not in job_branches.values_list('branch', flat=True):
+            return False,"Your branch is not eligible"
+        if job_student:
+            return False,"You are already placed in "+str(job_student.job)
+        if student.cgpa < job.curr_cgpa:
+            return False,"Cgpa is low"
+        if student.tenPercentage < job.sslc:
+            return False,"10th percentage low"
+        if student.twelvePercentage < job.puc and student.diplomaPercentage < job.diploma:
+            return False,"12th percentage low"
+        if student.degreePercentage < job.degree:
+            return False,"Degree percentage low"
+        if student.diplomaPercentage < job.diploma:
+            return False,"Diploma percentage low"
+        if student.activeBacklog > job.max_activebacklog:
+            return False,"Active backlogs are more"
+        if student.totalBacklog > job.max_histbacklog:
+            return False,"Total backlogs are more"
+        if student.gap_edu > job.gap_edu:
+            return False,"Gap is eduction is more"
+        if job.min_dob and (not student.dateOfBirth or student.dateOfBirth < job.min_dob):
+            return False,"Date of birth out of range"
+        if job.max_dob and (not student.dateOfBirth or student.dateOfBirth > job.max_dob):
+            return False,"Date of birth out of range"
+        if student.yearBatch != job.yearBatch:
+            return False,"Job not applicable for your academic year"
+
+        return True,""
+
+@normaluserWithProfile_required
 def companyPage(request,id):
     job = get_object_or_404(Job,id=id)
+    job_branches=Job_branch.objects.filter(job=job)
     if job.reg_open==True and job.registration_last_date<datetime.now(timezone.utc):
         job.reg_open=False
         job.save()
     student = request.user.student
-    eligible = is_eligible(job,student)
+    eligible,reason = is_eligible(job,student)
     job_student = Job_student.objects.filter(job=job,student=student).first()
 
     if request.method == 'POST' and eligible:
@@ -171,4 +196,13 @@ def companyPage(request,id):
                 messages.error(request, 'Already applied.')
             return redirect('companyPage',id=id)
 
-    return render(request,"student/companyPage.html",{'job':job,'id':id,'student':student,'eligible':eligible,'job_student':job_student})
+    return render(request,"student/companyPage.html",{'job':job,'id':id,'student':student,'eligible':eligible,'job_student':job_student,'job_branches':job_branches,'reason':reason})
+
+@normaluser_required
+def rules(request):
+    srules = Rule.objects.all()
+    return render(request, "student/rules.html",context={'srules':srules})
+
+@normaluserWithProfile_required
+def profile(request):
+    return render(request, "student/profile.html")

@@ -8,7 +8,6 @@ path('au/student/profile/<int:id>',views.viewprofile,name='viewprofile'),
 path('au/student/update',views.updateStudent,name='updateStudent'),
 path('au/student/update/usns',views.updateMultipleUsn,name='updateUsns'),
 path('au/student/update/marks',views.updateMultipleMarks,name='updateMarks'),
-path('au/student/changePasswordAdmin',views.changePasswordAdmin, name='changePasswordAdmin'),
 path('au/student/block',views.blockStudent,name='blockStudent'),
 path('au/student/editBlock',views.editBlock,name='editBlock'),
 path('au/student/profileEditBlock/<int:id>/',views.profileEditBlock,name='profileEditBlock'),
@@ -22,7 +21,7 @@ path('au/student/loginBlockAll',views.LoginBlockAll,name='LoginBlockAll'),
 path('au/student/loginUnBlockAll',views.LoginUnblockAll,name='LoginUnblockAll'),
 path('au/student/search',views.search,name='search'),
 
-
+path('au/changePassword',views.changePasswordAdmin, name='changePassword'),
 path('au/addNewsUpdates',views.addNewsUpdates,name='addNewsUpdates'), 
 path('au/newsAndUpdates',views.newsAndUpdates,name='newsAndUpdates'), 
 path('au/updateNews/<int:id>/',views.updateNews,name='updateNews'), 
@@ -59,5 +58,6 @@ path('au/report/register/images/<int:id>',views.downLoadImages,name='downLoadIma
 path('au/report/register/<int:id>',views.registerList,name='registerList'),
 path('au/report/company',views.companyList,name="companylist"),
 path('au/report/list',views.student_report_list,name="studentReportList"),
+path('au/manageportal/editbranch/<int:id>',views.editBranch,name='editBranch'),
 
 ]

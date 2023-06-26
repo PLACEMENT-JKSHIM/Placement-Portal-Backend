@@ -1,7 +1,7 @@
 from django.shortcuts import HttpResponse
 from django.contrib.auth.models import User
 from .models import Company, Job, Rule, Slider, Team,Gallery
-from administrator.models import Job_student
+from administrator.models import Job_student,Statistic
 from django.shortcuts import render,redirect
 from django.contrib.auth import authenticate
 from django.contrib import auth
@@ -29,7 +29,9 @@ def index(request):
     sliders = Slider.objects.all()
     teams = Team.objects.all()
     gallery = Gallery.objects.all()
-    return render(request, "home/index.html",context={'gallery':gallery,'sliders':sliders,'teams':teams,'total_placed':total_placed,'total_offered':total_offered,'highest_package':highest_package,'average_package':average_package,'total_companies':total_companies})
+    statistics = Statistic.objects.all().first()
+    print(statistics)
+    return render(request, "home/index.html",context={'gallery':gallery,'sliders':sliders,'teams':teams,'total_placed':total_placed,'total_offered':total_offered,'highest_package':highest_package,'average_package':average_package,'total_companies':total_companies,'statistics':statistics})
 
 
 def login(request):
@@ -37,7 +39,7 @@ def login(request):
         if request.user.is_superuser or request.user.is_staff:   
             return redirect('/au')
         else:   
-            return redirect('/student_home')
+            return redirect('/home')
             
     if request.method=='POST':
         usn=request.POST['username']
@@ -58,23 +60,12 @@ def login(request):
                 if request.GET.getlist("next"):
                     return redirect(to=request.GET.getlist("next")[0])
                 else:    
-                    return redirect('/student_home')
+                    return redirect('/home')
         else:
             messages.error(request, message="Invaild username or password")
             
     return render(request, "home/login.html")
 
-        
-
-
-@login_required(login_url='/login')
-def rules(request):
-    srules = Rule.objects.all()
-    return render(request, "student/rules.html",context={'srules':srules})
-
-@login_required(login_url='/login')
-def profile(request):
-    return render(request, "student/profile.html")
 
 
 @login_required(login_url='/login',redirect_field_name=None)

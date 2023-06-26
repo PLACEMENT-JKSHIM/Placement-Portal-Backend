@@ -80,10 +80,23 @@
                         </label>
                         {{form.yearBatch}}
                     </div>
+                    <div class="sm:col-span-1 md:col-span-6">
+                    <label for="id_allowed_branches">Allowed Branches:(<span class="font-bold">All branch</span> if not selected any)</label>
+                    <div class="flex mb-4 h-full flex-wrap">
+                      {% for branch in branches %}
+                      <div class="max-w-5 h-3 my-2 ">
+                        <input type="checkbox" name="allowed_branches" id="branch_{{ branch.id }}" value="{{ branch.id }}" class="hidden peer" >
+                        <label for="branch_{{ branch.id }}" class="w-full m-2 px-4 py-1 text-gray-500 bg-white border-2 border-gray-200 rounded-lg cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 peer-checked:bg-gray-500 peer-checked:text-white hover:text-gray-600 dark:peer-checked:text-gray-300  hover:bg-gray-50 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700">{{ branch }}</label>
+                      </div>
+                      {% endfor %}
+                    </div>
+                  </div>
+                </div>
                     <div class="relative sm:col-span-1 md:col-span-12 w-40 m-auto mt-4">
                         {% include "../../buttons/buttons.html" with main=True btn="Add Job" secondary=False %}
                     </div>
                 </form>
+              
         </div>
         
 

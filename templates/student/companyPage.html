@@ -26,24 +26,24 @@
             
             <div class="block max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow hover:shadow-md dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
                 <h5 class="mb-6 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Placement Information</h5>
-            <ul class="max-w-md space-y-1 text-gray-500 list-none list-inside dark:text-gray-400">
+            <ul class="max-w-md space-y-1 text-gray-500 list-none list-inside">
                 <li>
-                    <span class="font-normal text-gray-700 dark:text-gray-400"><span class="font-bold">CGPA : </span>{{ job.curr_cgpa }}</span>
+                    <span class="font-normal text-gray-700"><span class="font-bold">CGPA : </span>{{ job.curr_cgpa }}</span>
                 </li>
                 <li>
-                    <span class="font-normal text-gray-700 dark:text-gray-400"><span class="font-bold">Talk Date : </span>{{ job.talk_date }}</span>
+                    <span class="font-normal text-gray-700"><span class="font-bold">Talk Date : </span>{{ job.talk_date }}</span>
                 </li>
                 <li>
-                    <span class="font-normal text-gray-700 dark:text-gray-400"><span class="font-bold">Test Date : </span>{{ job.test_date }}</span>
+                    <span class="font-normal text-gray-700"><span class="font-bold">Test Date : </span>{{ job.test_date }}</span>
                 </li>
                 <li>
-                    <span class="font-normal text-gray-700 dark:text-gray-400"><span class="font-bold">Interview Date : </span>{{ job.interview_date }}</span>
+                    <span class="font-normal text-gray-700"><span class="font-bold">Interview Date : </span>{{ job.interview_date }}</span>
                 </li>
                 <li>
-                    <span class="font-normal text-gray-700 dark:text-gray-400"><span class="font-bold">CTC PA : </span>{{ job.ctc_pa }}</span>
+                    <span class="font-normal text-gray-700"><span class="font-bold">CTC PA : </span>{{ job.ctc_pa }}</span>
                 </li>
                 <li>
-                    <span class="font-normal text-gray-700 dark:text-gray-400"><span class="font-bold">Closes On : </span>{{ job.registration_last_date }}</span>
+                    <span class="font-normal text-gray-700"><span class="font-bold">Closes On : </span>{{ job.registration_last_date }}</span>
                 </li>
             </ul>
                 {% if eligible %}
@@ -66,7 +66,8 @@
                     {% else %}
                     {% endif %}
                 {% elif eligible == False %}
-                    <p class="mt-2 text-center font-extrabold text-red-600">NOT ELIGIBLE</p>
+                    <p class="mt-3 text-center font-extrabold text-red-600">NOT ELIGIBLE</p>
+                    <p class="text-center text-sm font-bold text-red-500">{{reason}}</p>
                 {% endif %}
                 <p class="mt-2 text-center font-extrabold text-primary">{{jobs_student.status}}</p>
         </div>
@@ -81,39 +82,41 @@
 <div class="bg-white  rounded-2xl px-8 mb-6">
     
     <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">Company Requirements to Apply</h2>
-    <ul class="max-w-md space-y-1 text-gray-500 list-disc list-inside dark:text-gray-400 ml-4">
+    <ul class="max-w-md space-y-1 text-gray-500 list-disc list-inside ml-4">
         <li>
-            <span class="font-normal text-gray-700 dark:text-gray-400"><span class="font-bold">SSLC : </span>{{ job.sslc }}</span>
+            <span class="font-normal text-gray-700"><span class="font-bold">SSLC : </span>{{ job.sslc }}</span>
         </li>
         <li>
-            <span class="font-normal text-gray-700 dark:text-gray-400"><span class="font-bold">PUC : </span>{{ job.puc }}</span>
+            <span class="font-normal text-gray-700"><span class="font-bold">PUC : </span>{{ job.puc }}</span>
         </li>
         <li>
-            <span class="font-normal text-gray-700 dark:text-gray-400"><span class="font-bold">Diploma : </span>{{ job.diploma }}</span>
+            <span class="font-normal text-gray-700"><span class="font-bold">Diploma : </span>{{ job.diploma }}</span>
         </li>
         <li>
-            <span class="font-normal text-gray-700 dark:text-gray-400"><span class="font-bold">Degree : </span>{{ job.degree }}</span>
+            <span class="font-normal text-gray-700"><span class="font-bold">Degree : </span>{{ job.degree }}</span>
         </li>
         <li>
-            <span class="font-normal text-gray-700 dark:text-gray-400"><span class="font-bold">Present CGPA : </span>{{ job.curr_cgpa }}</span>
+            <span class="font-normal text-gray-700"><span class="font-bold">Present CGPA : </span>{{ job.curr_cgpa }}</span>
         </li>
         <li>
-            <span class="font-normal text-gray-700 dark:text-gray-400"><span class="font-bold">Gap in Education : </span>{{ job.gap_edu }}</span>
+            <span class="font-normal text-gray-700"><span class="font-bold">Gap in Education : </span>{{ job.gap_edu }}</span>
         </li>
         <li>
-            <span class="font-normal text-gray-700 dark:text-gray-400"><span class="font-bold">Allowed Backlog : </span>{{ job.max_activebacklog }}</span>
+            <span class="font-normal text-gray-700"><span class="font-bold">Allowed Maximum Backlog : </span>{{ job.max_activebacklog }}</span>
         </li>
         <li>
-            <span class="font-normal text-gray-700 dark:text-gray-400"><span class="font-bold">History of Backlog : </span>{{ job.max_histbacklog }}</span>
+            <span class="font-normal text-gray-700"><span class="font-bold">Allowed Maximum Total Backlog : </span>{{ job.max_histbacklog }}</span>
         </li>
         <li>
-            <span class="font-normal text-gray-700 dark:text-gray-400"><span class="font-bold">Born Between : </span>{{ job.min_dob }} - {{ job.max_dob }}</span>
+            <span class="font-normal text-gray-700"><span class="font-bold">Born Between : </span>{{ job.min_dob | default:"--" }} <span class="font-bold">-</span> {{ job.max_dob |default:"--"}}</span>
         </li>
         <li>
-            <span class="font-normal text-gray-700 dark:text-gray-400"><span class="font-bold">Allowed Branches : </span>{{ job.branch }}</span>
+            <span class="font-normal text-gray-700"><span class="font-bold">Allowed Branches : </span>{% for job_branch in job_branches %}
+            {{ job_branch.branch }} ,
+        {% endfor %}</span>
         </li>
         <li>
-            <span class="font-normal text-gray-700 dark:text-gray-400"><span class="font-bold">Other : </span>{{ job.notes }}</span>
+            <span class="font-normal text-gray-700"><span class="font-bold">Other : </span>{{ job.notes }}</span>
         </li>
     </ul>
 

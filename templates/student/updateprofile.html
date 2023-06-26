@@ -239,10 +239,10 @@
                 </div>
                 <div class="mt-3 pt-6 border-t border-secondary">
 
-                    {% include "../custom_fields/_file.html" with field=form.image obj=form.instance.image %}
+                    {% include "../custom_fields/_file.html" with field=form.image obj=form.instance.image extra="(file size not more than 500kb)" %}
                 </div>
                 <div class="mt-3 mb-3 pt-6 pb-4 border-t border-b border-secondary">
-                    {% include "../custom_fields/_file.html" with field=form.resume obj=form.instance.resume %}
+                    {% include "../custom_fields/_file.html" with field=form.resume obj=form.instance.resume extra="(file size not more than 500kb)" %}
                 </div>
                 <div class="relative w-36 m-auto flex">
                     {% include "../buttons/buttons.html" with btn="Submit" main=True %}

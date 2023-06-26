@@ -99,16 +99,18 @@
             <span class="font-normal text-gray-700 dark:text-gray-400"><span class="font-bold">Gap in Education : </span>{{ job.gap_edu }}</span>
         </li>
         <li>
-            <span class="font-normal text-gray-700 dark:text-gray-400"><span class="font-bold">Allowed Backlog : </span>{{ job.max_activebacklog }}</span>
+            <span class="font-normal text-gray-700 dark:text-gray-400"><span class="font-bold">Allowed Maximum Backlog : </span>{{ job.max_activebacklog }}</span>
         </li>
         <li>
-            <span class="font-normal text-gray-700 dark:text-gray-400"><span class="font-bold">History of Backlog : </span>{{ job.max_histbacklog }}</span>
+            <span class="font-normal text-gray-700 dark:text-gray-400"><span class="font-bold">Allowed Maximum Total Backlog : </span>{{ job.max_histbacklog }}</span>
         </li>
         <li>
-            <span class="font-normal text-gray-700 dark:text-gray-400"><span class="font-bold">Born Between : </span>{{ job.min_dob }} - {{ job.max_dob }}</span>
+            <span class="font-normal text-gray-700 dark:text-gray-400"><span class="font-bold">Born Between : </span>{{ job.min_dob | default:"--" }} <span class="font-bold">-</span> {{ job.max_dob |default:"--"}}</span>
         </li>
         <li>
-            <span class="font-normal text-gray-700 dark:text-gray-400"><span class="font-bold">Allowed Branches : </span>{{ job.branch }}</span>
+            <span class="font-normal text-gray-700 dark:text-gray-400"><span class="font-bold">Allowed Branches : </span>{% for job_branch in job_branches %}
+            {{ job_branch.branch }} ,
+        {% endfor %}</span>
         </li>
         <li>
             <span class="font-normal text-gray-700 dark:text-gray-400"><span class="font-bold">Other : </span>{{ job.notes }}</span>
@@ -120,7 +122,6 @@
     <div class="flex flex-col justify-around ">
         <div class="flex justify-center">
             <form class="flex items-center" id="profile"  action="{% url 'editJob' job.id  %}">
-        {% csrf_token %}
         <div class="m-5 mx-8">
             {% include "../../buttons/buttons.html" with btn="Edit Job Details" secondary=True %}
         </div>

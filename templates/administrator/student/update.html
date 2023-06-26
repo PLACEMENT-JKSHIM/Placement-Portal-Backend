@@ -11,12 +11,12 @@
 </h1>
     <ul class="flex mb-0 list-none flex-wrap pt-3 pb-4 flex-row">
         <li class="-mb-px  last:mr-0 flex-auto text-center">
-        <a class="text-xs font-bold uppercase px-5 py-3 shadow block leading-normal border border-t-2 border-t-blue-600 text-blue-600 bg-white" onclick="changeActiveTab(event,'tab-usns')">
+        <a class="cursor-pointer text-xs font-bold uppercase px-5 py-3 shadow block leading-normal border border-t-2 border-t-blue-600 text-blue-600 bg-white" onclick="changeActiveTab(event,'tab-usns')">
             <i class="fas fa-space-shuttle text-base mr-1"></i> Update Usernames
         </a>
         </li>
         <li class="-mb-px  last:mr-0 flex-auto text-center">
-        <a class="text-xs font-medium uppercase px-5 py-3 shadow  block leading-normal border border-t-2 text-gray-600 bg-gray-200" onclick="changeActiveTab(event,'tab-marks')">
+        <a class="cursor-pointer text-xs font-medium uppercase px-5 py-3 shadow  block leading-normal border border-t-2 text-gray-600 bg-gray-200" onclick="changeActiveTab(event,'tab-marks')">
             <i class="fas fa-cog text-base mr-1"></i> Update Marks
         </a>
         </li>
@@ -28,12 +28,8 @@
                 <form action="" method="post">
                     {% csrf_token %}
                     <div class="px-4 pt-3">
-                        <label class="my-3 font-semibold" for="usn">Student USN:</label><br>
-                        <input class="my-3 w-full rounded-lg border-gray-300" type="text"
-                            name="usn" placeholder="Enter USN"><br>
-                        <label class="my-3 font-semibold" for="newusn">New USN:</label><br>
-                        <input class="my-3 w-full rounded-lg border-gray-300" type="text"
-                            name="newusn" placeholder="Enter new USN"><br>
+                        {% include "../../custom_fields/_inputT.html" with type="text" customOnly=True classL="my-3 font-semibold" classI="my-3 w-full rounded-lg border-gray-300" id="usn" label="Student USN:"  placeholder="Enter USN" autofocus=True required=True%}
+                        {% include "../../custom_fields/_inputT.html" with type="text" customOnly=True classL="my-3 font-semibold" classI="my-3 w-full rounded-lg border-gray-300" id="newusn" label="New USN:"  placeholder="Enter new USN" required=True%}
                     </div>
                     <div class="text-center mt-5 p-1 pb-2 bg-gray-100 font-semibold">
                         {% include "../../buttons/buttons.html" with btn="Update" %}

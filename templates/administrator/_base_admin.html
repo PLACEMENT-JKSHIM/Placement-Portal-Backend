@@ -29,7 +29,7 @@
   aria-label="Sidebar"
 >
   <!-- <div class="h-full px-3 py-4 overflow-y-auto bg-gray-50 dark:bg-gray-800"> -->
-  <div class="h-full px-3 py-4 overflow-y-auto bg-primary">
+  <div class="h-full px-3 py-4 overflow-y-auto no-scrollbar bg-primary">
     <ul class="space-y-2">
       <div class="flex justify-start space-x-4">
         <div class="font-medium text-white">
@@ -221,10 +221,10 @@
           </li>
           <li>
             <a
-              href="/au/student/changePasswordAdmin"
+              href="/au/student/update"
               class="flex items-center w-full p-2 text-base font-normal border-2 border-secondary text-white transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 hover:text-primary hover:border-white hover:font-semibold dark:hover:bg-gray-700"
             >
-              <span class="flex-1 whitespace-nowrap">Change Password</span>
+              <span class="flex-1 whitespace-nowrap">Update Students</span>
             </a>
           </li>
           <li>
@@ -390,6 +390,19 @@
           </li>
         </ul>
       </li>
+      {% if user.is_superuser %}
+      <li class="mt-4">
+        <a
+        href="/au/changePassword"
+        class="group flex items-center p-2 text-base font-normal text-sidebarfont rounded-full hover:text-primary hover:bg-white hover:font-semibold hover:shadow-[0px_0px_10px_2px] hover:shadow-slate-400 [&>svg]:hover:animate-[spin_700ms_ease_1] dark:hover:bg-gray-700"
+        >
+        <svg aria-hidden="true" class="flex-shrink-0 w-6 h-6 text-sidebaricons transition duration-75 group-hover:text-primary dark:group-hover:text-white" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+          <path clip-rule="evenodd" fill-rule="evenodd" d="M10 1a4.5 4.5 0 00-4.5 4.5V9H5a2 2 0 00-2 2v6a2 2 0 002 2h10a2 2 0 002-2v-6a2 2 0 00-2-2h-.5V5.5A4.5 4.5 0 0010 1zm3 8V5.5a3 3 0 10-6 0V9h6z"></path>
+        </svg>
+          <span class="flex-1 ml-3 whitespace-nowrap">Change password</span>
+        </a>
+      </li>
+      {%endif%}
       {% if user.is_superuser %}
       <li class="mt-4">
           <a

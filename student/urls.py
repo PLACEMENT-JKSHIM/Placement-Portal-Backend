@@ -7,6 +7,8 @@ path('previousjob/delete/<int:id>',views.deletePreviousJob, name='deletePrevious
 path('previousjob/edit/<int:id>',views.editPreviousJob, name='editPreviousJob') ,  
 path('student/registerCompany',views.registerCompany,name="registerCompany"),
 path('student/changePassword',views.changePassword,name="changePassword"),
-path('student_home',views.student_home,name='student_home'),  
+path('home',views.student_home,name='home'),  
 path('student/companyPage/<int:id>',views.companyPage,name='companyPage'),
+path('rules',views.rules,name="rules"),
+path('profile',views.profile,name="profile"),
 ]
