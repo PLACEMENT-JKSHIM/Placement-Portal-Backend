@@ -14,24 +14,11 @@ from django.db.models import Avg
 
 @cache_page(60 * 60)
 def index(request):
-    total_placed = Job_student.objects.filter(status='P').values('student').distinct().count()
-    total_offered = (Job_student.objects.filter(status='OF'or 'P')|Job_student.objects.filter(status='P')).count()
-    highest_package = (Job_student.objects.filter(status='OF')|Job_student.objects.filter(status='P')).order_by('-job__ctc_pa').first()
-    if highest_package:
-        highest_package = highest_package.job.ctc_pa
-    else:
-        highest_package = 0
-    if total_placed == 0:
-        average_package = 0
-    else:
-        average_package = Job_student.objects.filter(status='P').aggregate(Avg('job__ctc_pa')).get('job__ctc_pa__avg')
-    total_companies = Company.objects.all().count()
     sliders = Slider.objects.all()
     teams = Team.objects.all()
     gallery = Gallery.objects.all()
     statistics = Statistic.objects.all().first()
-    print(statistics)
-    return render(request, "home/index.html",context={'gallery':gallery,'sliders':sliders,'teams':teams,'total_placed':total_placed,'total_offered':total_offered,'highest_package':highest_package,'average_package':average_package,'total_companies':total_companies,'statistics':statistics})
+    return render(request, "home/index.html",context={'gallery':gallery,'sliders':sliders,'teams':teams,'statistics':statistics})
 
 
 def login(request):

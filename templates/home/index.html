@@ -5,9 +5,11 @@
         <div>
             {% include "./slideshow.html" with sliders=sliders %}
         </div>
+        {% if statistics %}
         <div>
             {% include "./statistics.html" %}
         </div>
+        {% endif %}
         {% if gallery %}
         <div id="gallery">
             {% include "./gallery.html" %}
