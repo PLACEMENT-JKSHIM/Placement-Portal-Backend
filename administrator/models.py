@@ -38,6 +38,7 @@ class Statistic(models.Model):
     offers_count = models.IntegerField(default=0, verbose_name='Offers Count')
     highest_ctc = models.DecimalField(max_digits=15, decimal_places=2, default=0.00, verbose_name='Highest CTC')
     avg_ctc = models.DecimalField(max_digits=15, decimal_places=2, default=0.00, verbose_name='Average CTC')
+    median_ctc=models.DecimalField(max_digits=15, decimal_places=2, default=0.00, verbose_name='Median CTC')
     companies_visited = models.IntegerField(default=0, verbose_name='Companies Visited')
     def __str__(self):
         return f"Statistics"

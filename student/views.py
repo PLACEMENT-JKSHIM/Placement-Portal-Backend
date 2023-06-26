@@ -141,10 +141,16 @@ def student_home(request):
 def is_eligible(job, student):
         student_branch = student.branch.id
         job_branches = Job_branch.objects.filter(job=job)
-        if student_branch not in job_branches.values_list('branch', flat=True):
-            return False,"Your branch is not eligible"
+        job_student=Job_student.objects.filter(student=student,status=Job_student.Status.PLACED).first()
+
         if not student.name:
             return False,"Please fill profile details"
+        if not student.branch:
+            return False,"Please fill profile details"
+        if student_branch not in job_branches.values_list('branch', flat=True):
+            return False,"Your branch is not eligible"
+        if job_student:
+            return False,"You are already placed in "+str(job_student.job)
         if student.cgpa < job.curr_cgpa:
             return False,"Cgpa is low"
         if student.tenPercentage < job.sslc:
@@ -167,9 +173,8 @@ def is_eligible(job, student):
             return False,"Date of birth out of range"
         if student.yearBatch != job.yearBatch:
             return False,"Job not applicable for your academic year"
-        if not student.branch:
-            return False,"Please fill profile details"
-        return True
+
+        return True,""
 
 @normaluserWithProfile_required
 def companyPage(request,id):

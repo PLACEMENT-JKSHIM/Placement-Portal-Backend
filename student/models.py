@@ -40,6 +40,12 @@ class Student(models.Model):
         PU='P'
         DIPLOMA='D'
 
+    def upload_student(instance,filename):
+        return m.generate_unique_filename(instance, filename, 'student')
+    
+    def upload_resume(instance,filename):
+        return m.generate_unique_filename(instance, filename, 'resume')
+
     user=models.OneToOneField(User,on_delete=models.CASCADE,primary_key=True)
     status=models.CharField(blank=True,max_length=2,choices=Blocked.choices,default=Blocked.NOT_BLOCKED)
     editable=models.BooleanField(default=True)
@@ -47,8 +53,8 @@ class Student(models.Model):
     name=models.CharField(blank=True,max_length=50,verbose_name='Name as in 10th marks card')
     nameAadhar=models.CharField(blank=True,max_length=50,verbose_name='Name as in Aadhar card')
     gender=models.CharField(max_length=1,choices=Gender.choices,default=Gender.MALE,verbose_name="Gender")
-    image=models.ImageField(blank=True,null=True,upload_to=lambda instance, filename: m.generate_unique_filename(instance, filename, 'student'),validators=[validate_file_size])
-    resume=models.FileField(blank=True,null=True,upload_to=lambda instance, filename: m.generate_unique_filename(instance, filename, 'resume'),validators=[validate_file_size])
+    image=models.ImageField(blank=True,null=True,upload_to=upload_student,validators=[validate_file_size])
+    resume=models.FileField(blank=True,null=True,upload_to=upload_resume,validators=[validate_file_size])
     branch=models.ForeignKey(Branch,blank=True,null=True, on_delete=models.SET_NULL,verbose_name="Branch")
     phoneNo=models.IntegerField(blank=True,null=True,verbose_name="Phone number",validators=[MinValueValidator(1000000000),MaxValueValidator(99999999999)])
     alternatePhoneNo=models.IntegerField(blank=True,null=True,verbose_name="Alternate Phone number",validators=[MinValueValidator(1000000000),MaxValueValidator(99999999999)])

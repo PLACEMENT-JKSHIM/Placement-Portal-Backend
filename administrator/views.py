@@ -32,7 +32,6 @@ from django.utils.timezone import datetime,timezone
 from django.db.models import Count,Q
 
 #GLOBALS
-statistic_obj = Statistic.objects.all()[0]
 statYear=None
 heads=['USN']
 unwanted=['id','user','editable','created_at','updated_at','status','job_student','image','resume','previousjob']
@@ -918,6 +917,7 @@ def resetportal(request):
 
 @superuser_required
 def manageportal(request):
+    statistic_obj = Statistic.objects.all().first()
     global statYear
     if request.method=='POST' and request.POST.get('startYear') :
         form = YearBatchForm(request.POST)
@@ -965,7 +965,11 @@ def manageportal(request):
         statistic_obj.placed_count=Job_student.objects.filter(student__yearBatch=year,job__in=jobs,status=Job_student.Status.PLACED).count()
         statistic_obj.offers_count=Job_student.objects.filter(student__yearBatch=year,job__in=jobs,status=Job_student.Status.OFFERED).count()
         statistic_obj.highest_ctc = Job.objects.filter(yearBatch=year).aggregate(max_ctc=Max('ctc_pa')).get('max_ctc', 0) or 0
-        statistic_obj.avg_ctc = Job.objects.filter(yearBatch=year).aggregate(avg_ctc=Avg('ctc_pa')).get('avg_ctc', 0) or 0
+        statistic_obj.avg_ctc = Job_student.objects.filter(job__yearBatch=year,status=Job_student.Status.PLACED).select_related('job').aggregate(avg_ctc=Avg('job__ctc_pa')).get('avg_ctc', 0) or 0
+        temp = Job_student.objects.filter(job__yearBatch=year,status=Job_student.Status.PLACED).select_related('job').values_list('job__ctc_pa',flat=True)
+        temp  =sorted(temp)
+        from statistics import median
+        statistic_obj.median_ctc= median(temp)
         statistic_obj.companies_visited = jobs.filter(yearBatch=year).values('company').distinct().count()
         statistic_obj.save()
         messages.success(request,message="Placement Stats Updated successfully")
