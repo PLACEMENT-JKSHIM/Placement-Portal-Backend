@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 from pathlib import Path
 import os
 import environ
+import dj_database_url
 
 # Initialise environment variables
 env = environ.Env()
@@ -118,15 +119,7 @@ if env.get_value("PRODUCTION",default=False):
             }  
         }  
 elif env.get_value("TEST_PRODUCTION",default=False):
-    dict1= {  
-            'ENGINE': 'django_psdb_engine-main',
-            'NAME': env('DB_NAME'),  
-            'HOST': env('DB_HOST'),
-            'PORT': env('DB_PORT'),
-            'USER': env('DB_USER'),
-            'PASSWORD': env('DB_PASSWORD'),
-            'OPTIONS': {'ssl': {'ca': Path.joinpath(BASE_DIR,env('MYSQL_ATTR_SSL_CA'))}, 'charset': 'utf8mb4'}, 
-        }  
+    dict1=   dj_database_url.parse(os.environ.get('DB_URL'))
 else:
     dict1= {
         'ENGINE': 'django.db.backends.sqlite3',
