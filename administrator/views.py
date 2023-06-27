@@ -918,6 +918,8 @@ def resetportal(request):
 @superuser_required
 def manageportal(request):
     statistic_obj = Statistic.objects.all().first()
+    if not statistic_obj:
+        statistic_obj=Statistic().save()
     global statYear
     if request.method=='POST' and request.POST.get('startYear') :
         form = YearBatchForm(request.POST)
