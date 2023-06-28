@@ -56,19 +56,20 @@ overflow-hidden transition-all bg-white text-secondary rounded-full group top-0.
 <div class="p-3 flex flex-row justify-around items-center flex-wrap ">  
     <!--Card 1-->
     {% for company in companies %}
-    <div class="w-64 h-80 my-3 rounded overflow-hidden bg-white  shadow-lg">
-      <div class="  ">
+    <div class="w-72 h-80 my-3 rounded overflow-hidden bg-white  shadow-lg">
         {% if company.image %}
-        <img class="company-image relative h-40" src="{{ company.image.url }}" alt="{{ company.c_name }}">
-    {% else %}
-        <img class="company-image relative h-40" alt="H" data-name="{{ company.c_name|slice:'1'|upper }}">
-        
-    {% endif %}
-</div>
+            <div class="relative h-40">
+                <div class="absolute inset-0 bg-cover opacity-25" style="background-image: url('{{ company.image.url }}');"></div>
+                <img class="company-image relative h-40 m-auto w-auto z-10" src="{{ company.image.url }}" alt="{{ company.c_name }}">
+        {% else %}
+            <div class="">
+                <img class="company-image relative h-40 m-auto w-auto" alt="H" data-name="{{ company.c_name|slice:'1'|upper }}">
+        {% endif %}
+            </div>
 
-      <div class="px-2 py-4">
+      <div class="px-2 py-2">
         <div class="font-bold text-xl text-center mb-2">{{company.c_name}}</div>
-        <p class="text-gray-700 text-base text-center">
+        <p class="text-gray-700 text-base text-center truncate">
           {{company.about}}
         </p>
       </div>
