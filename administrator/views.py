@@ -971,7 +971,8 @@ def manageportal(request):
         temp = Job_student.objects.filter(job__yearBatch=year,status=Job_student.Status.PLACED).select_related('job').values_list('job__ctc_pa',flat=True)
         temp  =sorted(temp)
         from statistics import median
-        statistic_obj.median_ctc= median(temp)
+        if temp:
+            statistic_obj.median_ctc= median(temp)
         statistic_obj.companies_visited = jobs.filter(yearBatch=year).values('company').distinct().count()
         statistic_obj.save()
         messages.success(request,message="Placement Stats Updated successfully")
