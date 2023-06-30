@@ -151,7 +151,7 @@ def is_eligible(job, student):
             return False,"Your profile is blocked from applying"
         if not job.reg_open:
             return False,"Registration closed"
-        if student_branch not in job_branches.values_list('branch', flat=True):
+        if job_branches.count()!=0 and student_branch not in job_branches.values_list('branch', flat=True):
             return False,"Your branch is not eligible"
         if job_student:
             return False,"You are already placed in "+str(job_student.job)

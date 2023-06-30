@@ -75,9 +75,9 @@
     </div>
 </div>
 {% if job.description %}
-    <div class="bg-white  rounded-2xl px-8 mb-4">
+    <div class="bg-white  rounded-2xl px-2 md:px-8 mb-4">
         <h2 class="mb-4 text-xl font-bold text-gray-900">Job Description</h2>
-        <p class="text-gray-500">{{ job.description }}</p>
+        <p class="text-gray-500">{{ job.description|linebreaksbr }}</p>
     </div>
 {% endif %}
 <div class="bg-white rounded-2xl px-8 mb-6 shadow-md py-3">
