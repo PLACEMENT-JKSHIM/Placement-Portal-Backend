@@ -2,147 +2,140 @@
 {% load static %}
 {% block content %}
 
-<div class="text-center mt-4 mb-8">
-    <h1 class="text-3xl font-extrabold text-primary hover:text-gray-90 col-span-10">{{ job.company.c_name }} - {{ job.title }}</h1>
-</div>
+    <div class="text-center mt-4 mb-8">
+        <h1 class="text-3xl font-extrabold text-primary hover:text-gray-90 col-span-10">{{ job.company.c_name }} - {{ job.title }}</h1>
+    </div>
 
-<div class="">
-    <div class="bg-white  rounded-2xl p-2 mb-6 mt-8 flex items-center justify-around md:flex-row flex-wrap">
-        <div data-aos="fade-right" data-aos-duration="1000" class="profile-main  sm:flex md:mx-auto lg:mx-10  md:my-auto xl:space-x-0">
-            <div class="w-full max-w-sm">
-                <div class="flex flex-col items-center pb-10">
-                    {% if job.company.image %}
-                    <img class="company-image relative h-32 w-32 md:h-56 md:w-56" src="{{ job.company.image.url }}" alt="{{ job.company.c_name }}">
-                {% else %}
-                    <img class="company-image relative h-32 w-32 md:h-56 md:w-56" alt="H" data-name="{{ job.company.c_name|slice:'1'|upper }}">
-                    
-                {% endif %}
+    <div class="">
+        <div class="bg-white  rounded-2xl p-2 mb-6 mt-8 flex items-center justify-around md:flex-row flex-wrap">
+            <div data-aos="fade-right" data-aos-duration="1000" class="profile-main  sm:flex md:mx-auto lg:mx-10  md:my-auto xl:space-x-0">
+                <div class="w-full max-w-sm">
+                    <div class="flex flex-col items-center pb-10">
+                        {% if job.company.image %}
+                            <img class="company-image relative h-32 w-32 md:h-56 md:w-56" src="{{ job.company.image.url }}" alt="{{ job.company.c_name }}">
+                        {% else %}
+                            <img class="company-image relative h-32 w-32 md:h-56 md:w-56" alt="H" data-name="{{ job.company.c_name|slice:'1'|upper }}">                    
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            <div class="">
+                <div data-aos="fade-left" data-aos-duration="1000"  >
+                    <div class="block max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow hover:shadow-md dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
+                        <h5 class="mb-6 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Placement Information</h5>
+                        <ul class="max-w-md space-y-1 text-gray-500 list-none list-inside dark:text-gray-400">
+                            <li>
+                                <span class="font-normal text-gray-700 dark:text-gray-400"><span class="font-bold">CGPA : </span>{{ job.curr_cgpa }}</span>
+                            </li>
+                            <li>
+                                <span class="font-normal text-gray-700 dark:text-gray-400"><span class="font-bold">Talk Date : </span>{{ job.talk_date }}</span>
+                            </li>
+                            <li>
+                                <span class="font-normal text-gray-700 dark:text-gray-400"><span class="font-bold">Test Date : </span>{{ job.test_date }}</span>
+                            </li>
+                            <li>
+                                <span class="font-normal text-gray-700 dark:text-gray-400"><span class="font-bold">Interview Date : </span>{{ job.interview_date }}</span>
+                            </li>
+                            <li>
+                                <span class="font-normal text-gray-700 dark:text-gray-400"><span class="font-bold">CTC PA : </span>{{ job.ctc_pa }}</span>
+                            </li>
+                            <li>
+                                <span class="font-normal text-gray-700 dark:text-gray-400"><span class="font-bold">Closes On : </span>{{ job.registration_last_date }}</span>
+                            </li>
+                        </ul>
+                        {% if job.reg_open %}
+                            <p class="mt-2 text-center font-extrabold text-primary">REGISTRATION OPEN</p>
+                        {% else %}
+                            <p class="mt-2 text-center font-extrabold text-red-500">REGISTRATION CLOSED</p>
+                        {% endif %}
+                    </div>
+                    <div class="flex justify-center gap-2 p-2 flex-wrap">
+                        <div class="w-full text-center font-semibold">Share</div>
+                        <a id="emailLink" href="mailto:?subject=Career Opportunity:{{job.title}} at {{job.company.c_name}}&amp;body={{job.description}}%0D%0A%0D%0ACGPA: {{job.curr_cgpa}}%0D%0ATalk Date: {{job.talk_date}}%0D%0ATest Date: {{job.test_date}}%0D%0AInterview Date: {{job.interview_date}}%0D%0ACTC PA: {{job.ctc_pa}}%0D%0ACloses On: {{job.registration_last_date}}%0D%0A%0D%0A" title="Share by Email">
+                            <img alt="Share by email" class="p-1" width="36" height="36" src="{% static "assets/mail.png" %}"/> 
+                        </a>
+                        <a id="whatsappLink" target="_blank" href="https://api.whatsapp.com/send?text=*Career Opportunity: {{job.title}} at {{job.company.c_name}}*%0D%0A%0D%0A{{job.description}}%0D%0A%0D%0ACGPA: {{job.curr_cgpa}}%0D%0ATalk Date: {{job.talk_date}}%0D%0ATest Date: {{job.test_date}}%0D%0AInterview Date: {{job.interview_date}}%0D%0ACTC PA: {{job.ctc_pa}}%0D%0ACloses On: {{job.registration_last_date}}%0D%0A%0D%0A" title="Send Message via WhatsApp">
+                            <img alt="Share by whatsapp" class="p-1" width="36" height="36" src="{% static "assets/whatsapp.png" %}"/> 
+                        </a>
+                    </div>
+                    <script>
+                        let whatsappLink = document.getElementById('whatsappLink');
+                        let emailLink= document.getElementById('emailLink');
+                        whatsappLink.href += window.location.href;
+                        emailLink.href += window.location.href;
+                    </script>
                 </div>
             </div>
         </div>
-
-        <div class="">
-        <div data-aos="fade-left" data-aos-duration="1000"  >
-            
-            <div class="block max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow hover:shadow-md dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
-                <h5 class="mb-6 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Placement Information</h5>
-            <ul class="max-w-md space-y-1 text-gray-500 list-none list-inside dark:text-gray-400">
-                <li>
-                    <span class="font-normal text-gray-700 dark:text-gray-400"><span class="font-bold">CGPA : </span>{{ job.curr_cgpa }}</span>
-                </li>
-                <li>
-                    <span class="font-normal text-gray-700 dark:text-gray-400"><span class="font-bold">Talk Date : </span>{{ job.talk_date }}</span>
-                </li>
-                <li>
-                    <span class="font-normal text-gray-700 dark:text-gray-400"><span class="font-bold">Test Date : </span>{{ job.test_date }}</span>
-                </li>
-                <li>
-                    <span class="font-normal text-gray-700 dark:text-gray-400"><span class="font-bold">Interview Date : </span>{{ job.interview_date }}</span>
-                </li>
-                <li>
-                    <span class="font-normal text-gray-700 dark:text-gray-400"><span class="font-bold">CTC PA : </span>{{ job.ctc_pa }}</span>
-                </li>
-                <li>
-                    <span class="font-normal text-gray-700 dark:text-gray-400"><span class="font-bold">Closes On : </span>{{ job.registration_last_date }}</span>
-                </li>
-            </ul>
-                {% if job.reg_open %}
-                <p class="mt-2 text-center font-extrabold text-primary">REGISTRATION OPEN</p>
-                {% else %}
-                <p class="mt-2 text-center font-extrabold text-red-500">REGISTRATION CLOSED</p>
-                {% endif %}
+    </div>
+    {% if job.description %}
+        <div class="bg-white  rounded-2xl px-8 mb-4">
+            <h2 class="mb-4 text-xl font-bold text-gray-900">Job Description</h2>
+            <p class="text-gray-500">{{ job.description }}</p>
+        </div>
+    {% endif %}
+    <div class="bg-white rounded-2xl px-8 mb-6 shadow-md py-3">
+        <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">Company Requirements to Apply</h2>
+        <ul class="max-w-md space-y-1 text-gray-500 list-disc list-inside dark:text-gray-400 ml-4">
+            <li>
+                <span class="font-normal text-gray-700 dark:text-gray-400"><span class="font-bold">SSLC : </span>{{ job.sslc }}</span>
+            </li>
+            <li>
+                <span class="font-normal text-gray-700 dark:text-gray-400"><span class="font-bold">PUC : </span>{{ job.puc }}</span>
+            </li>
+            <li>
+                <span class="font-normal text-gray-700 dark:text-gray-400"><span class="font-bold">Diploma : </span>{{ job.diploma }}</span>
+            </li>
+            <li>
+                <span class="font-normal text-gray-700 dark:text-gray-400"><span class="font-bold">Degree : </span>{{ job.degree }}</span>
+            </li>
+            <li>
+                <span class="font-normal text-gray-700 dark:text-gray-400"><span class="font-bold">Present CGPA : </span>{{ job.curr_cgpa }}</span>
+            </li>
+            <li>
+                <span class="font-normal text-gray-700 dark:text-gray-400"><span class="font-bold">Gap in Education : </span>{{ job.gap_edu }}</span>
+            </li>
+            <li>
+                <span class="font-normal text-gray-700 dark:text-gray-400"><span class="font-bold">Allowed Maximum Backlog : </span>{{ job.max_activebacklog }}</span>
+            </li>
+            <li>
+                <span class="font-normal text-gray-700 dark:text-gray-400"><span class="font-bold">Allowed Maximum Total Backlog : </span>{{ job.max_histbacklog }}</span>
+            </li>
+            <li>
+                <span class="font-normal text-gray-700 dark:text-gray-400"><span class="font-bold">Born Between : </span>{{ job.min_dob | default:"--" }} <span class="font-bold">-</span> {{ job.max_dob |default:"--"}}</span>
+            </li>
+            <li>
+                <span class="font-normal text-gray-700 dark:text-gray-400"><span class="font-bold">Allowed Branches : </span>
+                    {% for job_branch in job_branches %}
+                        {{ job_branch.branch }} ,
+                    {% endfor %}
+                </span>
+            </li>
+            <li>
+                <span class="font-normal text-gray-700 dark:text-gray-400"><span class="font-bold">Other : </span>{{ job.notes }}</span>
+            </li>
+        </ul>
+    </div>
+    {% if request.user.is_superuser %}
+        <div class="flex flex-col justify-around ">
+            <div class="flex justify-center">
+                <form class="flex items-center" id="profile"  action="{% url 'editJob' job.id  %}">
+                    <div class="mb-3 mx-8">
+                        {% include "../../buttons/buttons.html" with btn="Edit Job" secondary=True %}
+                    </div>        
+                </form>
+                <form class="flex items-center" id="profile" method="POST" action="{% url 'deleteJob' job.id  %}">
+                    {% csrf_token %}
+                    <div class="mb-3 mx-8">
+                        {% include "../../buttons/buttons.html" with btn="Delete" secondary=False %}
+                    </div>
+                </form>
             </div>
-            <div class="flex justify-center gap-2 p-2 flex-wrap">
-                <div class="w-full text-center font-semibold">Share</div>
-                    <a id="emailLink" href="mailto:?subject=Career Opportunity:{{job.title}} at {{job.company.c_name}}&amp;body={{job.description}}%0D%0A%0D%0ACGPA: {{job.curr_cgpa}}%0D%0ATalk Date: {{job.talk_date}}%0D%0ATest Date: {{job.test_date}}%0D%0AInterview Date: {{job.interview_date}}%0D%0ACTC PA: {{job.ctc_pa}}%0D%0ACloses On: {{job.registration_last_date}}%0D%0A%0D%0A" title="Share by Email">
-                        <img alt="Share by email" class="p-1" width="36" height="36" src="{% static "assets/mail.png" %}"/> 
-                    </a>
-                    <a id="whatsappLink" target="_blank" href="https://api.whatsapp.com/send?text=*Career Opportunity: {{job.title}} at {{job.company.c_name}}*%0D%0A%0D%0A{{job.description}}%0D%0A%0D%0ACGPA: {{job.curr_cgpa}}%0D%0ATalk Date: {{job.talk_date}}%0D%0ATest Date: {{job.test_date}}%0D%0AInterview Date: {{job.interview_date}}%0D%0ACTC PA: {{job.ctc_pa}}%0D%0ACloses On: {{job.registration_last_date}}%0D%0A%0D%0A" title="Send Message via WhatsApp">
-                        <img alt="Share by whatsapp" class="p-1" width="36" height="36" src="{% static "assets/whatsapp.png" %}"/> 
-                    </a>
-            </div>
-            <script>
-                let whatsappLink = document.getElementById('whatsappLink');
-                let emailLink= document.getElementById('emailLink');
-                whatsappLink.href += window.location.href;
-                emailLink.href += window.location.href;
-            </script>
         </div>
-        </div>
-    </div>
-</div>
-
-{% if job.description %}
-    <div class="bg-white  rounded-2xl px-8 mb-4">
-        <h2 class="mb-4 text-xl font-bold text-gray-900">Job Description</h2>
-        <p class="text-gray-500">{{ job.description }}</p>
-    </div>
-{% endif %}
-<div class="bg-white rounded-2xl px-8 mb-6 shadow-md py-3">
-    
-    <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">Company Requirements to Apply</h2>
-    <ul class="max-w-md space-y-1 text-gray-500 list-disc list-inside dark:text-gray-400 ml-4">
-        <li>
-            <span class="font-normal text-gray-700 dark:text-gray-400"><span class="font-bold">SSLC : </span>{{ job.sslc }}</span>
-        </li>
-        <li>
-            <span class="font-normal text-gray-700 dark:text-gray-400"><span class="font-bold">PUC : </span>{{ job.puc }}</span>
-        </li>
-        <li>
-            <span class="font-normal text-gray-700 dark:text-gray-400"><span class="font-bold">Diploma : </span>{{ job.diploma }}</span>
-        </li>
-        <li>
-            <span class="font-normal text-gray-700 dark:text-gray-400"><span class="font-bold">Degree : </span>{{ job.degree }}</span>
-        </li>
-        <li>
-            <span class="font-normal text-gray-700 dark:text-gray-400"><span class="font-bold">Present CGPA : </span>{{ job.curr_cgpa }}</span>
-        </li>
-        <li>
-            <span class="font-normal text-gray-700 dark:text-gray-400"><span class="font-bold">Gap in Education : </span>{{ job.gap_edu }}</span>
-        </li>
-        <li>
-            <span class="font-normal text-gray-700 dark:text-gray-400"><span class="font-bold">Allowed Maximum Backlog : </span>{{ job.max_activebacklog }}</span>
-        </li>
-        <li>
-            <span class="font-normal text-gray-700 dark:text-gray-400"><span class="font-bold">Allowed Maximum Total Backlog : </span>{{ job.max_histbacklog }}</span>
-        </li>
-        <li>
-            <span class="font-normal text-gray-700 dark:text-gray-400"><span class="font-bold">Born Between : </span>{{ job.min_dob | default:"--" }} <span class="font-bold">-</span> {{ job.max_dob |default:"--"}}</span>
-        </li>
-        <li>
-            <span class="font-normal text-gray-700 dark:text-gray-400"><span class="font-bold">Allowed Branches : </span>{% for job_branch in job_branches %}
-            {{ job_branch.branch }} ,
-        {% endfor %}</span>
-        </li>
-        <li>
-            <span class="font-normal text-gray-700 dark:text-gray-400"><span class="font-bold">Other : </span>{{ job.notes }}</span>
-        </li>
-    </ul>
-
-</div>
-{% if request.user.is_superuser %}
-    <div class="flex flex-col justify-around ">
-        <div class="flex justify-center">
-            <form class="flex items-center" id="profile"  action="{% url 'editJob' job.id  %}">
-        <div class="mb-3 mx-8">
-            {% include "../../buttons/buttons.html" with btn="Edit Job" secondary=True %}
-        </div>
-        
-    </form>
-    <form class="flex items-center" id="profile" method="POST" action="{% url 'deleteJob' job.id  %}">
-        {% csrf_token %}
-        <div class="mb-3 mx-8">
-        {% include "../../buttons/buttons.html" with btn="Delete" secondary=False %}
-        </div>
-    </form>
-    </div>
-    </div>
-{% endif %}
-
-</div> 
-<script src="https://unpkg.com/aos@next/dist/aos.js"></script>
-<script>
-AOS.init();
-</script>
-
+    {% endif %}
+    </div> 
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+    <script>
+        AOS.init();
+    </script>
 {% endblock content %}
