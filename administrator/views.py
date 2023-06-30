@@ -393,7 +393,7 @@ def addJob(request):
     context = {'form': form,"branches":branches}
     return render(request, "administrator/company/addjob.html", context)
 
-@superuser_required
+@staff_required
 def companies(request):
     companies=Company.objects.all()
     if request.method == 'POST':

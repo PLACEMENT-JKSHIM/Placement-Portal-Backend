@@ -2,7 +2,7 @@ from django.db import models
 from datetime import datetime
 from django.contrib.auth.models import User
 from home.models import YearBatch
-from django.core.validators import MaxValueValidator, MinValueValidator 
+from django.core.validators import MaxValueValidator, MinValueValidator ,FileExtensionValidator
 from cloudinary_storage.storage import RawMediaCloudinaryStorage
 from django.core.exceptions import ValidationError
 import home.models as m
@@ -55,7 +55,7 @@ class Student(models.Model):
     nameAadhar=models.CharField(blank=True,max_length=50,verbose_name='Name as in Aadhar card')
     gender=models.CharField(max_length=1,choices=Gender.choices,default=Gender.MALE,verbose_name="Gender")
     image=models.ImageField(blank=True,null=True,upload_to=upload_student,validators=[validate_file_size])
-    resume=models.FileField(blank=True,null=True,upload_to=upload_resume,validators=[validate_file_size],storage=RawMediaCloudinaryStorage)
+    resume=models.FileField(blank=True,null=True,upload_to=upload_resume,validators=[validate_file_size,FileExtensionValidator(allowed_extensions=['pdf'])],storage=RawMediaCloudinaryStorage)
     branch=models.ForeignKey(Branch,blank=True,null=True, on_delete=models.SET_NULL,verbose_name="Branch")
     phoneNo=models.BigIntegerField(blank=True,null=True,verbose_name="Phone number",validators=[MinValueValidator(1000000000),MaxValueValidator(99999999999)])
     alternatePhoneNo=models.BigIntegerField(blank=True,null=True,verbose_name="Alternate Phone number",validators=[MinValueValidator(1000000000),MaxValueValidator(99999999999)])
