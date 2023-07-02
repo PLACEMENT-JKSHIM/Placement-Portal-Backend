@@ -11,6 +11,8 @@ import home.models as m
 def validate_file_size(value):
     filesize= value.size
     
+    if not filesize:
+        return value
     if filesize > 512*1024:
         raise ValidationError("You cannot upload file more than 500KB")
     else:
