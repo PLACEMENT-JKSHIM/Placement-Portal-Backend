@@ -288,13 +288,16 @@
     //const form = document.getElementById('profile');
     const profiledisplay = document.getElementById('profile-display');
     const inputFieldP = document.getElementById('profile-usn');
-
+    let debounceTimeout;
     inputFieldP.addEventListener('keyup', event => {
         event.preventDefault();  // prevent the form from submitting normally
 
         const searchQuery = inputFieldP.value;
-        console.log(searchQuery)
+        console.log("search:", event.timeStamp, searchQuery);
 
+        // Clear the previous debounce timeout, if any
+        clearTimeout(debounceTimeout);
+        debounceTimeout = setTimeout(() => {
         fetch('/au/student/editBlock', {
             method: 'POST',
             headers: {
@@ -347,6 +350,7 @@
                 // handle errors
                 console.log(error);
             });
+        }, 500); // Adjust the debounce delay as needed (500ms in this example)
     });
     //***************************************** Student profile edit block end **********************************************************
     //***************************************** Student login block start  **********************************************************
@@ -357,9 +361,10 @@
         event.preventDefault();  // prevent the form from submitting normally
 
         const searchQuery = inputFieldL.value;
-
-
-
+        console.log("search:", event.timeStamp, searchQuery);
+        // Clear the previous debounce timeout, if any
+        clearTimeout(debounceTimeout);
+        debounceTimeout = setTimeout(() => {
         fetch('/au/student/editBlock', {
             method: 'POST',
             headers: {
@@ -412,6 +417,7 @@
                 // handle errors
                 console.log(error);
             });
+        }, 500); // Adjust the debounce delay as needed (500ms in this example)
     });
     //***************************************** Student Login  block end   **********************************************************
 
@@ -423,8 +429,10 @@
         event.preventDefault();  // prevent the form from submitting normally
 
         const searchQuery = inputFieldA.value;
-
-
+        console.log("search:", event.timeStamp, searchQuery);
+        // Clear the previous debounce timeout, if any
+        clearTimeout(debounceTimeout);
+        debounceTimeout = setTimeout(() => {
         fetch('/au/student/editBlock', {
             method: 'POST',
             headers: {
@@ -449,12 +457,12 @@
                       <div class="shadow-[0px_4px_16px_rgba(17,17,26,0.1),_0px_8px_24px_rgba(17,17,26,0.1),_0px_16px_56px_rgba(17,17,26,0.1)] rounded-lg px-3 w-[400px] md:w-[300px] lg:w-[320px]  py-4 my-3 mx-1">
                           <div class="flex flex-col sm:flex-row items-center justify-center ">
                             <div class="relative">
-                              ${students[i].image.url ? `
-                                <img class="profile-image w-16 h-16 rounded-full" src="${students[i].image.url}" alt="${students[i].name}">
-                              ` : `
-                                <img class="profile-image w-16 h-16 rounded-full" alt="${students[i].name}" data-name="${students[i].name.slice(0, 1).toUpperCase()}">
-                              `}
-                            </div>
+                                ${students[i].image.url ? `
+                                  <img class="profile-image w-16 h-16 rounded-full" src="${students[i].image.url}" alt="${students[i].name}">
+                                ` : `
+                                  <img class="profile-image w-16 h-16 rounded-full bg-gray-800" alt="${students[i].name}" data-name="${students[i].name.slice(0, 1).toUpperCase()}">
+                                `}
+                              </div>
                               <p class="px-3 md:px-5 py-3">${students[i].name}</p>
                               <p class="">${students[i].user.user}</p>
                           </div>
@@ -477,6 +485,7 @@
                 // handle errors
                 console.log(error);
             });
+        }, 500); // Adjust the debounce delay as needed (500ms in this example)
     });
 //***************************************** Student Apply  block end   **********************************************************
 </script>

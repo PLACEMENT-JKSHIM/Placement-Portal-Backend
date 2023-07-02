@@ -80,23 +80,29 @@
   const profiledisplay = document.getElementById("profile-display");
   const inputFieldP = document.getElementById("profile-usn");
   const tagH = document.getElementById("tag-h");
+  let debounceTimeout;
 
   inputFieldP.addEventListener("keyup", (event) => {
     event.preventDefault(); // prevent the form from submitting normally
     tagH.style.display = "none";
     const searchQuery = inputFieldP.value;
-    console.log(searchQuery);
-
-    fetch("/au/student/editBlock", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "X-CSRFToken": csrftoken,
-      },
-      body: JSON.stringify({
-        q: searchQuery,
-      }),
-    })
+    console.log("search:", event.timeStamp, searchQuery);
+  
+    // Clear the previous debounce timeout, if any
+    clearTimeout(debounceTimeout);
+  
+    // Set a new debounce timeout to trigger the API call after 500ms of user inactivity
+    debounceTimeout = setTimeout(() => {
+      fetch("/au/student/editBlock", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRFToken": csrftoken,
+        },
+        body: JSON.stringify({
+          q: searchQuery,
+        }),
+      })
       .then((response) => response.json())
       .then((data) => {
         console.log(data);
@@ -142,7 +148,9 @@
         // handle errors
         console.log(error);
       });
+    }, 500); // Adjust the debounce delay as needed (500ms in this example)
   });
+  
   //***************************************** Student Apply  block end   **********************************************************
 </script>
 {% endblock content %}
