@@ -45,7 +45,8 @@
                             href="mailto:webmaster@flowbite.com">{{request.user.student.email}}</a>
                         <div class="mt-4">Home adress</div>
                         <div class="mb-2 text-sm font-medium text-gray-900">
-                            {{request.user.student.address}}
+                            {{request.user.student.address}} {{request.user.student.homeTown}},
+                {{request.user.student.homeState}} 
                         </div>
                         <div class="mt-4">Phone number</div>
                         <div class="mb-2 text-sm font-medium text-gray-900">
@@ -105,7 +106,7 @@
             <dt class="text-sm font-medium text-gray-400">Permanent Address</dt>
             <dd class="text-sm font-semibold text-gray-900">
                 {{request.user.student.address}} {{request.user.student.homeTown}},
-                {{request.user.student.homeState}}
+                {{request.user.student.homeState}} 
             </dd>
         </div>
         {% comment %} <div>
