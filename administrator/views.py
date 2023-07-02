@@ -862,10 +862,11 @@ def manageSelections(request):
             selectedYear=YearBatch.objects.filter(pk=int(request.GET.get("year"))).first()
         except:
             pass
-
+    
+    print(selectedYear)
     if not selectedYear:
         selectedYear=YearBatch.objects.all().order_by('-endYear').first()
-
+        
     jobs=Job.objects.filter(yearBatch=selectedYear)
 
     selectedJob=False
@@ -875,8 +876,8 @@ def manageSelections(request):
         except:
             pass
 
-    if not selectedYear:
-        selectedYear=Job.objects.filter(yearBatch=selectedYear).first()
+    if not selectedJob:
+        selectedJob=Job.objects.filter(yearBatch=selectedYear).first()
 
 
     jobSt=Job_student.objects.filter(job=selectedJob)

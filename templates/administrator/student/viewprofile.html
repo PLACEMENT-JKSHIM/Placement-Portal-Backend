@@ -44,7 +44,8 @@
                             href="mailto:webmaster@flowbite.com">{{student.email}}</a>
                         <div class="mt-4">Home adress</div>
                         <div class="mb-2 text-sm font-medium text-gray-900">
-                            {{student.address}}
+                            {{student.address}} {{student.homeTown}},
+                {{student.homeState}}
                         </div>
                         <div class="mt-4">Phone number</div>
                         <div class="mb-2 text-sm font-medium text-gray-900">
@@ -151,9 +152,9 @@
             <dt class="text-sm font-medium text-gray-400">
                 Resume
             </dt>
-            {% if request.user.student.resume %}
+            {% if student.resume %}
             <dd class="text-sm font-semibold text-gray-900">
-                <a href="{{request.user.student.resume.url}}" target="_blank" class="text-blue-500 font-bold no-underline hover:underline">
+                <a href="{{student.resume.url}}" target="_blank" class="text-blue-500 font-bold no-underline hover:underline">
                     View resume
                 </a>
             </dd>

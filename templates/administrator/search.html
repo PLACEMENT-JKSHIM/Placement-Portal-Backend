@@ -7,8 +7,7 @@
     Students
   </h1>
   <div class="w-full">
-    <form class="flex mt-5 items-center" method="POST" id="profile">
-      {% csrf_token %}
+    <div class="flex mt-5 items-center" id="profile">
       <label for="voice-search" class="sr-only">Search</label>
       <div class="relative w-full">
         <div
@@ -41,7 +40,7 @@
           class="absolute inset-y-0 right-0 flex items-center pr-3"
         ></button>
       </div>
-    </form>
+    </div>
     <h1 id="tag-h" class="text-xl block text-center font-bold text-primary">
       <span class="underline underline-offset-8 decoration-7 decoration-secondary"
         >Recent Logins</span
