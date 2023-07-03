@@ -19,8 +19,8 @@
             <div class="mt-4 max-h-full space-y-8 md:grid md:grid-cols-3 lg:grid-cols-3 md:gap-12 md:space-y-0">
                 {% for latest in news%}
                 <a data-drawer-target={{latest.title}} data-drawer-show={{latest.title}} data-drawer-placement="bottom" aria-controls={{latest.title}} class="hover:cursor-pointer block max-w-sm p-4 bg-white rounded-lg shadow hover:bg-gray-100 hover:ring-4 shadow-primary dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
-                    <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white text-ellipsis overflow-hidden ...">{{latest.title}} </h5>
-                    <p class="font-normal text-gray-700 dark:text-gray-400">Campus drive 2023 - Super Dream Option</p>
+                    <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white text-ellipsis overflow-hidden capitalize">{{latest.title}} </h5>
+                    <p class="font-normal text-gray-700 dark:text-gray-400">{{latest.content|truncatechars:10}}</p>
                 </a>
                 <div id={{latest.title}} class="max-h-96 fixed bottom-0 left-0 right-0 z-40 w-full p-4 overflow-y-auto bg-blue-50 dark:bg-gray-800 transition-transform translate-y-full" tabindex="-1">
                     <h5 id="drawer-bottom-label" class="inline-flex mr-1 items-center mb-4 text-base font-semibold text-primary dark:text-gray-400">
@@ -30,7 +30,7 @@
                         <span class="sr-only">Close menu</span>
                     </button>
                     <p class="mb-3 text-sm text-gray-500 dark:text-gray-400 whitespace-pre-line">
-                        {{latest.content}} 
+                        {{latest.content|linebreaksbr}} 
                         
                     </p>
                 </div>
