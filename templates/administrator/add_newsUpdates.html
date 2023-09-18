@@ -1,0 +1,25 @@
+{% extends "../administrator/_base_admin.html" %}
+{% block content %}
+
+<div class="text-center">
+    <div class="p-2 text-2xl pb-7">Add Latest News And Updates</div>
+        <div class="rounded-lg border-slate-300 text-left overflow-auto border-2">
+            <div class="bg-primary h-10 text-white px-4 pt-2 font-semibold">News And Updates</div>
+            <form action="" method="post">
+                {% csrf_token %}
+                <div class="px-4 pt-3 flex flex-col gap-2">
+                    {% include "../custom_fields/_input.html" with field=news.title %}
+                    {% include "../custom_fields/_textarea.html" with field=news.content %}
+                       
+                    {% include "../custom_fields/_toggle.html" with field=news.hidden %}
+                        
+                </div>
+                <div class="text-center mt-5 p-1 pb-2 bg-gray-100 font-semibold">
+                    {% include "../buttons/buttons.html" with btn="  Post  +" %}
+                </div>
+            </form>
+        </div>
+      
+
+</div>
+{% endblock content %}

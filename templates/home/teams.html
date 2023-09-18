@@ -1,0 +1,21 @@
+{% load static %}
+<div class="text-center text-3xl uppercase font-extrabold text-primary my-6 hover:text-gray-900">
+    <h1>Meet our team</h1>
+</div>
+<div class="flex flex-wrap justify-center gap-6">
+    {% for member in teams %}
+        <div class="text-primary transform transition duration-500 "> 
+            <div class="w-60 h-80 max-w-sm bg-white border border-gray-200 rounded-xl shadow-md group hover:rounded-3xl">
+                <div class="flex h-full flex-col justify-center gap-3 items-center">
+                   {% if member.mem_image %}
+<img class=" object-contain transition-all duration-300 w-36 h-36 rounded-[50%] shadow-md group-hover:scale-105 group-hover:shadow-lg" src="{{member.mem_image.url}}" />
+{% else %}
+<img class=" object-contain transition-all duration-300 w-36 h-36 rounded-[50%] shadow-md group-hover:scale-105 group-hover:shadow-lg" src="{% static 'team.png' %}" />
+{% endif %}
+                    <h5 class="capitalize mb-1 mt-3 text-lg transition-transform font-medium group-hover:scale-125 group-hover:font-semibold">{{member.mem_name}}</h5>
+                    <span class="text-sm transition-transform group-hover:scale-105">{{member.mem_designation|linebreaks}}</span>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+</div>

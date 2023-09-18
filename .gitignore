@@ -96,8 +96,16 @@ db.sqlite3
 .history
 secrets.json
 **/migrations/*
+!**/migrations/__init__.py
 .vscode
 *invoice*
 .DS_Store
 
+#Additionals
 node_modules
+media/
+static/src/output.css
+
+static/admin/
+static/staticfiles.json
+cacert.pem

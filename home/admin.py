@@ -1,5 +1,12 @@
 from django.contrib import admin
-from .models import Student
+from .models import Company,Job,Team,Slider,Rule,Gallery,YearBatch
 # Register your models here.
 
-admin.site.register(Student)
+admin.site.register(Company)
+admin.site.register(Job)
+admin.site.register(Team)
+admin.site.register(Slider)
+admin.site.register(Rule)
+admin.site.register(Gallery)
+admin.site.register(YearBatch)
+

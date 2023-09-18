@@ -1,0 +1,139 @@
+{% extends "./_base_student.html" %}
+{% load static %}
+{% block content %}
+
+<div class="text-center mt-4 mb-8">
+    <h1 class="text-3xl font-extrabold text-primary hover:text-gray-90 col-span-10">{{ job.company.c_name }} - {{ job.title }}</h1>
+</div>
+
+<div class="">
+    <div class="bg-white  rounded-2xl p-2 mb-6 mt-8 flex items-center justify-around md:flex-row flex-wrap">
+        <div data-aos="fade-right" data-aos-duration="1000" class="profile-main  sm:flex md:mx-auto lg:mx-10  md:my-auto xl:space-x-0">
+            <div class="w-full max-w-sm">
+                <div class="flex flex-col items-center pb-10">
+                    {% if job.company.image %}
+                    <img class="company-image relative h-32 w-32  md:h-56 md:w-56" src="{{ job.company.image.url }}" alt="{{ job.company.c_name }}">
+                {% else %}
+                    <img class="company-image relative h-32 w-32 md:h-56 md:w-56" alt="H" data-name="{{ job.company.c_name|slice:'1'|upper }}">
+                    
+                {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="">
+        <div data-aos="fade-left" data-aos-duration="1000"  >
+            
+            <div class="block max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow hover:shadow-md dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
+                <h5 class="mb-6 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Placement Information</h5>
+            <ul class="max-w-md space-y-1 text-gray-500 list-none list-inside">
+                <li>
+                    <span class="font-normal text-gray-700"><span class="font-bold">CGPA : </span>{{ job.curr_cgpa }}</span>
+                </li>
+                <li>
+                    <span class="font-normal text-gray-700"><span class="font-bold">Talk Date : </span>{{ job.talk_date }}</span>
+                </li>
+                <li>
+                    <span class="font-normal text-gray-700"><span class="font-bold">Test Date : </span>{{ job.test_date }}</span>
+                </li>
+                <li>
+                    <span class="font-normal text-gray-700"><span class="font-bold">Interview Date : </span>{{ job.interview_date }}</span>
+                </li>
+                <li>
+                    <span class="font-normal text-gray-700"><span class="font-bold">CTC PA : </span>{{ job.ctc_pa }}</span>
+                </li>
+                <li>
+                    <span class="font-normal text-gray-700"><span class="font-bold">Closes On : </span>{{ job.registration_last_date }}</span>
+                </li>
+            </ul>
+                {% if eligible %}
+                    {% if job_student.status == 'A' %}
+                        <p class="mt-2 text-center font-extrabold text-green-500">APPLIED</p>
+                    {% elif job_student.status == 'OF' %}
+                        <p class="mt-2 text-center font-extrabold text-green-500">OFFERED</p>
+                    {% elif job_student.status == 'P' %}
+                        <p class="mt-2 text-center font-extrabold text-green-500">PLACED</p>
+                    {% elif job_student.status == 'R' %}
+                        <p class="mt-2 text-center font-extrabold text-red-500">REJECTED</p>
+                    {% elif job.reg_open %}
+                        <p class="mt-2 text-center font-extrabold text-primary">REGISTRATION OPEN</p>
+                            <form class="flex flex-col justify-center items-center mt-4" action="{% url 'companyPage' id %}" method="post">
+                            {% csrf_token %}
+                            <button type="submit" id="apply-btn" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">APPLY</button>
+                            </form>
+                    {% elif not job.reg_open  %}
+                        <p class="mt-2 text-center font-extrabold text-red-500">REGISTRATION CLOSED</p>
+                    {% else %}
+                    {% endif %}
+                {% elif eligible == False %}
+                    <p class="mt-3 text-center font-extrabold text-red-600">NOT ELIGIBLE</p>
+                    <p class="text-center text-sm font-bold text-red-500">{{reason}}</p>
+                {% endif %}
+                <p class="mt-2 text-center font-extrabold text-primary">{{jobs_student.status}}</p>
+        </div>
+        </div>
+    </div>
+</div>
+{% if job.description %}
+    <div class="bg-white  rounded-2xl px-2 md:px-8 mb-4">
+        <h2 class="mb-4 text-xl font-bold text-gray-900">Job Description</h2>
+        <p class="text-gray-500">{{ job.description|linebreaksbr }}</p>
+    </div>
+{% endif %}
+<div class="bg-white rounded-2xl px-8 mb-6 shadow-md py-3">
+    
+    <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">Company Requirements to Apply</h2>
+    <ul class="max-w-md space-y-1 text-gray-500 list-disc list-inside ml-4">
+        <li>
+            <span class="font-normal text-gray-700"><span class="font-bold">SSLC : </span>{{ job.sslc }}</span>
+        </li>
+        <li>
+            <span class="font-normal text-gray-700"><span class="font-bold">PUC : </span>{{ job.puc }}</span>
+        </li>
+        <li>
+            <span class="font-normal text-gray-700"><span class="font-bold">Diploma : </span>{{ job.diploma }}</span>
+        </li>
+        <li>
+            <span class="font-normal text-gray-700"><span class="font-bold">Degree : </span>{{ job.degree }}</span>
+        </li>
+        <li>
+            <span class="font-normal text-gray-700"><span class="font-bold">Present CGPA : </span>{{ job.curr_cgpa }}</span>
+        </li>
+        <li>
+            <span class="font-normal text-gray-700"><span class="font-bold">Gap in Education : </span>{{ job.gap_edu }}</span>
+        </li>
+        <li>
+            <span class="font-normal text-gray-700"><span class="font-bold">Allowed Maximum Backlog : </span>{{ job.max_activebacklog }}</span>
+        </li>
+        <li>
+            <span class="font-normal text-gray-700"><span class="font-bold">Allowed Maximum Total Backlog : </span>{{ job.max_histbacklog }}</span>
+        </li>
+        <li>
+            <span class="font-normal text-gray-700"><span class="font-bold">Born Between : </span>{{ job.min_dob | default:"--" }} <span class="font-bold">-</span> {{ job.max_dob |default:"--"}}</span>
+        </li>
+        <li>
+            <span class="font-normal text-gray-700"><span class="font-bold">Allowed Branches : </span>{% for job_branch in job_branches %}
+            {{ job_branch.branch }} ,
+        {% endfor %}</span>
+        </li>
+        <li>
+            <span class="font-normal text-gray-700"><span class="font-bold">Other : </span>{{ job.notes }}</span>
+        </li>
+    </ul>
+
+</div>
+
+</div>
+</div> 
+<script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<script>
+AOS.init();
+const form = document.querySelector('form');
+    const applyButton = document.querySelector('#apply-btn');
+    form.addEventListener('submit', function() {
+      applyButton.disabled = true;
+      applyButton.style.display = 'none';
+    });
+</script>
+
+{% endblock content %}

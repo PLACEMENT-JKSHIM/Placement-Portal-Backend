@@ -1,0 +1,86 @@
+{% extends "./_base_student.html" %}
+
+{% block content %}
+   
+
+<section class="h-screen  bg-slate-100">
+    <div class="py-8 px-4 mx-auto max-w-screen-xl sm:py-16 lg:px-6">
+        <div class="p-3 max-w-screen lg:mb-10 text-center border-2 shadow-md shadow-gray-400 rounded-full bg-gradient-to-r from-[rgba(0,0,255,0.34)] to-secondary/40">
+            <h2 class="mb-4 text-2xl tracking-tight font-bold text-primary uppercase"><span class="underline underline-offset-8 decoration-7 decoration-secondary">{{request.user.username|slice:"0:5"}}</span>{{request.user.username|slice:"5:"}}</h2>
+            <p id="typer" class="text-primary text-xl font-semibold sm:text-3xl"><span class="typed-text"></span><span class="cursor">&nbsp;</span></p>
+        </div>
+        <hr class="w-48 h-1 mx-auto my-2 bg-primary border-0 rounded md:my-3 dark:bg-gray-700">
+        <div class="p-2">
+            <h2 class="mb-6 text-4xl tracking-tight font-bold text-blue-600">
+                <span class="text-blue-800 text-2xl font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800 ml-2">
+                    <span class="underline underline-offset-8 decoration-7 decoration-secondary">Latest</span> news & updates
+                </span>
+            </h2>
+            <div class="mt-4 max-h-full space-y-8 md:grid md:grid-cols-3 lg:grid-cols-3 md:gap-12 md:space-y-0">
+                {% for latest in news%}
+                <a data-drawer-target={{latest.title}} data-drawer-show={{latest.title}} data-drawer-placement="bottom" aria-controls={{latest.title}} class="hover:cursor-pointer block max-w-sm p-4 bg-white rounded-lg shadow hover:bg-gray-100 hover:ring-4 shadow-primary dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
+                    <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white text-ellipsis overflow-hidden capitalize">{{latest.title}} </h5>
+                    <p class="font-normal text-gray-700 dark:text-gray-400">{{latest.content|truncatechars:10}}</p>
+                </a>
+                <div id={{latest.title}} class="max-h-96 fixed bottom-0 left-0 right-0 z-40 w-full p-4 overflow-y-auto bg-blue-50 dark:bg-gray-800 transition-transform translate-y-full" tabindex="-1">
+                    <h5 id="drawer-bottom-label" class="inline-flex mr-1 items-center mb-4 text-base font-semibold text-primary dark:text-gray-400">
+                       {{latest.title}} </h5>
+                    <button type="button" data-drawer-hide={{latest.title}} aria-controls={{latest.title}} class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 absolute top-2.5 right-2.5 inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white" >
+                        <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+                        <span class="sr-only">Close menu</span>
+                    </button>
+                    <p class="mb-3 text-sm text-gray-500 dark:text-gray-400 whitespace-pre-line">
+                        {{latest.content|linebreaksbr}} 
+                        
+                    </p>
+                </div>
+                {% endfor %}
+                
+                
+            </div>
+        </div>
+    </div>
+</section>
+<script>
+    const typedTextSpan = document.querySelector(".typed-text");
+    const cursorSpan = document.querySelector(".cursor");
+    const textArray = ["Hello! "+"{{request.user.student.name}}","Welcome to Placement Portal JKSHIM","Opportunities meet ambition here", "Unlock your MBA career potential.","Embrace the journey to success"];
+    const typingDelay = 200;
+    const erasingDelay = 100;
+    const newTextDelay = 2000; // Delay between current and next text
+    let textArrayIndex = 0;
+    let charIndex = 0;
+
+    function type() {
+    if (charIndex < textArray[textArrayIndex].length) {
+        if(!cursorSpan.classList.contains("typing")) cursorSpan.classList.add("typing");
+        typedTextSpan.textContent += textArray[textArrayIndex].charAt(charIndex);
+        charIndex++;
+        setTimeout(type, typingDelay);
+    } 
+    else {
+        cursorSpan.classList.remove("typing");
+        setTimeout(erase, newTextDelay);
+    }
+    }
+
+    function erase() {
+        if (charIndex > 0) {
+        if(!cursorSpan.classList.contains("typing")) cursorSpan.classList.add("typing");
+        typedTextSpan.textContent = textArray[textArrayIndex].substring(0, charIndex-1);
+        charIndex--;
+        setTimeout(erase, erasingDelay);
+    } 
+    else {
+        cursorSpan.classList.remove("typing");
+        textArrayIndex++;
+        if(textArrayIndex>=textArray.length) textArrayIndex=0;
+        setTimeout(type, typingDelay + 1100);
+    }
+    }
+
+    document.addEventListener("DOMContentLoaded", function() { // On DOM Load initiate the effect
+    if(textArray.length) setTimeout(type, newTextDelay + 250);
+    });
+</script>
+{% endblock content %}

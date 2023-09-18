@@ -12,7 +12,7 @@ module.exports = {
                 secondary: '#FFA500',
                 sidebarfont: '#e6efff',
                 sidebaricons: '#7a9dff',
-            }
+            },
         },
     },
     plugins: [

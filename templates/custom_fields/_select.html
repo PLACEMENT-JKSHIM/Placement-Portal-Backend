@@ -1,0 +1,18 @@
+{% load widget_tweaks %}
+
+<div>
+    <label for="{{field.id_for_label}}" class="block mb-2 font-medium text-gray-900 dark:text-white">{{field.label}}{% if field.field.required %}<span class="text-red-600">*</span>{% endif %} : </label>
+    <div class="relative">
+        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+        </div>
+        <select name="{{ field.name }}" id="{{ field.id }}"
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 pr-8 pl-3 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                <option value="" {% if not field.value %}selected{% endif %} disabled>Select {{ field.label }}</option>
+                {% for company in field.field.choices %}
+                {% if not forloop.first %}
+                    <option value="{{ company.0 }}" {% if field.value == company.0 %}selected{% endif %}>{{ company.1 }}</option>
+                {% endif %}
+            {% endfor %}
+        </select>
+    </div>
+</div>

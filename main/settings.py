@@ -11,21 +11,35 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
 from pathlib import Path
+import os
+import environ
+# Initialise environment variables
+env = environ.Env()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
+environ.Env.read_env(env_file=os.path.join(BASE_DIR, ".env"))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-1lym&u*wd9rnxm^28(&ynl9wz$e5&7p(z!s@k#m&re=jvt0r68'
+# SECRET_KEY = 'django-insecure-1lym&u*wd9rnxm^28(&ynl9wz$e5&7p(z!s@k#m&re=jvt0r68'
+SECRET_KEY ="ashufhq28y32s3sdf(0^248"
+if env.get_value("SECRET_KEY",default=False):
+    SECRET_KEY = env('SECRET_KEY') 
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+if env.get_value("PRODUCTION",default=False) or env.get_value("TEST_PRODUCTION",default=False):
+    DEBUG = False
+else:
+    DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1','localhost',env.get_value('ALLOWED_HOST',default='')]
+if env.get_value('ALLOWED_HOST',default='')[0:5]=="local":
+    CSRF_TRUSTED_ORIGINS=['http://'+env.get_value('ALLOWED_HOST',default='')]
+else:
+    CSRF_TRUSTED_ORIGINS=['https://'+env.get_value('ALLOWED_HOST',default='')]
 
 
 # Application definition
@@ -37,12 +51,19 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'livereload',
+    "whitenoise.runserver_nostatic",
     'django.contrib.staticfiles',
-    'home'
+    'home',
+    'student',
+    'administrator',
+    'widget_tweaks',
+    'mathfilters',
+    'django_cleanup.apps.CleanupConfig'
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -53,7 +74,10 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'main.urls'
-
+# Base url to serve media files
+MEDIA_URL = '/media/'
+# Path where media is stored
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -76,12 +100,28 @@ WSGI_APPLICATION = 'main.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
-
-DATABASES = {
-    'default': {
+dict1 = {}
+if env.get_value("PRODUCTION",default=False):
+    dict1= {  
+            'ENGINE': 'django.db.backends.mysql',  
+            'NAME': env('DB_NAME'),  
+            'HOST': env('DB_HOST'),
+            'PORT': env('DB_PORT'),
+            'USER': env('DB_USER'),
+            'PASSWORD': env('DB_PASSWORD'),
+            'OPTIONS': {  
+                'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"  
+            }  
+        }  
+else:
+    dict1= {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     }
+
+DATABASES = {
+
+    'default':dict1
 }
 
 
@@ -109,7 +149,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Kolkata'
 
 USE_I18N = True
 
@@ -119,12 +159,23 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
-STATIC_URL = 'static/'
-
-STATICFILES_DIRS = [
-    BASE_DIR / "static"
-]
+STATIC_URL = '/static/'
+if not DEBUG:
+    STATIC_ROOT=os.path.join(BASE_DIR,'static')
+    STORAGES = {
+        # ...
+        "staticfiles": {
+            "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+        },
+    }
+else:
+    STATICFILES_DIRS = [
+        BASE_DIR / "static"
+    ]
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+SESSION_EXPIRE_AT_BROWSER_CLOSE = False
+SESSION_COOKIE_AGE = 2*60*60

@@ -1,0 +1,164 @@
+{% extends "../_base_admin.html" %}
+{% load static %}
+{% block meta %}
+    <script lang="javascript" src="{% static "src/js/xlsx.full.min.js" %}"></script>
+{% endblock meta %}
+{% block content %}
+<div class="flex flex-wrap flex-col relative top-0  px-1" id="tabs-id">
+<h1 class="text-3xl mt-5 mb-3 font-bold text-primary">
+    <span class="underline underline-offset-8 decoration-7 decoration-secondary"
+      >Update Stu</span>dent Information
+</h1>
+    <ul class="flex mb-0 list-none flex-wrap pt-3 pb-4 flex-row">
+        <li class="-mb-px  last:mr-0 flex-auto text-center">
+        <a class="cursor-pointer text-xs font-bold uppercase px-5 py-3 shadow block leading-normal border border-t-2 border-t-blue-600 text-blue-600 bg-white" onclick="changeActiveTab(event,'tab-usns')">
+            <i class="fas fa-space-shuttle text-base mr-1"></i> Update Usernames
+        </a>
+        </li>
+        <li class="-mb-px  last:mr-0 flex-auto text-center">
+        <a class="cursor-pointer text-xs font-medium uppercase px-5 py-3 shadow  block leading-normal border border-t-2 text-gray-600 bg-gray-200" onclick="changeActiveTab(event,'tab-marks')">
+            <i class="fas fa-cog text-base mr-1"></i> Update Marks
+        </a>
+        </li>
+    </ul>
+    <div class="p-2 text-center tab-content" >
+        <div class="grid lg:grid-cols-2 gap-4 " id="tab-usns">
+            <div class="rounded-lg border-slate-300 text-left overflow-auto border-2">
+                <div class="bg-primary h-10 text-white px-4 pt-2 font-semibold">Update Username</div>
+                <form action="" method="post">
+                    {% csrf_token %}
+                    <div class="px-4 pt-3">
+                        {% include "../../custom_fields/_inputT.html" with type="text" customOnly=True classL="my-3 font-semibold" classI="my-3 w-full rounded-lg border-gray-300" id="usn" label="Student USN:"  placeholder="Enter USN" autofocus=True required=True%}
+                        {% include "../../custom_fields/_inputT.html" with type="text" customOnly=True classL="my-3 font-semibold" classI="my-3 w-full rounded-lg border-gray-300" id="newusn" label="New USN:"  placeholder="Enter new USN" required=True%}
+                    </div>
+                    <div class="text-center mt-5 p-1 pb-2 bg-gray-100 font-semibold">
+                        {% include "../../buttons/buttons.html" with btn="Update" %}
+                    </div>
+                </form>
+            </div>
+            <div class="rounded-lg min-h-[300px] border-slate-300 text-left flex flex-col justify-between border-2">
+                <div class="bg-secondary/75 h-10 text-white px-4 pt-2 font-semibold">Update Multiple Username</div>
+
+                <div class="text-center"><b>Upload xlsx/csv file</b><br><b>XLSX File Must Contain username,newusername 
+                    <span class="text-red-600 font-extrabold">in same format</span>
+                </b>
+                </div>
+                <div>
+                    <form method="POST" action="/au/student/update/usns">
+                        {% csrf_token %}
+                        <div class="p-3">
+                        <label class="my-3 font-semibold" for="S_password">File Input</label><br>
+                        <input class="hidden" name="usns" id="multipleUsns">
+                        <input class="my-3 w-full border-secondary/40 border-2  rounded-lg" id="uploadFileUsns" type="file"
+                            placeholder="Choose File" accept=".xlsx,.xls,.csv">
+                        </div>
+                        <div class="text-center pb-2 p-1 bg-gray-100 font-semibold">
+                            {% include "../../buttons/buttons.html" with btn="Update Usns" secondary=True %}
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="grid lg:grid-cols-2 gap-4 hidden" id="tab-marks">
+            <div class="rounded-lg border-slate-300 text-left overflow-auto border-2">
+                <div class="bg-primary h-10 text-white px-4 pt-2 font-semibold">Update Marks of a Student</div>
+                <form action="" method="post">
+                    {% csrf_token %}
+                    <div class="px-4 pt-3 flex flex-col gap-3">
+                        
+                        {% include "../../custom_fields/_input.html" with field=form.usn %}
+                        {% include "../../custom_fields/_input.html" with field=form.sgpa1 %}
+                        {% include "../../custom_fields/_input.html" with field=form.sgpa2 %}
+                        {% include "../../custom_fields/_input.html" with field=form.sgpa3 %}
+                        {% include "../../custom_fields/_input.html" with field=form.sgpa4 %}
+                        {% include "../../custom_fields/_input.html" with field=form.cgpa %}
+                    </div>
+                    <div class="text-center mt-5 p-1 pb-2 bg-gray-100 font-semibold">
+                        {% include "../../buttons/buttons.html" with btn="Update" %}
+                    </div>
+                </form>
+            </div>
+            <div class="rounded-lg min-h-[300px] border-slate-300 text-left flex flex-col justify-between border-2">
+                <div class="bg-secondary/75 h-10 text-white px-4 pt-2 font-semibold">Update Marks of Multiple students</div>
+
+                <div class="text-center"><b>Upload xlsx/csv file</b><br><b>XLSX File Must Contain username,sgpa1,sgpa2,sgpa3,spga4,cpga
+                    <span class="text-red-600 font-extrabold">in same format</span>
+                </b>
+                </div>
+                <div>
+                    <form method="POST" action="/au/student/update/marks">
+                        {% csrf_token %}
+                        <div class="p-3 pb-10">
+                        <label class="my-3 font-semibold" for="S_password">File Input</label><br>
+                        <input class="hidden" name="marks" id="multipleMarks">
+                        <input class="my-3 w-full border-secondary/40 border-2  rounded-lg" id="uploadFileMarks" type="file"
+                            placeholder="Choose File" accept=".xlsx,.xls,.csv">
+                        </div>
+                        <div class="text-center pb-2 p-1 bg-gray-100 font-semibold">
+                            {% include "../../buttons/buttons.html" with btn="Update Usns" secondary=True %}
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function changeActiveTab(event,tabID){
+      let element = event.target;
+      while(element.nodeName !== "A"){
+        element = element.parentNode;
+      }
+      console.log(element)
+      ulElement = element.parentNode.parentNode;
+      aElements = ulElement.querySelectorAll("li > a");
+      tabContents = document.getElementById("tabs-id").querySelectorAll(".tab-content > div");
+      for(let i = 0 ; i < aElements.length; i++){
+        aElements[i].classList.remove("text-blue-600");
+        aElements[i].classList.remove("bg-white");
+        aElements[i].classList.remove("border-t-blue-600");
+        aElements[i].classList.remove("font-bold");
+        aElements[i].classList.add("text-gray-600");
+        aElements[i].classList.add("bg-gray-200");
+        aElements[i].classList.add("font-medium");
+        tabContents[i].classList.add("hidden");
+        tabContents[i].classList.remove("block");
+      }
+      element.classList.remove("text-gray-600");
+      element.classList.remove("bg-gray-200");
+      element.classList.remove("font-medium");
+      element.classList.add("text-blue-600");
+      element.classList.add("bg-white");
+      element.classList.add("border-t-blue-600");
+      element.classList.add("font-bold");
+      document.getElementById(tabID).classList.remove("hidden");
+      document.getElementById(tabID).classList.add("block");
+    }
+    function xlsxToJsonListener(uploadFile,input){
+        uploadFile.addEventListener("change", (e) => {
+            if (!e.target.files)
+                return;
+
+            let f = e.target.files[0]
+
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                let data = e.target.result;
+                let workbook = XLSX.read(data);
+                const sheet1 = workbook.Sheets[workbook.SheetNames[0]]
+                const obj = XLSX.utils.sheet_to_row_object_array(sheet1)
+                input.value = JSON.stringify(obj)
+            };
+            reader.readAsArrayBuffer(f)
+        })
+
+    }
+    const uploadFileMarks = document.getElementById("uploadFileMarks")
+    const uploadFileUsns = document.getElementById("uploadFileUsns")
+    const inputMarks=document.getElementById("multipleMarks")
+    const inputUsns=document.getElementById("multipleUsns")
+
+    xlsxToJsonListener(uploadFileMarks,inputMarks)
+    xlsxToJsonListener(uploadFileUsns,inputUsns)
+</script>
+{% endblock content %}

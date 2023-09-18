@@ -1,0 +1,293 @@
+{% extends "../_base_admin.html" %}
+{% load static %}   
+{% block meta %}
+    <script lang="javascript" src="{% static "src/js/xlsx.full.min.js" %}"></script>
+{% endblock meta %}
+{% block content %}
+<div class="p-3 text-2xl pb-7">Registration List {% if selected != -1 %}{{selected.job}}{% endif %}</div>
+<div class="flex p-2 mb-3 md:justify-between gap-2 flex-wrap justify-center">
+    <select name="years" id="years">
+        <option disabled selected value> -- select an Academic year -- </option>
+        {% for year in years %}
+            <option value="{{year.pk}}" {% if selectedYear.pk == year.pk %}selected{% endif %}>{{year}}</option>
+        {% endfor %}
+    </select>
+    <select name="jobs" id="jobs">
+        <option disabled selected value> -- select an job-company -- </option>
+        <option value="0" {% if selected.id == 0 %}selected{% endif %}>All</option>
+        {% for job in jobs %}
+            <option value="{{job.pk}}" {% if selected.id == job.pk %}selected{% endif %}>{{job}}</option>
+        {% endfor %}
+    </select>
+    <div class="flex flex-wrap justify-end gap-3 md:justify-center">
+        {% include "../../buttons/buttons.html" with id="printSheet" btn="Print Sheet" %}
+        {% include "../../buttons/buttons.html" with id="printResume" btn="Print Resumes" secondary=True %}
+        {% include "../../buttons/buttons.html" with id="printImage" btn="Print Images" %}
+    </div>
+</div>
+{% if stLen %}
+<div class="text-center text-primary font-bold">
+    Number of students applied is <span class="text-lg">{{stLen}}</span>
+</div>
+{% endif %}
+
+<div class="relative overflow-auto  shadow-md sm:rounded-lg">
+    <table class="w-full h-screen-50 text-sm text-left text-gray-500 dark:text-gray-400 ">
+        <thead class="text-xs text-white whitespace-nowrap bg-primary dark:text-gray-400">
+            <tr id="colSelect">
+                {% for head in heads %}
+                <th scope="col" class="px-6 py-3">
+                    <input type="checkbox" value="{{forloop.counter}}"
+                    class="peer/k text-secondary" checked>
+                    <p class="text-gray-400 peer-checked/k:text-white inline-block mx-2">{{head}}</p>
+                </th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for student,pjs in students %}
+            <tr class="bg-white border-b  text-gray-900 font-semibold dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-200">
+                        <td class="px-6 py-1 whitespace-nowrap">
+                            {{student.user.username|default:"-"}}
+                        </td>   
+                        <td class="px-6 py-1 whitespace-nowrap">
+                            {{student.name|default:"-"}}
+                        </td>   
+                        <td class="px-6 py-1 whitespace-nowrap">
+                            {{student.nameAadhar|default:"-"}}
+                        </td>   
+                        <td class="px-6 py-1 whitespace-nowrap">
+                            {{student.gender|default:"-"}}
+                        </td>   
+                        <td class="px-6 py-1 whitespace-nowrap">
+                            {{student.branch|default:"-"}}
+                        </td>
+                        <td class="px-6 py-1 whitespace-nowrap">
+                            {{student.phoneNo|default:"-"}}
+                        </td>   
+                        <td class="px-6 py-1 whitespace-nowrap">
+                            {{student.alternatePhoneNo|default:"-"}}
+                        </td>
+                        <td class="px-6 py-1 whitespace-nowrap">
+                            {{student.email|default:"-"}}
+                        </td>   
+                        <td class="px-6 py-1 whitespace-nowrap">
+                            {{student.aadhar|default:"-"}}
+                        </td>   
+                        <td class="px-6 py-1 whitespace-nowrap">
+                            {{student.pancard|default:"-"}}
+                        </td>   
+                        <td class="px-6 py-1 whitespace-nowrap">
+                            {{student.dateOfBirth|default:"-"}}
+                        </td>   
+                        <td class="px-6 py-1 whitespace-nowrap">
+                            {{student.homeTown|default:"-"}}
+                        </td>   
+                        <td class="px-6 py-1 whitespace-nowrap">
+                            {{student.homeState|default:"-"}}
+                        </td>   
+                        <td class="px-6 py-1 whitespace-nowrap">
+                            {{student.address|default:"-"}}
+                        </td>   
+                         <td class="px-6 py-1 whitespace-nowrap">
+                            {{student.tenPercentage|default:"-"}}
+                        </td>   
+                        <td class="px-6 py-1 whitespace-nowrap">
+                            {{student.tenBoard|default:"-"}}
+                        </td>   
+                        <td class="px-6 py-1 whitespace-nowrap">
+                            {{student.tenSchool|default:"-"}}
+                        </td>
+                        <td class="px-6 py-1 whitespace-nowrap">
+                            {{student.tenPassYear|default:"-"}}
+                        </td>
+                        <td class="px-6 py-1 whitespace-nowrap">
+                            {{student.tenState|default:"-"}}
+                        </td>   
+                        <td class="px-6 py-1 whitespace-nowrap">
+                            {{student.tenCountry|default:"-"}}
+                        </td>   
+                        <td class="px-6 py-1 whitespace-nowrap">
+                            {{student.twelvePercentage|default:"-"}}
+                        </td>   
+                        <td class="px-6 py-1 whitespace-nowrap">
+                            {{student.twelveBoard|default:"-"}}
+                        </td>   
+                        <td class="px-6 py-1 whitespace-nowrap">
+                            {{student.twelveSchool|default:"-"}}
+                        </td>
+                        <td class="px-6 py-1 whitespace-nowrap">
+                            {{student.twelvePassYear|default:"-"}}
+                        </td>
+                        <td class="px-6 py-1 whitespace-nowrap">
+                            {{student.twelveState|default:"-"}}
+                        </td>   
+                        <td class="px-6 py-1 whitespace-nowrap">
+                            {{student.twelveCountry|default:"-"}}
+                        </td> 
+                        <td class="px-6 py-1 whitespace-nowrap">
+                            {{student.diplomaPercentage|default:"-"}}
+                        </td>   
+                        <td class="px-6 py-1 whitespace-nowrap">
+                            {{student.diplomaBoard|default:"-"}}
+                        </td>   
+                        <td class="px-6 py-1 whitespace-nowrap">
+                            {{student.diplomaSchool|default:"-"}}
+                        </td>
+                        <td class="px-6 py-1 whitespace-nowrap">
+                            {{student.diplomaPassYear|default:"-"}}
+                        </td>
+                        <td class="px-6 py-1 whitespace-nowrap">
+                            {{student.diplomaState|default:"-"}}
+                        </td>   
+                        <td class="px-6 py-1 whitespace-nowrap">
+                            {{student.diplomaCountry|default:"-"}}
+                        </td>   
+                        <td class="px-6 py-1 whitespace-nowrap">
+                            {{student.degreePercentage|default:"-"}}
+                        </td>   
+                        <td class="px-6 py-1 whitespace-nowrap">
+                            {{student.degreeStream|default:"-"}}
+                        </td>
+                        <td class="px-6 py-1 whitespace-nowrap">
+                            {{student.degreeCourse|default:"-"}}
+                        </td>
+                        <td class="px-6 py-1 whitespace-nowrap">
+                            {{student.degreeCollege|default:"-"}}
+                        </td>   
+                        <td class="px-6 py-1 whitespace-nowrap">
+                            {{student.degreeUniversity|default:"-"}}
+                        </td>
+                        <td class="px-6 py-1 whitespace-nowrap">
+                            {{student.degreePassYear|default:"-"}}
+                        </td>
+                        <td class="px-6 py-1 whitespace-nowrap">
+                            {{student.degreeState|default:"-"}}
+                        </td>     
+                        <td class="px-6 py-1 whitespace-nowrap">
+                            {{student.degreeCountry|default:"-"}}
+                        </td>
+                        <td class="px-6 py-1 whitespace-nowrap">
+                            {{student.sgpa1|default:"-"}}
+                        </td>
+                        <td class="px-6 py-1 whitespace-nowrap">
+                            {{student.sgpa2|default:"-"}}
+                        </td>
+                        <td class="px-6 py-1 whitespace-nowrap">
+                            {{student.sgpa3|default:"-"}}
+                        </td>
+                        <td class="px-6 py-1 whitespace-nowrap">
+                            {{student.sgpa4|default:"-"}}
+                        </td>
+                        <td class="px-6 py-1 whitespace-nowrap">
+                            {{student.cgpa|default:"-"}}
+                        </td>
+                        <td class="px-6 py-1 whitespace-nowrap">
+                            {{student.activeBacklog|default:"-"}}
+                        </td>
+                        <td class="px-6 py-1 whitespace-nowrap">
+                            {{student.totalBacklog|default:"-"}}
+                        </td>
+                        <td class="px-6 py-1 whitespace-nowrap">
+                            {{student.gap_edu|default:"-"}}
+                        </td>
+                        <td class="px-6 py-1 whitespace-nowrap">
+                            {{student.yearBatch|default:"-"}}
+                        </td>
+                        <td class="px-6 py-1 whitespace-nowrap">
+                            {{student.projects|default:"-"}}
+                        </td>
+                        <td class="px-6 py-1 whitespace-nowrap">
+                            {{student.preferredJobLocation|default:"-"}}
+                        </td>
+                        <td class="px-6 py-1 whitespace-nowrap">
+                            {% for pj in pjs %}
+                                {{pj.role|default:"-"}} | {{pj.yearsofExperience}} years {{pj.monthsofExperience}} months| {{pj.company|default:"-"}}
+                                <br>
+                            {% endfor %}
+                        </td>
+              </tr>      
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+<form method="post">
+    {% csrf_token %}
+    <input type="hidden" name="year" value="">
+</form>
+<script>
+    const jobs = document.getElementById('jobs');
+    // const years = document.getElementById('years');
+    const colIndexesToDelete =new Map()
+
+    const colSelect=document.getElementById('colSelect')
+
+    colSelect.querySelectorAll('input').forEach((input,i)=>{
+        input.addEventListener('change', (e) => {
+            if(e.target.checked)
+                colIndexesToDelete.delete(i)
+            else
+                colIndexesToDelete.set(i,true)
+
+        });
+    })
+
+    jobs.addEventListener('change', (e) => {
+        document.forms[0].action='/au/report/register/'+e.target.value+'?year='+{{selectedYear.pk}};
+        document.forms[0].submit();
+    });
+    years.addEventListener('change', (e) => {
+        document.forms[0].action='/au/report/register'
+        document.forms[0].querySelectorAll('input')[1].value=e.target.value
+        document.forms[0].submit();
+    });
+
+    const btnPrint=document.getElementById('printSheet')
+    btnPrint.addEventListener('click',()=>{
+        {% if selected != -1  %} 
+            printSheet()
+        {% endif %}
+    })
+    const btnResume=document.getElementById('printResume')
+    btnResume.addEventListener('click',()=>{
+        {% if selected != -1  %}
+            window.location.href='/au/report/register/resumes/{{selected.id}}'
+        {% endif %}
+    })
+    const btnImage=document.getElementById('printImage')
+    btnImage.addEventListener('click',()=>{
+        {% if selected != -1  %}
+            window.location.href='/au/report/register/images/{{selected.id}}'
+        {% endif %}
+    })
+
+    function printSheet(){
+        const xl=XLSX.utils.table_to_sheet(document.querySelector('table'), {sheet:"Sheet JS"});
+        const data = XLSX.utils.sheet_to_json(xl,{header:1});
+        const newData = data.map(row => row.filter((_, i) => !colIndexesToDelete.has(i)));
+        const workbook = XLSX.utils.book_new();
+        const sheet = XLSX.utils.aoa_to_sheet(newData);
+
+        let k=[]
+        
+        for(let i=0;i<50;i++)
+            k.push({width:50})
+        sheet['!cols'] =k
+
+        var range = XLSX.utils.decode_range(sheet['!ref']);
+        for (var row = range.s.r; row <= range.e.r; row++) {
+        for (var col = range.s.c; col <= range.e.c; col++) {
+            var cellAddress = XLSX.utils.encode_cell({ r: row, c: col });
+            var cell = sheet[cellAddress];
+            if (cell && cell.t === "s") {
+            cell.s = { alignment: { wrapText: true } };
+            }
+        }
+        }
+
+        console.log(sheet)
+        XLSX.utils.book_append_sheet(workbook, sheet, 'Sheet 1');
+        XLSX.writeFile(workbook, 'students.xlsx',{cellStyle:true});
+    }
+</script>
+{% endblock content %}

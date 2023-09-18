@@ -1,0 +1,29 @@
+{% extends "./_base_home.html" %}
+{% load custom_filter %}
+{% block content %}
+    <div class="flex flex-col gap-16"> 
+        <div>
+            {% include "./slideshow.html" with sliders=sliders %}
+        </div>
+        {% if statistics %}
+        <div>
+            {% include "./statistics.html" %}
+        </div>
+        {% endif %}
+        {% if gallery %}
+        <div id="gallery">
+            {% include "./gallery.html" %}
+        </div>
+        {% endif %}
+        {% if teams %}
+            <div id="teams">
+                {% include "./teams.html" with teams=teams %}
+            </div>
+        {% endif %}
+        {% if teams and teams|has_description %}
+            <div>
+                {% include "./contact.html" %}
+            </div>
+        {% endif %}
+    </div>
+{% endblock content %}

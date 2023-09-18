@@ -1,0 +1,88 @@
+{% extends "./_base_admin.html" %} {% load static %} {% block content %}
+<div class="overflow-auto text-center">
+    <div class="grid grid-cols-4 gap-2 text-white">
+        <div class="bg-teal-500 text-left border rounded-md overflow-auto">
+            <div class="text-3xl font-semibold p-2">{{student_count}}</div>
+            <div class="pb-2 px-2">Total No. Of Students</div>
+
+            
+        </div>
+        <div
+            class="text-black bg-yellow-300 text-left border rounded-md overflow-auto"
+        >
+            <div class="text-3xl font-semibold p-2">{{active_jobs}}</div>
+            <div class="pb-2 px-2">Jobs Currently open</div>
+
+           
+        </div>
+        <div class="bg-red-600 text-left border rounded-md overflow-auto">
+            <div class="text-3xl font-semibold p-2">{{login_blocked_count}}</div>
+            <div class="pb-2 px-2">Login Blocked Students</div>
+
+           
+        </div>
+        <div class="bg-emerald-600 text-left border rounded-md overflow-auto">
+            <div class="text-3xl font-semibold p-2">{{app_blocked_count}}</div>
+            <div class="pb-2 px-2">Application Blocked</div>
+
+        </div>
+    </div>
+
+    <div class="grid pt-3 grid-cols-2 gap-2">
+        <div class="overflow-auto bg-white rounded-md border-2">
+            <div class="text-left p-2 text-md font-semibold">
+                <div class="inline">Recent Profile Updates</div>
+                <div class="inline relative"></div>
+                <hr />
+                <div class="flex flex-wrap pt-3 gap-2 justify-center">
+
+                    {% for student in recently_updated %}
+                        <div class="text-center w-36 p-3">
+                            <div class=" flex justify-center items-center ">
+                                {% if student.image %}
+                                <img class="profile-image relative w-20 h-20 rounded-full" src="{{ student.image.url }}" alt="{{ student.name }}">
+                            {% else %}
+                                <img class="profile-image relative w-20 h-20 rounded-full" alt="H" data-name="{{ student.name|slice:'1'|upper }}">
+                            {% endif %}
+                        </div>
+                            <div class="text-black">
+                                <div class="text-md">{{student.user.username}}</div>
+                                <div class="text-sm">{{student.name}}</div>
+                                <div class="text-xs">{{student.updated_at}}</div>
+                            </div>
+                        </div>
+                    {% endfor %}
+
+                </div>
+            </div>
+        </div>
+        <div class="overflow-auto bg-white rounded-md border-2">
+            <div class="text-left p-2 text-md font-semibold">
+                <div class="inline">Toppers of 2022</div>
+                <div class="inline relative"></div>
+                <hr />
+                <div class="flex flex-wrap pt-3 gap-2 justify-center">
+
+                    {% for student in toppers %}
+                        <div class="text-center w-36 p-3">
+                            <div class=" flex justify-center items-center ">
+                                {% if student.image %}
+                                <img class="profile-image relative w-20 h-20 rounded-full" src="{{ student.image.url }}" alt="{{ student.name }}">
+                            {% else %}
+                                <img class="profile-image relative w-20 h-20 rounded-full" alt="H" data-name="{{ student.name|slice:'1'|upper }}">
+                            {% endif %}
+                        </div>
+                            <div class="text-black">
+                                <div class="text-md">{{student.user.username}}</div>
+                                <div class="text-sm">{{student.name}}</div>
+                                <div class="text-xs">{{student.cgpa}}</div>
+                            </div>
+                        </div>
+                    {% endfor %}
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
