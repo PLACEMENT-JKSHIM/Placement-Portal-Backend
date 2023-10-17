@@ -119,7 +119,15 @@ if env.get_value("PRODUCTION",default=False):
             }  
         }  
 elif env.get_value("TEST_PRODUCTION",default=False):
-    dict1=   dj_database_url.parse(os.environ.get('DB_URL'))
+    dict1={
+    'ENGINE': 'django_psdb_engine-main',
+    'NAME': os.environ.get('DB_NAME'),
+    'HOST': os.environ.get('DB_HOST'),
+    'PORT': os.environ.get('DB_PORT'),
+    'USER': os.environ.get('DB_USER'),
+    'PASSWORD': os.environ.get('DB_PASSWORD'),
+    'OPTIONS': {'ssl': {'ca': os.environ.get('MYSQL_ATTR_SSL_CA')},'charset': 'utf8mb4'}
+  }
 else:
     dict1= {
         'ENGINE': 'django.db.backends.sqlite3',
