@@ -10,6 +10,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
+ENV MYSQL_ATTR_SSL_CA=/etc/ssl/cert.pem
+
 RUN python manage.py makemigrations
 
 RUN python manage.py migrate
