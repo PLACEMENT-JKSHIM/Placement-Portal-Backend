@@ -16,8 +16,6 @@ RUN python manage.py migrate
 
 RUN python manage.py collectstatic --noinput
 
-RUN python manage.py shell < script.py
-
 EXPOSE 80
 
 
@@ -25,6 +23,6 @@ COPY nginx.conf /etc/nginx/http.d/default.conf
 RUN mkdir /var/log/gunicorn/
 # RUN nginx
 
-CMD  nginx && gunicorn --bind 0.0.0.0:8000 main.wsgi:application -w 3 --access-logfile /var/log/gunicorn/access.log --error-logfile /var/log/gunicorn/error.log
+CMD  python manage.py shell < script.py && nginx && gunicorn --bind 0.0.0.0:8000 main.wsgi:application -w 3 --access-logfile /var/log/gunicorn/access.log --error-logfile /var/log/gunicorn/error.log
 
 
